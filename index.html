@@ -111,7 +111,7 @@
 
     <div class="wadah">
         <div id="beranda" class="halaman aktif">
-            <header><h1>MACCA CASHFLOW</h1></header>
+            <header><h1>MACCA CASH FLOW</h1></header>
             <div class="kartu-saldo">
                 <small style="color:var(--pink-krimson); font-weight: 600; letter-spacing: 2px;">SALDO TERSEDIA</small>
                 <div class="jumlah-saldo" id="saldoUtama">Rp. 0</div>
@@ -128,8 +128,8 @@
             <h2><i class="fa-solid fa-arrow-up"></i> Kas Keluar</h2>
             <div class="grid-tombol">
                 <button class="tombol-aksi" onclick="bukaModal('KASIR (ARA)', 'keluar')"><i class="fa-solid fa-user-tie"></i><span>Kasir</span></button>
-                <button class="tombol-aksi" onclick="bukaModal('DAPUR (IBU IBU IBU IBU ATI)', 'keluar')"><i class="fa-solid fa-kitchen-set"></i><span>Dapur</span></button>
-                <button class="tombol-aksi" onclick="bukaModal('STOK (HASBI)', 'keluar')"><i class="fa-solid fa-fish"></i><span>Stok</span></button>
+                <button class="tombol-aksi" onclick="bukaModal('DAPUR (IBU ATI)', 'keluar')"><i class="fa-solid fa-kitchen-set"></i><span>Dapur</span></button>
+                <button class="tombol-aksi" onclick="bukaModal('STOK IKAN (HASBI)', 'keluar')"><i class="fa-solid fa-fish"></i><span>Stok</span></button>
                 <button class="tombol-aksi" onclick="bukaModal('PAK BOSS', 'keluar')"><i class="fa-solid fa-crown"></i><span>Boss</span></button>
             </div>
         </div>
@@ -164,7 +164,7 @@
             <input type="text" id="inNominal" placeholder="Rp. 0" oninput="formatRupiah(this)">
             <textarea id="inCatatan" rows="2" placeholder="Catatan tambahan..."></textarea>
             <button id="btnSimpan" onclick="simpanData()" style="width: 100%; padding: 16px; background: linear-gradient(45deg, var(--ungu-elektrik), var(--pink-krimson)); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer;">SIMPAN DATA</button>
-            <p tutupModal()" style="text-align:center; color:rgba(255,255,255,0.3); cursor:pointer; font-size:0.8rem; margin-top:15px;">BATALKAN</p>
+            <p onclick="tutupModal()" style="text-align:center; color:rgba(255,255,255,0.3); cursor:pointer; font-size:0.8rem; margin-top:15px;">BATALKAN</p>
         </div>
     </div>
 
@@ -200,17 +200,20 @@
 
         const initDates = () => {
             const tgl = getHariIni();
-            document.getElementById('riwayatTgl').value = tgl;
-            document.getElementById('nDaily').value = tgl;
-            document.getElementById('nMonthly').value = tgl.substring(0, 7);
+            const elRiwayat = document.getElementById('riwayatTgl');
+            const elDaily = document.getElementById('nDaily');
+            const elMonthly = document.getElementById('nMonthly');
+            if(elRiwayat) elRiwayat.value = tgl;
+            if(elDaily) elDaily.value = tgl;
+            if(elMonthly) elMonthly.value = tgl.substring(0, 7);
         };
         initDates();
 
         const configSub = {
             'CASH KASIR': ['Penjualan Toko', 'GrabFood', 'GoFood'],
             'KASIR (ARA)': ['Operasional', 'Kasbon Karyawan', 'Belanja Kebutuhan'],
-            'DAPUR (IBU IBU IBU IBU ATI)': ['Bahan Dapur', 'Sayuran', 'Bahan Mentah'],
-            'STOK IKAN': ['Ikan', 'Gas'],
+            'DAPUR (IBU ATI)': ['Bahan Dapur', 'Sayuran', 'Bahan Mentah'],
+            'STOK IKAN (HASBI)': ['Ikan', 'Gas'],
             'PAK BOSS': ['TF BRI', 'TF BNI']
         };
 
@@ -240,7 +243,14 @@
             document.getElementById('modal').style.display = 'flex';
         };
 
-        window.tutupModal = () => { document.getElementById('modal').style.display = 'none'; document.getElementById('inNominal').value = ""; document.getElementById('inCatatan').value = ""; isSaving = false; document.getElementById('btnSimpan').innerText = "SIMPAN DATA"; };
+        window.tutupModal = () => { 
+            document.getElementById('modal').style.display = 'none'; 
+            document.getElementById('inNominal').value = ""; 
+            document.getElementById('inCatatan').value = ""; 
+            isSaving = false; 
+            document.getElementById('btnSimpan').innerText = "SIMPAN DATA"; 
+        };
+
         window.formatRupiah = (el) => { let v = el.value.replace(/\D/g, ""); el.value = v ? "Rp. " + parseInt(v).toLocaleString('id-ID') : ""; };
 
         window.simpanData = async () => {
@@ -258,7 +268,8 @@
         window.gantiHal = (id) => { 
             document.querySelectorAll('.halaman').forEach(h => h.classList.remove('aktif')); 
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('aktif')); 
-            document.getElementById(id).classList.add('aktif'); 
+            const target = document.getElementById(id);
+            if(target) target.classList.add('aktif'); 
             event.currentTarget.classList.add('aktif');
             syncUI();
         };
@@ -269,7 +280,8 @@
                 const x = d.data();
                 if(x.timestamp) { cache.push({...x, id: d.id, t: x.timestamp.toDate()}); sal += (x.type === 'in' ? x.amount : -x.amount); }
             });
-            document.getElementById('saldoUtama').innerText = "Rp. " + sal.toLocaleString('id-ID');
+            const elSaldo = document.getElementById('saldoUtama');
+            if(elSaldo) elSaldo.innerText = "Rp. " + sal.toLocaleString('id-ID');
             syncUI();
         });
 
@@ -346,10 +358,11 @@
         window.syncUI = () => {
             const list = document.getElementById('listRiwayat'); if(!list) return;
             list.innerHTML = "";
-            const tglFilter = document.getElementById('riwayatTgl').value || getHariIni();
+            const elTglRiwayat = document.getElementById('riwayatTgl');
+            const tglFilter = (elTglRiwayat ? elTglRiwayat.value : null) || getHariIni();
             
             const getIcon = (cat) => {
-                const icons = { 'KASIR': 'fa-cash-register', 'GERAI': 'fa-store', 'WARKOP': 'fa-mug-hot', 'QRIS': 'fa-qrcode', 'ARA': 'fa-user-tie', 'IBU ATI': 'fa-kitchen-set', 'STOK': 'fa-fish', 'BOSS': 'fa-crown' };
+                const icons = { 'KASIR': 'fa-cash-register', 'GERAI': 'fa-store', 'WARKOP': 'fa-mug-hot', 'QRIS': 'fa-qrcode', 'ARA': 'fa-user-tie', 'ATI': 'fa-kitchen-set', 'STOK': 'fa-fish', 'BOSS': 'fa-crown' };
                 for(let key in icons) if(cat.includes(key)) return icons[key];
                 return "fa-wallet";
             };
@@ -379,7 +392,7 @@
                     </div>
                     <div style="margin-top:15px; padding-top:15px; border-top:1px solid var(--kaca-garis)">
                         <div class="neraca-row" style="margin-bottom:0">
-                            <div class="neraca-icon bg-net"><i class="fa-solid fa-wallet"></i></div>
+                            <div class="neraca-icon bg-net"><i class="fa-solid fa-scale-balanced"></i></div>
                             <div><small style="opacity:0.5; font-size:0.6rem">Laba Bersih</small><div style="color:var(--emas-murni); font-weight:600; font-size:1.2rem">Rp ${(pIn-pOut).toLocaleString()}</div></div>
                         </div>
                     </div>
@@ -389,9 +402,13 @@
                     </div>`;
             };
             
-            drawNeraca("boxHarian", cache.filter(d => d.t.toLocaleDateString('en-CA') === (document.getElementById('nDaily').value || getHariIni())), "LAPORAN HARIAN", "harian");
-            drawNeraca("boxBulanan", cache.filter(d => d.t.toLocaleDateString('en-CA').substring(0, 7) === (document.getElementById('nMonthly').value || getHariIni().substring(0,7))), "LAPORAN BULANAN", "bulanan");
-            drawNeraca("boxTahunan", cache.filter(d => d.t.getFullYear().toString() === document.getElementById('nYearly').value), "LAPORAN TAHUNAN", "tahunan");
+            const elDaily = document.getElementById('nDaily');
+            const elMonthly = document.getElementById('nMonthly');
+            const elYearly = document.getElementById('nYearly');
+
+            drawNeraca("boxHarian", cache.filter(d => d.t.toLocaleDateString('en-CA') === ((elDaily ? elDaily.value : null) || getHariIni())), "LAPORAN HARIAN", "harian");
+            drawNeraca("boxBulanan", cache.filter(d => d.t.toLocaleDateString('en-CA').substring(0, 7) === ((elMonthly ? elMonthly.value : null) || getHariIni().substring(0,7))), "LAPORAN BULANAN", "bulanan");
+            drawNeraca("boxTahunan", cache.filter(d => d.t.getFullYear().toString() === (elYearly ? elYearly.value : "2026")), "LAPORAN TAHUNAN", "tahunan");
         };
 
         // --- SYNC RTDB ---
@@ -431,4 +448,3 @@
     </script>
 </body>
 </html>
-
