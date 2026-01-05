@@ -43,16 +43,13 @@
             margin: 0;
         }
 
-        /* --- [NOTIFIKASI] --- */
         #notif-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 3000; width: 90%; max-width: 350px; }
         .notif { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(15px); border: 1px solid var(--kaca-garis); border-radius: 15px; padding: 15px 20px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: popNotif 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .notif-teks { font-size: 0.8rem; color: #fff; }
 
-        /* --- [SALDO] --- */
         .kartu-saldo { background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)); backdrop-filter: blur(15px); border: 1px solid var(--kaca-garis); border-radius: 25px; padding: 35px 25px; text-align: center; box-shadow: var(--cahaya-neon); margin-bottom: 30px; }
         .jumlah-saldo { font-size: 2.1rem; font-weight: 600; color: #fff; }
 
-        /* --- [MODAL & SUB-CATEGORY] --- */
         #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
         .modal-konten { background: linear-gradient(160deg, #0f172a 0%, #040a16 100%); border: 1px solid var(--kaca-garis); border-radius: 30px; padding: 30px; width: 100%; max-width: 380px; }
         #labelTipeModal { display: inline-block; padding: 4px 12px; border-radius: 8px; font-size: 0.65rem; font-weight: 800; margin-bottom: 10px; }
@@ -63,7 +60,6 @@
         .btn-sub { flex: 1; min-width: 80px; padding: 10px; border-radius: 12px; border: 1px solid var(--kaca-garis); background: transparent; color: white; font-size: 0.7rem; cursor: pointer; }
         .btn-sub.aktif { background: var(--emas-murni); color: var(--biru-dalam); font-weight: 600; border-color: var(--emas-murni); }
 
-        /* --- [RIWAYAT] --- */
         .item-riwayat-elite { background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02)); backdrop-filter: blur(10px); border: 1px solid var(--kaca-garis); border-radius: 20px; padding: 18px; margin-bottom: 15px; display: flex; align-items: center; gap: 15px; }
         .icon-riwayat { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
         .riwayat-info { flex: 1; }
@@ -73,7 +69,6 @@
         .riwayat-amt { display: block; font-weight: 600; font-size: 0.95rem; }
         .riwayat-desc { font-size: 0.65rem; color: rgba(255,255,255,0.3); display: block; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        /* --- [NERACA] --- */
         .kartu-neraca { background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)); backdrop-filter: blur(15px); border: 1px solid var(--kaca-garis); border-radius: 25px; padding: 25px; margin-bottom: 20px; box-shadow: var(--cahaya-neon); }
         .neraca-header { font-size: 0.65rem; color: var(--emas-murni); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; display: block; }
         .neraca-row { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
@@ -82,12 +77,10 @@
         .bg-out { background: rgba(255, 51, 102, 0.1); color: var(--bahaya); }
         .bg-net { background: rgba(239, 191, 59, 0.1); color: var(--emas-murni); }
 
-        /* --- [EXPORT BUTTONS] --- */
         .box-export { display: flex; gap: 10px; margin-top: 15px; padding-top: 15px; border-top: 1px dashed rgba(255,255,255,0.1); }
         .btn-export { flex: 1; padding: 8px; border-radius: 10px; border: 1px solid var(--kaca-garis); background: rgba(255,255,255,0.05); color: #fff; font-size: 0.65rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; transition: 0.3s; }
         .btn-export:active { transform: scale(0.95); background: var(--emas-murni); color: var(--biru-dalam); }
 
-        /* --- [NAV & GRID] --- */
         h2 { font-size: 0.8rem; color: var(--emas-murni); letter-spacing: 1.5px; text-transform: uppercase; margin: 25px 0 15px; display: flex; align-items: center; gap: 10px; }
         h2::after { content: ""; flex: 1; height: 1px; background: linear-gradient(to right, var(--kaca-garis), transparent); }
         .grid-tombol { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -128,7 +121,7 @@
             <h2><i class="fa-solid fa-arrow-up"></i> Kas Keluar</h2>
             <div class="grid-tombol">
                 <button class="tombol-aksi" onclick="bukaModal('KASIR (ARA)', 'keluar')"><i class="fa-solid fa-user-tie"></i><span>Kasir</span></button>
-                <button class="tombol-aksi" onclick="bukaModal('DAPUR (IBU ATI)', 'keluar')"><i class="fa-solid fa-kitchen-set"></i><span>Dapur</span></button>
+                <button class="tombol-aksi" onclick="bukaModal('DAPUR (IBU IBU IBU ATI)', 'keluar')"><i class="fa-solid fa-kitchen-set"></i><span>Dapur</span></button>
                 <button class="tombol-aksi" onclick="bukaModal('STOK IKAN (HASBI)', 'keluar')"><i class="fa-solid fa-fish"></i><span>Stok</span></button>
                 <button class="tombol-aksi" onclick="bukaModal('PAK BOSS', 'keluar')"><i class="fa-solid fa-crown"></i><span>Boss</span></button>
             </div>
@@ -187,7 +180,6 @@
 
         let cache = []; let cKat = "", cTip = "", cSub = "", isSaving = false;
         
-        // --- LOGIKA WAKTU WITA (+8) ---
         const getHariIni = () => {
             const d = new Date();
             const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
@@ -209,11 +201,13 @@
         };
         initDates();
 
+        // --- KONFIGURASI SUB KATEGORI ---
         const configSub = {
             'CASH KASIR': ['Penjualan Toko', 'GrabFood', 'GoFood'],
+            'QRIS / TRANSFER': ['BRI', 'BNI'], // Tambahan Tombol BRI & BNI di sini
             'KASIR (ARA)': ['Operasional', 'Kasbon Karyawan', 'Belanja Kebutuhan'],
-            'DAPUR (IBU ATI)': ['Bahan Dapur', 'Sayuran', 'Bahan Mentah'],
-            'STOK IKAN (HASBI)': ['Ikan', 'Gas'],
+            'DAPUR (IBU IBU ATI)': ['Bahan Dapur', 'Sayuran', 'Bahan Mentah'],
+            'STOK IKAN': ['Ikan', 'Gas'],
             'PAK BOSS': ['TF BRI', 'TF BNI']
         };
 
@@ -285,11 +279,8 @@
             syncUI();
         });
 
-        // --- [ LOGIKA EKSPOR ] ---
         window.prosesExport = (format, filterType) => {
-            let dataFiltered = [];
-            let fileName = "MaccaFlow_Report";
-
+            let dataFiltered = []; let fileName = "MaccaFlow_Report";
             if(filterType === 'harian') {
                 const val = document.getElementById('nDaily').value;
                 dataFiltered = cache.filter(d => d.t.toLocaleDateString('en-CA') === val);
@@ -303,53 +294,22 @@
                 dataFiltered = cache.filter(d => d.t.getFullYear().toString() === val);
                 fileName += `_Tahunan_${val}`;
             }
-
             if(dataFiltered.length === 0) return tampilkanNotif("Tidak ada data untuk diekspor", "bahaya");
             dataFiltered.sort((a,b) => b.t - a.t);
-
             if(format === 'csv') {
                 let csvContent = "Tanggal,Waktu,Kategori,Tipe,Nominal,Catatan\n";
                 dataFiltered.forEach(d => {
-                    const row = [
-                        d.t.toLocaleDateString('id-ID'),
-                        formatWita(d.t).replace(" WITA", ""),
-                        d.category,
-                        d.type === 'in' ? 'MASUK' : 'KELUAR',
-                        d.amount,
-                        `"${d.description || '-'}"`
-                    ];
+                    const row = [d.t.toLocaleDateString('id-ID'), formatWita(d.t).replace(" WITA", ""), d.category, d.type === 'in' ? 'MASUK' : 'KELUAR', d.amount, `"${d.description || '-'}"`];
                     csvContent += row.join(",") + "\n";
                 });
                 const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.download = `${fileName}.csv`;
-                link.click();
+                const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `${fileName}.csv`; link.click();
             } else {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                doc.setFontSize(18);
-                doc.text("LAPORAN TRANSAKSI MACCA FLOW", 14, 20);
-                doc.setFontSize(10);
-                doc.text(`Dicetak pada: ${new Date().toLocaleString('id-ID')}`, 14, 28);
-
-                const tableData = dataFiltered.map(d => [
-                    d.t.toLocaleDateString('id-ID'),
-                    formatWita(d.t),
-                    d.category,
-                    d.type === 'in' ? 'MASUK' : 'KELUAR',
-                    `Rp ${d.amount.toLocaleString()}`,
-                    d.description || '-'
-                ]);
-
-                doc.autoTable({
-                    startY: 35,
-                    head: [['Tanggal', 'Waktu', 'Kategori', 'Tipe', 'Nominal', 'Catatan']],
-                    body: tableData,
-                    theme: 'grid',
-                    headStyles: { fillColor: [4, 10, 22] }
-                });
-
+                const { jsPDF } = window.jspdf; const doc = new jsPDF();
+                doc.setFontSize(18); doc.text("LAPORAN TRANSAKSI MACCA FLOW", 14, 20);
+                doc.setFontSize(10); doc.text(`Dicetak pada: ${new Date().toLocaleString('id-ID')}`, 14, 28);
+                const tableData = dataFiltered.map(d => [d.t.toLocaleDateString('id-ID'), formatWita(d.t), d.category, d.type === 'in' ? 'MASUK' : 'KELUAR', `Rp ${d.amount.toLocaleString()}`, d.description || '-']);
+                doc.autoTable({ startY: 35, head: [['Tanggal', 'Waktu', 'Kategori', 'Tipe', 'Nominal', 'Catatan']], body: tableData, theme: 'grid', headStyles: { fillColor: [4, 10, 22] } });
                 doc.save(`${fileName}.pdf`);
             }
             tampilkanNotif("Export Berhasil!");
@@ -405,22 +365,18 @@
             const elDaily = document.getElementById('nDaily');
             const elMonthly = document.getElementById('nMonthly');
             const elYearly = document.getElementById('nYearly');
-
             drawNeraca("boxHarian", cache.filter(d => d.t.toLocaleDateString('en-CA') === ((elDaily ? elDaily.value : null) || getHariIni())), "LAPORAN HARIAN", "harian");
             drawNeraca("boxBulanan", cache.filter(d => d.t.toLocaleDateString('en-CA').substring(0, 7) === ((elMonthly ? elMonthly.value : null) || getHariIni().substring(0,7))), "LAPORAN BULANAN", "bulanan");
             drawNeraca("boxTahunan", cache.filter(d => d.t.getFullYear().toString() === (elYearly ? elYearly.value : "2026")), "LAPORAN TAHUNAN", "tahunan");
         };
 
-        // --- SYNC RTDB ---
         let lastSyncAmount = 0;
         onValue(ref(rtdb, 'stok_macca_v14_flow'), async (s) => {
             const d = s.val(); if(!d) return;
-            let i = 0, a = 0, c = 0;
-            const now = new Date();
+            let i = 0, a = 0, c = 0; const now = new Date();
             const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
             const witaNow = new Date(utc + (3600000 * 8));
             const startWita = witaNow.setHours(0,0,0,0);
-
             Object.values(d).forEach(x => { 
                 if(x.time >= startWita && x.note?.includes("Penj. Gerai Depan")) { 
                     const sub = x.qty * (x.price || 0); 
@@ -436,13 +392,9 @@
                 lastSyncAmount = tot; 
                 await addDoc(colRef, { category: "CASH GERAI", type: "in", amount: tot, note: key, description: `Ikan:Rp${i.toLocaleString()}, Ayam:Rp${a.toLocaleString()}`, timestamp: serverTimestamp() }); 
                 tampilkanNotif("Sync Gerai Ok!"); 
-            }
-            else { 
+            } else { 
                 const existingDoc = snap.docs[0]; 
-                if(existingDoc.data().amount !== tot) { 
-                    lastSyncAmount = tot; 
-                    await updateDoc(doc(db, "transactions", existingDoc.id), { amount: tot }); 
-                } 
+                if(existingDoc.data().amount !== tot) { lastSyncAmount = tot; await updateDoc(doc(db, "transactions", existingDoc.id), { amount: tot }); } 
             }
         });
     </script>
