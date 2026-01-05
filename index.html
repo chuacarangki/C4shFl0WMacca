@@ -111,7 +111,7 @@
 
     <div class="wadah">
         <div id="beranda" class="halaman aktif">
-            <header><h1>MACCA FLOW</h1></header>
+            <header><h1>MACCA CASHFLOW</h1></header>
             <div class="kartu-saldo">
                 <small style="color:var(--pink-krimson); font-weight: 600; letter-spacing: 2px;">SALDO TERSEDIA</small>
                 <div class="jumlah-saldo" id="saldoUtama">Rp. 0</div>
@@ -127,9 +127,9 @@
 
             <h2><i class="fa-solid fa-arrow-up"></i> Kas Keluar</h2>
             <div class="grid-tombol">
-                <button class="tombol-aksi" onclick="bukaModal('KASIR (ARA)', 'keluar')"><i class="fa-solid fa-user-tie"></i><span>Ara</span></button>
-                <button class="tombol-aksi" onclick="bukaModal('DAPUR (ATI)', 'keluar')"><i class="fa-solid fa-kitchen-set"></i><span>Ati</span></button>
-                <button class="tombol-aksi" onclick="bukaModal('STOK IKAN', 'keluar')"><i class="fa-solid fa-fish"></i><span>Stok</span></button>
+                <button class="tombol-aksi" onclick="bukaModal('KASIR (ARA)', 'keluar')"><i class="fa-solid fa-user-tie"></i><span>Kasir</span></button>
+                <button class="tombol-aksi" onclick="bukaModal('DAPUR (IBU IBU IBU IBU ATI)', 'keluar')"><i class="fa-solid fa-kitchen-set"></i><span>Dapur</span></button>
+                <button class="tombol-aksi" onclick="bukaModal('STOK (HASBI)', 'keluar')"><i class="fa-solid fa-fish"></i><span>Stok</span></button>
                 <button class="tombol-aksi" onclick="bukaModal('PAK BOSS', 'keluar')"><i class="fa-solid fa-crown"></i><span>Boss</span></button>
             </div>
         </div>
@@ -209,7 +209,7 @@
         const configSub = {
             'CASH KASIR': ['Penjualan Toko', 'GrabFood', 'GoFood'],
             'KASIR (ARA)': ['Operasional', 'Kasbon Karyawan', 'Belanja Kebutuhan'],
-            'DAPUR (ATI)': ['Bahan Dapur', 'Sayuran', 'Bahan Mentah'],
+            'DAPUR (IBU IBU IBU IBU ATI)': ['Bahan Dapur', 'Sayuran', 'Bahan Mentah'],
             'STOK IKAN': ['Ikan', 'Gas'],
             'PAK BOSS': ['TF BRI', 'TF BNI']
         };
@@ -349,7 +349,7 @@
             const tglFilter = document.getElementById('riwayatTgl').value || getHariIni();
             
             const getIcon = (cat) => {
-                const icons = { 'KASIR': 'fa-cash-register', 'GERAI': 'fa-store', 'WARKOP': 'fa-mug-hot', 'QRIS': 'fa-qrcode', 'ARA': 'fa-user-tie', 'ATI': 'fa-kitchen-set', 'STOK': 'fa-fish', 'BOSS': 'fa-crown' };
+                const icons = { 'KASIR': 'fa-cash-register', 'GERAI': 'fa-store', 'WARKOP': 'fa-mug-hot', 'QRIS': 'fa-qrcode', 'ARA': 'fa-user-tie', 'IBU ATI': 'fa-kitchen-set', 'STOK': 'fa-fish', 'BOSS': 'fa-crown' };
                 for(let key in icons) if(cat.includes(key)) return icons[key];
                 return "fa-wallet";
             };
@@ -431,3 +431,4 @@
     </script>
 </body>
 </html>
+
