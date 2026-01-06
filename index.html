@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Macca Flow Elite - History Export</title>
+    <title>Macca Flow Elite - Auto Today</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -108,14 +108,14 @@
                 <button class="tombol-aksi" onclick="bukaModal('CASH KASIR', 'masuk')"><i class="fa-solid fa-cash-register"></i><span>Kasir</span></button>
                 <button class="tombol-aksi" onclick="bukaModal('CASH GERAI', 'masuk')"><i class="fa-solid fa-store"></i><span>Gerai</span></button>
                 <button class="tombol-aksi" onclick="bukaModal('CASH WARKOP', 'masuk')"><i class="fa-solid fa-mug-hot"></i><span>Warkop</span></button>
-                <button class="tombol-aksi" onclick="bukaModal('TRANSFER / QRIS', 'masuk')"><i class="fa-solid fa-qrcode"></i><span>BANK/QRIS</span></button>
+                <button class="tombol-aksi" onclick="bukaModal('TRANSFER / QRIS', 'masuk')"><i class="fa-solid fa-qrcode"></i><span>QRIS</span></button>
             </div>
 
             <h2><i class="fa-solid fa-arrow-up-long"></i> Kas Keluar</h2>
             <div class="grid-tombol">
-                <button class="tombol-aksi" onclick="bukaModal('KASIR (ARA)', 'keluar')"><i class="fa-solid fa-user-tie"></i><span>Kasir</span></button>
-                <button class="tombol-aksi" onclick="bukaModal(' (IBU ATI)', 'keluar')"><i class="fa-solid fa-kitchen-set"></i><span>Dapur</span></button>
-                <button class="tombol-aksi" onclick="bukaModal('STOK IKAN/GAS (HASBI)', 'keluar')"><i class="fa-solid fa-fish"></i><span>Stok</span></button>
+                <button class="tombol-aksi" onclick="bukaModal('KASIR (ARA)', 'keluar')"><i class="fa-solid fa-user-tie"></i><span>Ara</span></button>
+                <button class="tombol-aksi" onclick="bukaModal('DAPUR (ATI)', 'keluar')"><i class="fa-solid fa-kitchen-set"></i><span>Ati</span></button>
+                <button class="tombol-aksi" onclick="bukaModal('STOK IKAN', 'keluar')"><i class="fa-solid fa-fish"></i><span>Stok</span></button>
                 <button class="tombol-aksi" onclick="bukaModal('PAK BOSS', 'keluar')"><i class="fa-solid fa-crown"></i><span>Boss</span></button>
             </div>
         </div>
@@ -178,14 +178,22 @@
         const colRef = collection(db, "transactions");
 
         let cache = [], cKat = "", cTip = "", cSub = "", cSub2 = "", isSaving = false;
-        const getHariIni = () => new Date(new Date().getTime() + (3600000 * 8)).toLocaleDateString('en-CA');
+        
+        // Fungsi mendapatkan tanggal WITA (Makassar)
+        const getHariIni = () => {
+            const d = new Date();
+            const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+            return new Date(utc + (3600000 * 8)).toLocaleDateString('en-CA');
+        };
+
+        const getBulanIni = () => getHariIni().substring(0, 7);
 
         const configSub = {
             'CASH KASIR': ['Penjualan Toko', 'GrabFood', 'GoFood'],
             'TRANSFER / QRIS': ['QRIS', 'Transfer Bank'],
             'KASIR (ARA)': ['Operasional', 'Kasbon', 'Belanja'],
-            ' (IBU ATI)': ['Bahan ', 'Sayuran'],
-            'STOK IKAN/GAS (HASBI)': ['Ikan', 'Gas'],
+            'DAPUR (ATI)': ['Bahan Dapur', 'Sayuran'],
+            'STOK IKAN': ['Ikan', 'Gas'],
             'PAK BOSS': ['Offline', 'Online']
         };
 
@@ -274,6 +282,14 @@
             document.querySelectorAll('.halaman').forEach(h => h.classList.remove('aktif'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('aktif'));
             document.getElementById(id).classList.add('aktif');
+            
+            // Set default tanggal setiap pindah tab
+            if(id === 'riwayat') document.getElementById('riwayatTgl').value = getHariIni();
+            if(id === 'neraca') {
+                document.getElementById('nDaily').value = getHariIni();
+                document.getElementById('nMonthly').value = getBulanIni();
+            }
+            
             if(event) event.currentTarget.classList.add('aktif');
             syncUI();
         };
@@ -309,7 +325,7 @@
                 list.appendChild(div);
             });
             drawNeraca("boxHarian", cache.filter(d => d.t.toLocaleDateString('en-CA') === (document.getElementById('nDaily').value || getHariIni())), "LAPORAN HARIAN", "harian");
-            drawNeraca("boxBulanan", cache.filter(d => d.t.toLocaleDateString('en-CA').substring(0, 7) === (document.getElementById('nMonthly').value || getHariIni().substring(0,7))), "LAPORAN BULANAN", "bulanan");
+            drawNeraca("boxBulanan", cache.filter(d => d.t.toLocaleDateString('en-CA').substring(0, 7) === (document.getElementById('nMonthly').value || getBulanIni())), "LAPORAN BULANAN", "bulanan");
             drawNeraca("boxTahunan", cache.filter(d => d.t.getFullYear().toString() === (document.getElementById('nYearly').value || "2026")), "LAPORAN TAHUNAN", "tahunan");
         };
 
@@ -329,90 +345,44 @@
                 </div>`;
         };
 
-        // EXPORT DENGAN HISTORY (RINCIAN)
         window.prosesExport = (format, filterType) => {
             tampilkanNotif("Memproses berkas...", "sukses");
             let dataFilter = [];
             const tglH = document.getElementById('nDaily').value, tglB = document.getElementById('nMonthly').value, tglT = document.getElementById('nYearly').value;
-            
             if (filterType === 'harian') dataFilter = cache.filter(d => d.t.toLocaleDateString('en-CA') === tglH);
             else if (filterType === 'bulanan') dataFilter = cache.filter(d => d.t.toLocaleDateString('en-CA').substring(0, 7) === tglB);
             else dataFilter = cache.filter(d => d.t.getFullYear().toString() === tglT);
-            
             if (dataFilter.length === 0) return tampilkanNotif("Tidak ada data", "bahaya");
-
-            // Sortir data agar urutan waktu teratur (dari lama ke baru)
             dataFilter.sort((a, b) => a.t - b.t);
-
             if (format === 'pdf') {
-                const { jsPDF } = window.jspdf; 
-                const doc = new jsPDF();
-                
-                // Header Laporan
-                doc.setFontSize(16);
+                const { jsPDF } = window.jspdf; const doc = new jsPDF();
                 doc.text("LAPORAN MACCA FLOW", 14, 15);
                 doc.setFontSize(10);
-                doc.text(`Sistem: Macca Finance | Periode: ${filterType.toUpperCase()}`, 14, 22);
-                doc.text(`Waktu Cetak: ${new Date().toLocaleString('id-ID')}`, 14, 27);
-                
-                // Summary ringkasan
-                let totalMasuk = 0, totalKeluar = 0;
-                dataFilter.forEach(d => { if(d.type==='in') totalMasuk += d.amount; else totalKeluar += d.amount; });
-                
-                doc.setDrawColor(200);
-                doc.line(14, 32, 196, 32);
-                doc.text(`Total Masuk: Rp ${totalMasuk.toLocaleString('id-ID')}`, 14, 40);
-                doc.text(`Total Keluar: Rp ${totalKeluar.toLocaleString('id-ID')}`, 80, 40);
-                doc.text(`Laba Bersih: Rp ${(totalMasuk-totalKeluar).toLocaleString('id-ID')}`, 140, 40);
-                doc.line(14, 45, 196, 45);
-
-                // Tabel History (Rincian)
-                const rows = dataFilter.map((d, i) => [
-                    i + 1, 
-                    d.t.toLocaleString('id-ID', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'}), 
-                    d.category, 
-                    d.type === 'in' ? 'MASUK' : 'KELUAR', 
-                    d.amount.toLocaleString('id-ID'),
-                    d.description || '-'
-                ]);
-
-                doc.autoTable({ 
-                    head: [['No', 'Waktu', 'Kategori', 'Tipe', 'Nominal', 'History/Catatan']], 
-                    body: rows, 
-                    startY: 50,
-                    styles: { fontSize: 8 },
-                    headStyles: { fillColor: [138, 43, 226] } // Warna Ungu Elektrik Macca
-                });
-                
+                doc.text(`Periode: ${filterType.toUpperCase()} | Dicetak: ${new Date().toLocaleString('id-ID')}`, 14, 22);
+                const rows = dataFilter.map((d, i) => [i + 1, d.t.toLocaleString('id-ID'), d.category, d.type === 'in' ? 'MASUK' : 'KELUAR', d.amount.toLocaleString('id-ID'), d.description || '-']);
+                doc.autoTable({ head: [['No', 'Waktu', 'Kategori', 'Tipe', 'Nominal', 'History']], body: rows, startY: 30, styles: { fontSize: 8 } });
                 const blobUrl = doc.output('bloburl');
-                const link = document.createElement('a');
-                link.href = blobUrl;
-                link.download = `Macca_History_${filterType}.pdf`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                const link = document.createElement('a'); link.href = blobUrl; link.download = `Macca_History_${filterType}.pdf`;
+                document.body.appendChild(link); link.click(); document.body.removeChild(link);
             } else {
-                // CSV juga menyertakan kolom rincian/catatan
-                let csv = "No,Waktu,Kategori,Tipe,Nominal,History_Catatan\n";
-                dataFilter.forEach((d, i) => { 
-                    csv += `${i+1},${d.t.toLocaleString('id-ID')},"${d.category}",${d.type === 'in' ? 'MASUK' : 'KELUAR'},${d.amount},"${d.description || '-'}"\n`; 
-                });
+                let csv = "No,Waktu,Kategori,Tipe,Nominal,History\n";
+                dataFilter.forEach((d, i) => { csv += `${i+1},${d.t.toLocaleString('id-ID')},"${d.category}",${d.type.toUpperCase()},${d.amount},"${d.description || '-'}"\n`; });
                 const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
                 const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.setAttribute('href', url);
-                link.setAttribute('download', `Macca_History_${filterType}.csv`);
-                link.setAttribute('target', '_blank');
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                const link = document.createElement('a'); link.setAttribute('href', url); link.setAttribute('download', `Macca_History_${filterType}.csv`);
+                document.body.appendChild(link); link.click(); document.body.removeChild(link);
             }
         };
 
-        document.getElementById('riwayatTgl').value = getHariIni();
-        document.getElementById('nDaily').value = getHariIni();
-        document.getElementById('nMonthly').value = getHariIni().substring(0, 7);
+        // Inisialisasi awal saat load
+        window.onload = () => {
+            const today = getHariIni();
+            const month = getBulanIni();
+            document.getElementById('riwayatTgl').value = today;
+            document.getElementById('nDaily').value = today;
+            document.getElementById('nMonthly').value = month;
+            syncUI();
+        };
     </script>
 </body>
 </html>
-
