@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Macca Flow Elite</title>
+    <title>Macca Flow Elite - Luxury Header</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -17,59 +17,58 @@
             --emas-murni: #efbf3b;
             --kaca-bg: rgba(255, 255, 255, 0.05);
             --kaca-garis: rgba(255, 255, 255, 0.1);
-            --cahaya-neon: 0 0 20px rgba(138, 43, 226, 0.3);
             --sukses: #00ff88;
             --bahaya: #ff3366;
             --teks-utama: #f8f9fa;
         }
 
-        body {
-            margin: 0; padding: 0;
-            font-family: 'Poppins', sans-serif;
-            background: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #040a16 100%);
-            color: var(--teks-utama); min-height: 100vh;
-            overflow-x: hidden;
-        }
-
+        body { margin: 0; font-family: 'Poppins', sans-serif; background: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #040a16 100%); color: var(--teks-utama); min-height: 100vh; overflow-x: hidden; }
         .wadah { padding: 25px; max-width: 480px; margin: auto; padding-bottom: 130px; }
-        .halaman { display: none; animation: geserAtas 0.4s ease-out; }
-        .halaman.aktif { display: block; }
+        .halaman { display: none; }
+        .halaman.aktif { display: block; animation: geserAtas 0.4s ease-out; }
 
-        header { text-align: center; padding: 20px 0; }
-        h1 { 
-            font-size: 1.6rem; font-weight: 600; letter-spacing: 3px; 
-            background: linear-gradient(to right, var(--emas-murni), var(--pink-krimson));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin: 0;
-        }
+        /* HEADER TERBARU - LUXURY STYLE */
+        header { text-align: center; padding: 30px 0 20px; position: relative; }
+        .logo-crown { font-size: 1.8rem; color: var(--emas-murni); margin-bottom: 5px; filter: drop-shadow(0 0 10px rgba(239, 191, 59, 0.5)); }
+        h1 { font-size: 1.4rem; font-weight: 600; letter-spacing: 4px; background: linear-gradient(to right, var(--emas-murni), #fff, var(--emas-murni)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; text-transform: uppercase; }
+        .sub-header { font-size: 0.65rem; color: rgba(255,255,255,0.4); letter-spacing: 2px; text-transform: uppercase; margin-top: 5px; display: block; }
 
         #notif-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 3000; width: 90%; max-width: 350px; }
-        .notif { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(15px); border: 1px solid var(--kaca-garis); border-radius: 15px; padding: 15px 20px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: popNotif 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .notif-teks { font-size: 0.8rem; color: #fff; }
+        .notif { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(15px); border: 1px solid var(--kaca-garis); border-radius: 15px; padding: 15px 20px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-        .kartu-saldo { background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)); backdrop-filter: blur(15px); border: 1px solid var(--kaca-garis); border-radius: 25px; padding: 35px 25px; text-align: center; box-shadow: var(--cahaya-neon); margin-bottom: 30px; }
+        .kartu-saldo { background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)); backdrop-filter: blur(15px); border: 1px solid var(--kaca-garis); border-radius: 25px; padding: 35px 25px; text-align: center; box-shadow: 0 0 20px rgba(138, 43, 226, 0.3); margin-bottom: 30px; }
         .jumlah-saldo { font-size: 2.1rem; font-weight: 600; color: #fff; }
+
+        h2 { font-size: 0.8rem; color: var(--emas-murni); letter-spacing: 1.5px; text-transform: uppercase; margin: 25px 0 15px; display: flex; align-items: center; gap: 10px; }
+        h2 i.fa-arrow-down-long { color: var(--sukses); }
+        h2 i.fa-arrow-up-long { color: var(--bahaya); }
+        .grid-tombol { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .tombol-aksi { background: var(--kaca-bg); border: 1px solid var(--kaca-garis); border-radius: 20px; padding: 18px 10px; color: white; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .tombol-aksi i { font-size: 1.4rem; background: linear-gradient(45deg, var(--emas-murni), var(--pink-krimson)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
         .modal-konten { background: linear-gradient(160deg, #0f172a 0%, #040a16 100%); border: 1px solid var(--kaca-garis); border-radius: 30px; padding: 30px; width: 100%; max-width: 380px; }
-        #labelTipeModal { display: inline-block; padding: 4px 12px; border-radius: 8px; font-size: 0.65rem; font-weight: 800; margin-bottom: 10px; }
-        .label-masuk { background: rgba(0, 255, 136, 0.15); color: var(--sukses); border: 1px solid var(--sukses); }
-        .label-keluar { background: rgba(255, 51, 102, 0.15); color: var(--bahaya); border: 1px solid var(--bahaya); }
         
         .box-sub { display: none; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 15px; }
         .btn-sub { flex: 1; min-width: 80px; padding: 10px; border-radius: 12px; border: 1px solid var(--kaca-garis); background: transparent; color: white; font-size: 0.7rem; cursor: pointer; }
         .btn-sub.aktif { background: var(--emas-murni); color: var(--biru-dalam); font-weight: 600; border-color: var(--emas-murni); }
 
-        .item-riwayat-elite { background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02)); backdrop-filter: blur(10px); border: 1px solid var(--kaca-garis); border-radius: 20px; padding: 18px; margin-bottom: 15px; display: flex; align-items: center; gap: 15px; }
+        .status-header-modal { font-size: 0.7rem; font-weight: 600; letter-spacing: 2px; padding: 5px 15px; border-radius: 20px; display: inline-block; margin-bottom: 10px; }
+        .status-masuk { background: rgba(0, 255, 136, 0.1); color: var(--sukses); border: 1px solid rgba(0, 255, 136, 0.3); }
+        .status-keluar { background: rgba(255, 51, 102, 0.1); color: var(--bahaya); border: 1px solid rgba(255, 51, 102, 0.3); }
+
+        input, select, textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--kaca-garis); color: #fff; padding: 14px; border-radius: 15px; font-family: 'Poppins'; margin-bottom: 12px; outline: none; box-sizing: border-box; }
+        .label-input { font-size: 0.65rem; color: var(--emas-murni); margin-bottom: 5px; display: block; opacity: 0.8; }
+
+        .item-riwayat-elite { background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02)); backdrop-filter: blur(10px); border: 1px solid var(--kaca-garis); border-radius: 20px; padding: 18px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; }
         .icon-riwayat { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
         .riwayat-info { flex: 1; }
         .riwayat-kat { display: block; font-weight: 600; font-size: 0.9rem; color: #fff; }
         .riwayat-jam { font-size: 0.65rem; color: rgba(255,255,255,0.4); }
-        .riwayat-nominal { text-align: right; }
-        .riwayat-amt { display: block; font-weight: 600; font-size: 0.95rem; }
-        .riwayat-desc { font-size: 0.65rem; color: rgba(255,255,255,0.3); display: block; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .riwayat-amt { display: block; font-weight: 600; font-size: 0.95rem; text-align: right; }
+        .riwayat-desc { font-size: 0.65rem; color: rgba(255,255,255,0.3); display: block; text-align: right; }
 
-        .kartu-neraca { background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)); backdrop-filter: blur(15px); border: 1px solid var(--kaca-garis); border-radius: 25px; padding: 25px; margin-bottom: 20px; box-shadow: var(--cahaya-neon); }
+        .kartu-neraca { background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)); backdrop-filter: blur(15px); border: 1px solid var(--kaca-garis); border-radius: 25px; padding: 25px; margin-bottom: 20px; }
         .neraca-header { font-size: 0.65rem; color: var(--emas-murni); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; display: block; }
         .neraca-row { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
         .neraca-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
@@ -77,24 +76,14 @@
         .bg-out { background: rgba(255, 51, 102, 0.1); color: var(--bahaya); }
         .bg-net { background: rgba(239, 191, 59, 0.1); color: var(--emas-murni); }
 
-        .box-export { display: flex; gap: 10px; margin-top: 15px; padding-top: 15px; border-top: 1px dashed rgba(255,255,255,0.1); }
-        .btn-export { flex: 1; padding: 8px; border-radius: 10px; border: 1px solid var(--kaca-garis); background: rgba(255,255,255,0.05); color: #fff; font-size: 0.65rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; transition: 0.3s; }
-        .btn-export:active { transform: scale(0.95); background: var(--emas-murni); color: var(--biru-dalam); }
-
-        h2 { font-size: 0.8rem; color: var(--emas-murni); letter-spacing: 1.5px; text-transform: uppercase; margin: 25px 0 15px; display: flex; align-items: center; gap: 10px; }
-        h2::after { content: ""; flex: 1; height: 1px; background: linear-gradient(to right, var(--kaca-garis), transparent); }
-        .grid-tombol { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .tombol-aksi { background: var(--kaca-bg); border: 1px solid var(--kaca-garis); border-radius: 20px; padding: 18px 10px; color: white; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .tombol-aksi i { font-size: 1.4rem; background: linear-gradient(45deg, var(--emas-murni), var(--pink-krimson)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
         .nav-bawah { position: fixed; bottom: 20px; left: 20px; right: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: space-around; padding: 12px; border-radius: 20px; border: 1px solid var(--kaca-garis); z-index: 1000; }
         .nav-item { color: rgba(255,255,255,0.4); display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
         .nav-item.aktif { color: var(--emas-murni); }
         .nav-item span { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; }
 
-        input, select, textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--kaca-garis); color: #fff; padding: 14px; border-radius: 15px; font-family: 'Poppins'; margin-bottom: 15px; outline: none; box-sizing: border-box; }
+        .btn-export { flex: 1; padding: 10px; border-radius: 12px; border: 1px solid var(--kaca-garis); background: rgba(255,255,255,0.05); color: #fff; font-size: 0.65rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .box-export { display: flex; gap: 10px; margin-top: 15px; padding-top: 15px; border-top: 1px dashed rgba(255,255,255,0.1); }
 
-        @keyframes popNotif { from { opacity: 0; transform: translateY(-50px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes geserAtas { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -104,41 +93,55 @@
 
     <div class="wadah">
         <div id="beranda" class="halaman aktif">
-            <header><h1>MACCA CASHFLOW</h1></header>
+            <header>
+                <div class="logo-crown"><i class="fa-solid fa-crown"></i></div>
+                <h1>MACCA CASH FLOW</h1>
+                <span class="sub-header">Macca Finance System</span>
+            </header>
+            
             <div class="kartu-saldo">
                 <small style="color:var(--pink-krimson); font-weight: 600; letter-spacing: 2px;">SALDO TERSEDIA</small>
                 <div class="jumlah-saldo" id="saldoUtama">Rp. 0</div>
             </div>
             
-            <h2><i class="fa-solid fa-arrow-down"></i> Kas Masuk</h2>
+            <h2><i class="fa-solid fa-arrow-down-long"></i> Kas Masuk</h2>
             <div class="grid-tombol">
                 <button class="tombol-aksi" onclick="bukaModal('CASH KASIR', 'masuk')"><i class="fa-solid fa-cash-register"></i><span>Kasir</span></button>
                 <button class="tombol-aksi" onclick="bukaModal('CASH GERAI', 'masuk')"><i class="fa-solid fa-store"></i><span>Gerai</span></button>
                 <button class="tombol-aksi" onclick="bukaModal('CASH WARKOP', 'masuk')"><i class="fa-solid fa-mug-hot"></i><span>Warkop</span></button>
-                <button class="tombol-aksi" onclick="bukaModal('QRIS / TRANSFER', 'masuk')"><i class="fa-solid fa-qrcode"></i><span>QRIS</span></button>
+                <button class="tombol-aksi" onclick="bukaModal('TRANSFER / QRIS', 'masuk')"><i class="fa-solid fa-qrcode"></i><span>QRIS</span></button>
             </div>
 
-            <h2><i class="fa-solid fa-arrow-up"></i> Kas Keluar</h2>
+            <h2><i class="fa-solid fa-arrow-up-long"></i> Kas Keluar</h2>
             <div class="grid-tombol">
-                <button class="tombol-aksi" onclick="bukaModal('KASIR (ARA)', 'keluar')"><i class="fa-solid fa-user-tie"></i><span>Kasir</span></button>
-                <button class="tombol-aksi" onclick="bukaModal('DAPUR (IBU ATI)', 'keluar')"><i class="fa-solid fa-kitchen-set"></i><span>Dapur</span></button>
-                <button class="tombol-aksi" onclick="bukaModal('STOK IKAN (HASBI)', 'keluar')"><i class="fa-solid fa-fish"></i><span>Stok</span></button>
+                <button class="tombol-aksi" onclick="bukaModal('KASIR (ARA)', 'keluar')"><i class="fa-solid fa-user-tie"></i><span>Ara</span></button>
+                <button class="tombol-aksi" onclick="bukaModal('DAPUR (ATI)', 'keluar')"><i class="fa-solid fa-kitchen-set"></i><span>Ati</span></button>
+                <button class="tombol-aksi" onclick="bukaModal('STOK IKAN', 'keluar')"><i class="fa-solid fa-fish"></i><span>Stok</span></button>
                 <button class="tombol-aksi" onclick="bukaModal('PAK BOSS', 'keluar')"><i class="fa-solid fa-crown"></i><span>Boss</span></button>
             </div>
         </div>
 
         <div id="riwayat" class="halaman">
-            <header><h1>RIWAYAT</h1></header>
+            <header>
+                <h1>RIWAYAT</h1>
+                <span class="sub-header">Macca Finance System</span>
+            </header>
             <input type="date" id="riwayatTgl" onchange="syncUI()">
             <div id="listRiwayat"></div>
         </div>
 
         <div id="neraca" class="halaman">
-            <header><h1>NERACA</h1></header>
-            <input type="date" id="nDaily" onchange="syncUI()" style="margin-top:20px;">
+            <header>
+                <h1>NERACA</h1>
+                <span class="sub-header">Macca Finance System</span>
+            </header>
+            <label class="label-input" style="margin-top:20px;">FILTER HARIAN</label>
+            <input type="date" id="nDaily" onchange="syncUI()">
             <div id="boxHarian" class="kartu-neraca"></div>
+            <label class="label-input">FILTER BULANAN</label>
             <input type="month" id="nMonthly" onchange="syncUI()">
             <div id="boxBulanan" class="kartu-neraca"></div>
+            <label class="label-input">FILTER TAHUNAN</label>
             <select id="nYearly" onchange="syncUI()">
                 <option value="2025">2025</option>
                 <option value="2026" selected>2026</option>
@@ -150,121 +153,138 @@
     <div id="modal">
         <div class="modal-konten">
             <div style="text-align: center; margin-bottom: 15px;">
-                <div id="labelTipeModal">TIPE</div>
-                <h3 id="judulModal" style="color:white; margin:0;">KATEGORI</h3>
+                <div id="statusHeaderModal" class="status-header-modal">STATUS</div>
+                <h3 id="judulModal" style="color:white; margin:0; letter-spacing:1px; font-size:1.1rem;">KATEGORI</h3>
             </div>
+            
             <div id="boxSubDynamic" class="box-sub"></div>
+            <div id="boxSubLevel2" class="box-sub" style="margin-top:-10px; background: rgba(255,255,255,0.01); border: 1px dashed var(--kaca-garis);"></div>
+
+            <label class="label-input">TANGGAL TRANSAKSI</label>
+            <input type="date" id="inTanggal">
+            <label class="label-input">NOMINAL</label>
             <input type="text" id="inNominal" placeholder="Rp. 0" oninput="formatRupiah(this)">
+            <label class="label-input">CATATAN</label>
             <textarea id="inCatatan" rows="2" placeholder="Catatan tambahan..."></textarea>
+            
             <button id="btnSimpan" onclick="simpanData()" style="width: 100%; padding: 16px; background: linear-gradient(45deg, var(--ungu-elektrik), var(--pink-krimson)); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer;">SIMPAN DATA</button>
             <p onclick="tutupModal()" style="text-align:center; color:rgba(255,255,255,0.3); cursor:pointer; font-size:0.8rem; margin-top:15px;">BATALKAN</p>
         </div>
     </div>
 
     <nav class="nav-bawah">
-        <div class="nav-item aktif" onclick="gantiHal('beranda')"><i class="fa-solid fa-compass"></i><span>Beranda</span></div>
+        <div class="nav-item aktif" onclick="gantiHal('beranda')"><i class="fa-solid fa-house-chimney"></i><span>Beranda</span></div>
         <div class="nav-item" onclick="gantiHal('riwayat')"><i class="fa-solid fa-receipt"></i><span>Riwayat</span></div>
         <div class="nav-item" onclick="gantiHal('neraca')"><i class="fa-solid fa-scale-balanced"></i><span>Neraca</span></div>
     </nav>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, where, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getFirestore, collection, addDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const firebaseConfig = { apiKey: "AIzaSyAXs5ZVr6gop28qPKbeaqTRiNdEGZlZMZQ", authDomain: "cashflowmacca.firebaseapp.com", projectId: "cashflowmacca", databaseURL: "https://stocklistmacca-default-rtdb.asia-southeast1.firebasedatabase.app" };
+        const firebaseConfig = { apiKey: "AIzaSyAXs5ZVr6gop28qPKbeaqTRiNdEGZlZMZQ", authDomain: "cashflowmacca.firebaseapp.com", projectId: "cashflowmacca" };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const rtdb = getDatabase(app);
         const colRef = collection(db, "transactions");
 
-        let cache = []; let cKat = "", cTip = "", cSub = "", isSaving = false;
-        
-        const getHariIni = () => {
-            const d = new Date();
-            const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
-            return new Date(utc + (3600000 * 8)).toLocaleDateString('en-CA');
-        };
+        let cache = [], cKat = "", cTip = "", cSub = "", cSub2 = "", isSaving = false;
+        const getHariIni = () => new Date(new Date().getTime() + (3600000 * 8)).toLocaleDateString('en-CA');
 
-        const formatWita = (date) => {
-            return date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Makassar' }) + " WITA";
-        };
-
-        const initDates = () => {
-            const tgl = getHariIni();
-            const elRiwayat = document.getElementById('riwayatTgl');
-            const elDaily = document.getElementById('nDaily');
-            const elMonthly = document.getElementById('nMonthly');
-            if(elRiwayat) elRiwayat.value = tgl;
-            if(elDaily) elDaily.value = tgl;
-            if(elMonthly) elMonthly.value = tgl.substring(0, 7);
-        };
-        initDates();
-
-        // --- KONFIGURASI SUB KATEGORI ---
         const configSub = {
             'CASH KASIR': ['Penjualan Toko', 'GrabFood', 'GoFood'],
-            'QRIS / TRANSFER': ['BRI', 'BNI'],
-            'KASIR (ARA)': ['Operasional', 'Kasbon Karyawan', 'Belanja Kebutuhan'],
-            'DAPUR (IBU ATI)': ['Bahan Dapur', 'Sayuran', 'Bahan Mentah'],
-            'STOK IKAN (HASBI)': ['Ikan', 'Gas'], // Perubahan: Ditambahkan sub-kategori Ikan & Gas
-            'PAK BOSS': ['TF BRI', 'TF BNI']
+            'TRANSFER / QRIS': ['QRIS', 'Transfer Bank'],
+            'KASIR (ARA)': ['Operasional', 'Kasbon', 'Belanja'],
+            'DAPUR (ATI)': ['Bahan Dapur', 'Sayuran'],
+            'STOK IKAN': ['Ikan', 'Gas'],
+            'PAK BOSS': ['Offline', 'Online']
         };
 
         window.tampilkanNotif = (pesan, tipe = 'sukses') => {
             const container = document.getElementById('notif-container');
             const el = document.createElement('div'); el.className = 'notif';
-            el.innerHTML = `<i class="fa-solid ${tipe==='sukses'?'fa-circle-check':'fa-circle-exclamation'}" style="color:${tipe==='sukses'?'var(--sukses)':'var(--bahaya)'}"></i><span class="notif-teks">${pesan}</span>`;
+            el.innerHTML = `<i class="fa-solid ${tipe==='sukses'?'fa-circle-check':'fa-circle-exclamation'}" style="color:${tipe==='sukses'?'var(--sukses)':'var(--bahaya)'}"></i><span style="font-size:0.8rem">${pesan}</span>`;
             container.appendChild(el);
             setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 500); }, 3000);
         };
 
         window.bukaModal = (k, t) => {
-            cKat = k; cTip = t; cSub = "";
+            document.getElementById('inNominal').value = "";
+            document.getElementById('inCatatan').value = "";
+            cKat = k; cTip = t; cSub = ""; cSub2 = "";
             document.getElementById('judulModal').innerText = k;
-            document.getElementById('labelTipeModal').innerText = t === 'masuk' ? "KAS MASUK" : "KAS KELUAR";
-            document.getElementById('labelTipeModal').className = t === 'masuk' ? "label-masuk" : "label-keluar";
-            const subBox = document.getElementById('boxSubDynamic'); subBox.innerHTML = "";
+            document.getElementById('inTanggal').value = getHariIni();
+            const statusHead = document.getElementById('statusHeaderModal');
+            if(t === 'masuk') {
+                statusHead.innerText = "KAS MASUK";
+                statusHead.className = "status-header-modal status-masuk";
+            } else {
+                statusHead.innerText = "KAS KELUAR";
+                statusHead.className = "status-header-modal status-keluar";
+            }
+
+            const subBox = document.getElementById('boxSubDynamic');
+            const subBox2 = document.getElementById('boxSubLevel2');
+            subBox.innerHTML = ""; subBox2.innerHTML = ""; subBox2.style.display = 'none';
+
             if(configSub[k]) {
                 subBox.style.display = 'flex';
                 configSub[k].forEach((s, idx) => {
-                    const btn = document.createElement('button'); btn.className = `btn-sub ${idx===0?'aktif':''}`; btn.innerText = s;
-                    if(idx===0) cSub = s;
-                    btn.onclick = () => { document.querySelectorAll('.btn-sub').forEach(b => b.classList.remove('aktif')); btn.classList.add('aktif'); cSub = s; };
+                    const btn = document.createElement('button');
+                    btn.className = `btn-sub ${idx===0?'aktif':''}`;
+                    btn.innerText = s;
+                    if(idx===0) { cSub = s; logicLevel2(k, s); }
+                    btn.onclick = () => {
+                        document.querySelectorAll('#boxSubDynamic .btn-sub').forEach(b => b.classList.remove('aktif'));
+                        btn.classList.add('aktif'); cSub = s; logicLevel2(k, s);
+                    };
                     subBox.appendChild(btn);
                 });
             } else { subBox.style.display = 'none'; }
             document.getElementById('modal').style.display = 'flex';
         };
 
-        window.tutupModal = () => { 
-            document.getElementById('modal').style.display = 'none'; 
-            document.getElementById('inNominal').value = ""; 
-            document.getElementById('inCatatan').value = ""; 
-            isSaving = false; 
-            document.getElementById('btnSimpan').innerText = "SIMPAN DATA"; 
+        const logicLevel2 = (k, s) => {
+            const subBox2 = document.getElementById('boxSubLevel2');
+            if ((k === 'PAK BOSS' && s === 'Online') || (k === 'TRANSFER / QRIS' && s === 'Transfer Bank')) {
+                subBox2.innerHTML = ""; subBox2.style.display = 'flex';
+                ['TF BRI', 'TF BNI'].forEach((bank, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = `btn-sub ${idx===0?'aktif':''}`;
+                    btn.innerText = bank;
+                    if(idx===0) cSub2 = bank;
+                    btn.onclick = () => {
+                        document.querySelectorAll('#boxSubLevel2 .btn-sub').forEach(b => b.classList.remove('aktif'));
+                        btn.classList.add('aktif'); cSub2 = bank;
+                    };
+                    subBox2.appendChild(btn);
+                });
+            } else { subBox2.style.display = 'none'; cSub2 = ""; }
         };
 
+        window.tutupModal = () => { document.getElementById('modal').style.display = 'none'; isSaving = false; };
         window.formatRupiah = (el) => { let v = el.value.replace(/\D/g, ""); el.value = v ? "Rp. " + parseInt(v).toLocaleString('id-ID') : ""; };
 
         window.simpanData = async () => {
             if(isSaving) return;
-            const nom = parseInt(document.getElementById('inNominal').value.replace(/\D/g, ""));
-            if(!nom) return tampilkanNotif("Masukkan nominal!", "bahaya");
-            isSaving = true; document.getElementById('btnSimpan').innerText = "PROSES...";
-            const finalDesc = (cSub ? "[" + cSub + "] " : "") + document.getElementById('inCatatan').value;
+            const nomInput = document.getElementById('inNominal').value.replace(/\D/g, "");
+            const nom = parseInt(nomInput);
+            const tglPilihan = document.getElementById('inTanggal').value;
+            if(!nom || !tglPilihan) return tampilkanNotif("Lengkapi data!", "bahaya");
+            isSaving = true;
+            let label = (cSub ? `[${cSub}]` : "") + (cSub2 ? ` [${cSub2}]` : "");
+            const finalDesc = (label ? label + " " : "") + document.getElementById('inCatatan').value;
+            const customDate = new Date(tglPilihan + "T" + new Date().toLocaleTimeString('en-GB'));
             try {
-                await addDoc(colRef, { category: cKat, type: cTip==='masuk'?'in':'out', amount: nom, description: finalDesc, timestamp: serverTimestamp() });
-                tampilkanNotif("Berhasil disimpan!"); tutupModal();
-            } catch (e) { isSaving = false; tampilkanNotif("Gagal simpan", "bahaya"); }
+                await addDoc(colRef, { category: cKat, type: cTip==='masuk'?'in':'out', amount: nom, description: finalDesc, timestamp: Timestamp.fromDate(customDate) });
+                tampilkanNotif("Data Disimpan"); tutupModal();
+            } catch (e) { isSaving = false; }
         };
 
-        window.gantiHal = (id) => { 
-            document.querySelectorAll('.halaman').forEach(h => h.classList.remove('aktif')); 
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('aktif')); 
-            const target = document.getElementById(id);
-            if(target) target.classList.add('aktif'); 
-            event.currentTarget.classList.add('aktif');
+        window.gantiHal = (id) => {
+            document.querySelectorAll('.halaman').forEach(h => h.classList.remove('aktif'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('aktif'));
+            document.getElementById(id).classList.add('aktif');
+            if(event) event.currentTarget.classList.add('aktif');
             syncUI();
         };
 
@@ -272,132 +292,77 @@
             cache = []; let sal = 0;
             s.forEach(d => {
                 const x = d.data();
-                if(x.timestamp) { cache.push({...x, id: d.id, t: x.timestamp.toDate()}); sal += (x.type === 'in' ? x.amount : -x.amount); }
+                if(x.timestamp) { cache.push({...x, id: d.id, t: x.timestamp.toDate()}); }
             });
-            const elSaldo = document.getElementById('saldoUtama');
-            if(elSaldo) elSaldo.innerText = "Rp. " + sal.toLocaleString('id-ID');
+            cache.sort((a, b) => b.t - a.t);
+            cache.forEach(item => { sal += (item.type === 'in' ? item.amount : -item.amount); });
+            document.getElementById('saldoUtama').innerText = "Rp. " + sal.toLocaleString('id-ID');
             syncUI();
         });
-
-        window.prosesExport = (format, filterType) => {
-            let dataFiltered = []; let fileName = "MaccaFlow_Report";
-            if(filterType === 'harian') {
-                const val = document.getElementById('nDaily').value;
-                dataFiltered = cache.filter(d => d.t.toLocaleDateString('en-CA') === val);
-                fileName += `_Harian_${val}`;
-            } else if(filterType === 'bulanan') {
-                const val = document.getElementById('nMonthly').value;
-                dataFiltered = cache.filter(d => d.t.toLocaleDateString('en-CA').substring(0, 7) === val);
-                fileName += `_Bulanan_${val}`;
-            } else {
-                const val = document.getElementById('nYearly').value;
-                dataFiltered = cache.filter(d => d.t.getFullYear().toString() === val);
-                fileName += `_Tahunan_${val}`;
-            }
-            if(dataFiltered.length === 0) return tampilkanNotif("Tidak ada data untuk diekspor", "bahaya");
-            dataFiltered.sort((a,b) => b.t - a.t);
-            if(format === 'csv') {
-                let csvContent = "Tanggal,Waktu,Kategori,Tipe,Nominal,Catatan\n";
-                dataFiltered.forEach(d => {
-                    const row = [d.t.toLocaleDateString('id-ID'), formatWita(d.t).replace(" WITA", ""), d.category, d.type === 'in' ? 'MASUK' : 'KELUAR', d.amount, `"${d.description || '-'}"`];
-                    csvContent += row.join(",") + "\n";
-                });
-                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `${fileName}.csv`; link.click();
-            } else {
-                const { jsPDF } = window.jspdf; const doc = new jsPDF();
-                doc.setFontSize(18); doc.text("LAPORAN TRANSAKSI MACCA FLOW", 14, 20);
-                doc.setFontSize(10); doc.text(`Dicetak pada: ${new Date().toLocaleString('id-ID')}`, 14, 28);
-                const tableData = dataFiltered.map(d => [d.t.toLocaleDateString('id-ID'), formatWita(d.t), d.category, d.type === 'in' ? 'MASUK' : 'KELUAR', `Rp ${d.amount.toLocaleString()}`, d.description || '-']);
-                doc.autoTable({ startY: 35, head: [['Tanggal', 'Waktu', 'Kategori', 'Tipe', 'Nominal', 'Catatan']], body: tableData, theme: 'grid', headStyles: { fillColor: [4, 10, 22] } });
-                doc.save(`${fileName}.pdf`);
-            }
-            tampilkanNotif("Export Berhasil!");
-        };
 
         window.syncUI = () => {
             const list = document.getElementById('listRiwayat'); if(!list) return;
             list.innerHTML = "";
-            const elTglRiwayat = document.getElementById('riwayatTgl');
-            const tglFilter = (elTglRiwayat ? elTglRiwayat.value : null) || getHariIni();
-            
+            const tglFilter = document.getElementById('riwayatTgl').value || getHariIni();
             const getIcon = (cat) => {
-                const icons = { 'KASIR': 'fa-cash-register', 'GERAI': 'fa-store', 'WARKOP': 'fa-mug-hot', 'QRIS': 'fa-qrcode', 'ARA': 'fa-user-tie', 'IBU ATI': 'fa-kitchen-set', 'STOK': 'fa-fish', 'BOSS': 'fa-crown' };
+                const icons = { 'KASIR': 'fa-cash-register', 'GERAI': 'fa-store', 'WARKOP': 'fa-mug-hot', 'QRIS': 'fa-qrcode', 'ARA': 'fa-user-tie', 'ATI': 'fa-kitchen-set', 'STOK': 'fa-fish', 'BOSS': 'fa-crown' };
                 for(let key in icons) if(cat.includes(key)) return icons[key];
                 return "fa-wallet";
             };
-
-            cache.filter(d => d.t.toLocaleDateString('en-CA') === tglFilter).sort((a,b) => b.t - a.t).forEach(d => {
+            cache.filter(d => d.t.toLocaleDateString('en-CA') === tglFilter).forEach(d => {
                 const isInc = d.type === 'in';
                 const div = document.createElement('div'); div.className = 'item-riwayat-elite';
                 div.innerHTML = `
                     <div class="icon-riwayat" style="background:${isInc?'rgba(0,255,136,0.1)':'rgba(255,51,102,0.1)'}; color:${isInc?'var(--sukses)':'var(--bahaya)'}"><i class="fa-solid ${getIcon(d.category)}"></i></div>
-                    <div class="riwayat-info"><span class="riwayat-kat">${d.category}</span><span class="riwayat-jam">${formatWita(d.t)}</span></div>
+                    <div class="riwayat-info"><span class="riwayat-kat">${d.category}</span><span class="riwayat-jam">${d.t.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'})}</span></div>
                     <div class="riwayat-nominal"><span class="riwayat-amt" style="color:${isInc?'var(--sukses)':'var(--bahaya)'}">${isInc?'+':'-'} Rp ${d.amount.toLocaleString()}</span><span class="riwayat-desc">${d.description || '-'}</span></div>`;
                 list.appendChild(div);
             });
-
-            const drawNeraca = (target, data, title, filterType) => {
-                let pIn = 0, pOut = 0; data.forEach(d => { if(d.type==='in') pIn += d.amount; else pOut += d.amount; });
-                const el = document.getElementById(target); if(!el) return;
-                el.innerHTML = `
-                    <span class="neraca-header">${title}</span>
-                    <div class="neraca-row">
-                        <div class="neraca-icon bg-in"><i class="fa-solid fa-arrow-down"></i></div>
-                        <div><small style="opacity:0.5; font-size:0.6rem">Pemasukan</small><div style="font-weight:600">Rp ${pIn.toLocaleString()}</div></div>
-                    </div>
-                    <div class="neraca-row">
-                        <div class="neraca-icon bg-out"><i class="fa-solid fa-arrow-up"></i></div>
-                        <div><small style="opacity:0.5; font-size:0.6rem">Pengeluaran</small><div style="font-weight:600">Rp ${pOut.toLocaleString()}</div></div>
-                    </div>
-                    <div style="margin-top:15px; padding-top:15px; border-top:1px solid var(--kaca-garis)">
-                        <div class="neraca-row" style="margin-bottom:0">
-                            <div class="neraca-icon bg-net"><i class="fa-solid fa-scale-balanced"></i></div>
-                            <div><small style="opacity:0.5; font-size:0.6rem">Laba Bersih</small><div style="color:var(--emas-murni); font-weight:600; font-size:1.2rem">Rp ${(pIn-pOut).toLocaleString()}</div></div>
-                        </div>
-                    </div>
-                    <div class="box-export">
-                        <button class="btn-export" onclick="prosesExport('pdf', '${filterType}')"><i class="fa-solid fa-file-pdf"></i> PDF</button>
-                        <button class="btn-export" onclick="prosesExport('csv', '${filterType}')"><i class="fa-solid fa-file-csv"></i> CSV</button>
-                    </div>`;
-            };
-            
-            const elDaily = document.getElementById('nDaily');
-            const elMonthly = document.getElementById('nMonthly');
-            const elYearly = document.getElementById('nYearly');
-            drawNeraca("boxHarian", cache.filter(d => d.t.toLocaleDateString('en-CA') === ((elDaily ? elDaily.value : null) || getHariIni())), "LAPORAN HARIAN", "harian");
-            drawNeraca("boxBulanan", cache.filter(d => d.t.toLocaleDateString('en-CA').substring(0, 7) === ((elMonthly ? elMonthly.value : null) || getHariIni().substring(0,7))), "LAPORAN BULANAN", "bulanan");
-            drawNeraca("boxTahunan", cache.filter(d => d.t.getFullYear().toString() === (elYearly ? elYearly.value : "2026")), "LAPORAN TAHUNAN", "tahunan");
+            drawNeraca("boxHarian", cache.filter(d => d.t.toLocaleDateString('en-CA') === (document.getElementById('nDaily').value || getHariIni())), "LAPORAN HARIAN", "harian");
+            drawNeraca("boxBulanan", cache.filter(d => d.t.toLocaleDateString('en-CA').substring(0, 7) === (document.getElementById('nMonthly').value || getHariIni().substring(0,7))), "LAPORAN BULANAN", "bulanan");
+            drawNeraca("boxTahunan", cache.filter(d => d.t.getFullYear().toString() === (document.getElementById('nYearly').value || "2026")), "LAPORAN TAHUNAN", "tahunan");
         };
 
-        let lastSyncAmount = 0;
-        onValue(ref(rtdb, 'stok_macca_v14_flow'), async (s) => {
-            const d = s.val(); if(!d) return;
-            let i = 0, a = 0, c = 0; const now = new Date();
-            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-            const witaNow = new Date(utc + (3600000 * 8));
-            const startWita = witaNow.setHours(0,0,0,0);
-            Object.values(d).forEach(x => { 
-                if(x.time >= startWita && x.note?.includes("Penj. Gerai Depan")) { 
-                    const sub = x.qty * (x.price || 0); 
-                    if(x.type.toLowerCase().includes("ikan")) i += sub; 
-                    else if(x.type.toLowerCase().includes("ungkep")) a += sub; 
-                    else if(x.type.toLowerCase().includes("crispy")) c += sub; 
-                } 
-            });
-            const tot = i + a + c; if(tot === 0 || tot === lastSyncAmount) return;
-            const key = "AUTO-SYNC-" + getHariIni();
-            const q = query(colRef, where("note", "==", key)); const snap = await getDocs(q);
-            if(snap.empty) { 
-                lastSyncAmount = tot; 
-                await addDoc(colRef, { category: "CASH GERAI", type: "in", amount: tot, note: key, description: `Ikan:Rp${i.toLocaleString()}, Ayam:Rp${a.toLocaleString()}`, timestamp: serverTimestamp() }); 
-                tampilkanNotif("Sync Gerai Ok!"); 
-            } else { 
-                const existingDoc = snap.docs[0]; 
-                if(existingDoc.data().amount !== tot) { lastSyncAmount = tot; await updateDoc(doc(db, "transactions", existingDoc.id), { amount: tot }); } 
+        const drawNeraca = (target, data, title, filterType) => {
+            let pIn = 0, pOut = 0; data.forEach(d => { if(d.type==='in') pIn += d.amount; else pOut += d.amount; });
+            const el = document.getElementById(target); if(!el) return;
+            el.innerHTML = `
+                <span class="neraca-header">${title}</span>
+                <div class="neraca-row"><div class="neraca-icon bg-in"><i class="fa-solid fa-arrow-down"></i></div><div><small style="opacity:0.5; font-size:0.6rem">Masuk</small><div style="font-weight:600">Rp ${pIn.toLocaleString()}</div></div></div>
+                <div class="neraca-row"><div class="neraca-icon bg-out"><i class="fa-solid fa-arrow-up"></i></div><div><small style="opacity:0.5; font-size:0.6rem">Keluar</small><div style="font-weight:600">Rp ${pOut.toLocaleString()}</div></div></div>
+                <div style="margin-top:15px; padding-top:15px; border-top:1px solid var(--kaca-garis)">
+                    <div class="neraca-row" style="margin-bottom:0"><div class="neraca-icon bg-net"><i class="fa-solid fa-scale-balanced"></i></div><div><small style="opacity:0.5; font-size:0.6rem">Laba Bersih</small><div style="color:var(--emas-murni); font-weight:600; font-size:1.2rem">Rp ${(pIn-pOut).toLocaleString()}</div></div></div>
+                </div>
+                <div class="box-export">
+                    <button class="btn-export" onclick="prosesExport('pdf', '${filterType}')"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+                    <button class="btn-export" onclick="prosesExport('csv', '${filterType}')"><i class="fa-solid fa-file-csv"></i> CSV</button>
+                </div>`;
+        };
+
+        window.prosesExport = (format, filterType) => {
+            let dataFilter = [];
+            const tglH = document.getElementById('nDaily').value, tglB = document.getElementById('nMonthly').value, tglT = document.getElementById('nYearly').value;
+            if (filterType === 'harian') dataFilter = cache.filter(d => d.t.toLocaleDateString('en-CA') === tglH);
+            else if (filterType === 'bulanan') dataFilter = cache.filter(d => d.t.toLocaleDateString('en-CA').substring(0, 7) === tglB);
+            else dataFilter = cache.filter(d => d.t.getFullYear().toString() === tglT);
+            if (dataFilter.length === 0) return tampilkanNotif("Tidak ada data", "bahaya");
+            if (format === 'pdf') {
+                const { jsPDF } = window.jspdf; const doc = new jsPDF();
+                doc.text(`LAPORAN - ${filterType.toUpperCase()}`, 14, 15);
+                const rows = dataFilter.map((d, i) => [i + 1, d.t.toLocaleString(), d.category, d.type === 'in' ? 'MASUK' : 'KELUAR', d.amount.toLocaleString()]);
+                doc.autoTable({ head: [['No', 'Waktu', 'Kategori', 'Tipe', 'Nominal']], body: rows, startY: 20 });
+                doc.save(`Macca_${filterType}.pdf`);
+            } else {
+                let csv = "No,Waktu,Kategori,Tipe,Nominal\n";
+                dataFilter.forEach((d, i) => { csv += `${i+1},${d.t.toLocaleString()},${d.category},${d.type},${d.amount}\n`; });
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const a = document.createElement('a'); a.href = window.URL.createObjectURL(blob); a.download = `Macca_${filterType}.csv`; a.click();
             }
-        });
+        };
+
+        document.getElementById('riwayatTgl').value = getHariIni();
+        document.getElementById('nDaily').value = getHariIni();
+        document.getElementById('nMonthly').value = getHariIni().substring(0, 7);
     </script>
 </body>
 </html>
-
