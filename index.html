@@ -90,7 +90,7 @@
         <div id="beranda" class="halaman aktif">
             <header>
                 <div class="logo-header"><i class="fa-solid fa-crown"></i></div>
-                <h1>MACCA FLOW</h1>
+                <h1>MACCA CASHFLOW</h1>
                 <span class="sub-header">Elite Financial System</span>
             </header>
             
@@ -200,9 +200,19 @@
         let cache = [], lineChart = null;
         const getHariIni = () => new Date().toLocaleDateString('en-CA');
 
+        // Fungsi Reset Form
+        const resetForm = () => {
+            document.getElementById('inNominal').value = "";
+            document.getElementById('inCatatan').value = "";
+            window.cSub = "";
+        };
+
         window.addEventListener('popstate', function(event) {
             const m = document.getElementById('modal');
-            if (m.style.display === 'flex') { m.style.display = 'none'; }
+            if (m.style.display === 'flex') { 
+                m.style.display = 'none';
+                resetForm();
+            }
         });
 
         onSnapshot(query(colRef, orderBy("timestamp", "desc")), (s) => {
@@ -217,15 +227,10 @@
                 const strDate = tDate.toLocaleDateString('en-CA');
                 const dataObj = {...x, id: d.id, t: tDate};
                 cache.push(dataObj);
-
                 const amt = (x.type === 'in' ? x.amount : -x.amount);
-                
-                // LOGIKA KAS ONLINE TERMASUK GRABFOOD
                 const isOnline = (x.isOnline || x.category === 'ONLINE PAYMENT' || (x.description && x.description.includes('[GrabFood]')));
-                
                 totalSal += amt;
                 if(isOnline) onSal += amt; else offSal += amt;
-
                 if(strDate === hariIni) {
                     if(x.type === 'in') dayIn += x.amount; else dayOut += x.amount;
                     if(isOnline) dayOn += amt; else dayOff += amt;
@@ -268,21 +273,22 @@
         };
 
         window.simpanData = async () => {
-            const nom = parseInt(document.getElementById('inNominal').value.replace(/\D/g, ""));
+            const nomInput = document.getElementById('inNominal').value;
+            const nom = parseInt(nomInput.replace(/\D/g, ""));
             const tgl = document.getElementById('inTanggal').value;
             if(!nom || !tgl) return alert("Nominal & Tanggal wajib diisi!");
             const desc = (window.cSub ? `[${window.cSub}] ` : "") + document.getElementById('inCatatan').value;
-            
-            // PENENTUAN KAS ONLINE (TERMASUK GRABFOOD)
             let statusOnline = (window.cKat === 'ONLINE PAYMENT' || window.cSub === 'GrabFood' || window.cSub === 'TF BRI' || window.cSub === 'QRIS' || window.cSub === 'Online');
             
             await addDoc(colRef, { category: window.cKat, type: window.cTip === 'masuk' ? 'in' : 'out', amount: nom, description: desc, isOnline: statusOnline, timestamp: Timestamp.fromDate(new Date(tgl + "T" + new Date().toLocaleTimeString('en-GB'))) });
+            
+            resetForm(); // Bersihkan form setelah simpan
             tutupModal();
             window.tampilkanNotif();
         };
 
         window.bukaModal = (k, t) => {
-            window.cKat = k; window.cTip = t; window.cSub = "";
+            window.cKat = k; window.cTip = t;
             const hModal = document.getElementById('judulModal');
             const btnSimpan = document.getElementById('btnSimpan');
             hModal.innerText = k;
@@ -291,8 +297,6 @@
             document.getElementById('inTanggal').value = getHariIni();
             const subBox = document.getElementById('boxSubDynamic');
             subBox.innerHTML = "";
-
-            // KONFIGURASI TOMBOL SUB KATEGORI YANG DIPERBARUI
             const configSub = { 
                 'CASH KASIR': ['Penjualan Kasir', 'Lainnya'], 
                 'ONLINE PAYMENT': ['QRIS', 'TF BRI', 'GrabFood'], 
@@ -301,7 +305,6 @@
                 'DAPUR (IBU ATI)': ['Bahan Dapur', 'Sayuran'], 
                 'PAK BOSS': t === 'masuk' ? ['Offline', 'Online'] : ['Offline', 'TF BRI', 'TF BNI'] 
             };
-
             if(configSub[k]) {
                 configSub[k].forEach((s, idx) => {
                     const btn = document.createElement('button');
@@ -317,17 +320,16 @@
 
         window.tutupModal = () => {
             document.getElementById('modal').style.display = 'none';
+            resetForm(); // Bersihkan form saat batal/tutup
             if (history.state && history.state.modal) { history.back(); }
         };
 
         window.formatRupiah = (el) => { let v = el.value.replace(/\D/g, ""); el.value = v ? "Rp. " + parseInt(v).toLocaleString('id-ID') : ""; };
         window.tampilkanNotif = () => { const n = document.getElementById('notif'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 3000); };
-        
         window.gantiHal = (id) => { 
             document.querySelectorAll('.halaman').forEach(h => h.classList.remove('aktif')); 
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('aktif')); 
             document.getElementById(id).classList.add('aktif');
-            // Menandai nav yang diklik sebagai aktif
             const items = document.querySelectorAll('.nav-item');
             if(id === 'beranda') items[0].classList.add('aktif');
             else if(id === 'riwayat') items[1].classList.add('aktif');
@@ -342,7 +344,6 @@
             const filter = document.getElementById('riwayatTgl').value || getHariIni();
             const filterNeraca = document.getElementById('nDaily').value || getHariIni();
             let totalIn = 0, totalOut = 0;
-            
             cache.filter(d => d.t.toLocaleDateString('en-CA') === filter).forEach(d => {
                 const isIn = d.type === 'in';
                 const div = document.createElement('div'); div.className = 'item-riwayat-elite';
