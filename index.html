@@ -7,11 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    
     <style>
         :root {
             --biru-dalam: #040a16;
@@ -24,244 +19,109 @@
             --teks-utama: #f8f9fa;
         }
 
-        body { margin: 0; font-family: 'Poppins', sans-serif; background: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #040a16 100%); color: var(--teks-utama); min-height: 100vh; overflow-x: hidden; }
+        body { margin: 0; font-family: 'Poppins', sans-serif; background: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #040a16 100%); color: var(--teks-utama); min-height: 100vh; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         .wadah { padding: 25px; max-width: 480px; margin: auto; padding-bottom: 130px; }
         .halaman { display: none; }
         .halaman.aktif { display: block; animation: geserAtas 0.4s ease-out; }
 
+        /* Gaya Kartu & Header Tetap Sama */
         header { text-align: center; padding: 30px 0 20px; }
-        .logo-header { font-size: 1.8rem; color: var(--emas-murni); margin-bottom: 5px; filter: drop-shadow(0 0 10px rgba(239, 191, 59, 0.5)); }
+        .logo-header { font-size: 1.8rem; color: var(--emas-murni); margin-bottom: 5px; }
         h1 { font-size: 1.4rem; font-weight: 600; letter-spacing: 4px; background: linear-gradient(to right, var(--emas-murni), #fff, var(--emas-murni)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; text-transform: uppercase; }
-        .sub-header { font-size: 0.65rem; color: rgba(255,255,255,0.6); letter-spacing: 2px; text-transform: uppercase; margin-top: 5px; display: block; }
-
-        .kartu-saldo-utama { background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.03)); backdrop-filter: blur(15px); border: 1px solid var(--kaca-garis); border-radius: 25px; padding: 25px; text-align: center; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .label-pusat { font-size: 0.65rem; color: var(--emas-murni); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; display: block; font-weight: 600; }
-        .jumlah-saldo { font-size: 2.2rem; font-weight: 600; color: #fff; margin-bottom: 25px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
         
-        .grid-split-saldo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 20px; }
-        .split-item { text-align: center; padding: 5px; cursor: pointer; transition: 0.3s; border-radius: 15px; }
-        .split-item:active { background: rgba(255,255,255,0.1); }
-        .split-label { font-size: 0.7rem; color: #ffffff; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 8px; font-weight: 600; }
-        .split-value { font-size: 0.9rem; font-weight: 600; color: var(--emas-murni); }
+        /* Modal Style */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-konten { background: linear-gradient(160deg, #0f172a 0%, #040a16 100%); border: 1px solid var(--kaca-garis); border-radius: 30px; padding: 30px; width: 100%; max-width: 380px; text-align: center; position: relative; }
 
-        .box-sub-bank { display: flex; justify-content: center; gap: 15px; margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); width: 100%; }
-        .bank-mini { display: flex; flex-direction: column; align-items: center; flex: 1; cursor: pointer; transition: 0.3s; border-radius: 10px; padding: 5px; }
-        .bank-mini:active { background: rgba(255,255,255,0.1); }
-        .bank-label { font-size: 0.55rem; color: rgba(255,255,255,0.5); text-transform: uppercase; }
-        .bank-val { font-size: 0.75rem; font-weight: 600; color: var(--biru-muda); }
-
-        .section-harian { margin-bottom: 30px; }
-        .harian-title { font-size: 0.65rem; color: var(--emas-murni); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; display: block; font-weight: 600; }
-        .baris-harian { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        .box-harian-mini { background: rgba(255,255,255,0.05); border: 1px solid var(--kaca-garis); border-radius: 15px; padding: 12px; display: flex; flex-direction: column; align-items: center; }
-        .mini-label { font-size: 0.55rem; color: rgba(255,255,255,0.8); text-transform: uppercase; margin-bottom: 4px; }
-        .mini-value { font-size: 0.85rem; font-weight: 600; }
-
-        .kartu-grafik { background: rgba(255,255,255,0.03); border: 1px solid var(--kaca-garis); border-radius: 25px; padding: 15px; margin-bottom: 15px; }
-
-        h2 { font-size: 0.85rem; color: var(--emas-murni); letter-spacing: 1.5px; text-transform: uppercase; margin: 25px 0 15px; display: flex; align-items: center; gap: 10px; font-weight: 600; }
-        .grid-tombol { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .tombol-aksi { background: var(--kaca-bg); border: 1px solid var(--kaca-garis); border-radius: 20px; padding: 18px 10px; color: white; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: 0.2s; }
-        .tombol-aksi i { font-size: 1.4rem; color: var(--emas-murni); }
-
-        input, select, textarea { width: 100%; background: rgba(255,255,255,0.15) !important; border: 1px solid var(--kaca-garis); color: #fff; padding: 14px; border-radius: 15px; font-family: 'Poppins'; margin-bottom: 12px; outline: none; box-sizing: border-box; }
-        select option { background-color: #1a1a2e; color: white; }
-        
-        input:focus, select:focus { background: rgba(255,255,255,0.2); border-color: var(--emas-murni); }
-
-        #notif { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(20px); border: 1px solid var(--emas-murni); padding: 15px 30px; border-radius: 50px; display: flex; align-items: center; gap: 12px; color: white; font-weight: 600; z-index: 4000; transition: 0.5s; }
-        #notif.show { top: 30px; }
-
-        .item-riwayat-elite { background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02)); backdrop-filter: blur(10px); border: 1px solid var(--kaca-garis); border-radius: 20px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
-        .btn-edit-item { background: rgba(239, 191, 59, 0.1); border: 1px solid rgba(239, 191, 59, 0.3); color: var(--emas-murni); width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-left: 10px; transition: 0.3s; }
+        .tombol-aksi { background: var(--kaca-bg); border: 1px solid var(--kaca-garis); border-radius: 20px; padding: 18px 10px; color: white; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
+        .btn-batal { width: 100%; padding: 12px; background: transparent; border: 1px solid rgba(239, 191, 59, 0.3); color: var(--emas-murni); border-radius: 15px; font-weight: 600; cursor: pointer; margin-top: 15px; }
 
         .nav-bawah { position: fixed; bottom: 20px; left: 20px; right: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: space-around; padding: 12px; border-radius: 20px; border: 1px solid var(--kaca-garis); z-index: 1000; }
         .nav-item { color: rgba(255,255,255,0.5); display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
         .nav-item.aktif { color: var(--emas-murni); }
         .nav-item span { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; }
 
-        /* MODAL FIX */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
-        .modal-konten { background: linear-gradient(160deg, #0f172a 0%, #040a16 100%); border: 1px solid var(--kaca-garis); border-radius: 30px; padding: 30px; width: 100%; max-width: 380px; text-align: center; max-height: 80vh; overflow-y: auto; position: relative; }
-
-        .label-input { font-size: 0.7rem; color: var(--emas-murni); margin-bottom: 5px; display: block; text-align: left; font-weight: 600; }
-        .btn-batal { width: 100%; padding: 12px; background: transparent; border: 1px solid rgba(239, 191, 59, 0.3); color: var(--emas-murni); border-radius: 15px; font-weight: 600; cursor: pointer; margin-top: 15px; font-size: 0.8rem; }
-        .btn-export { width: 100%; padding: 10px; background: var(--kaca-bg); border: 1px solid var(--emas-murni); color: var(--emas-murni); border-radius: 12px; font-size: 0.75rem; margin-top: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; }
-
-        .neraca-group { margin-bottom: 25px; }
-        .neraca-group-title { font-size: 0.65rem; color: #fff; background: rgba(255,255,255,0.05); padding: 8px 16px; border-radius: 30px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; font-weight: 600; border: 1px solid rgba(255,255,255,0.15); width: fit-content; }
-        .neraca-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.85rem; align-items: center; }
-        .neraca-label { color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 12px; }
-        .neraca-label i { font-size: 1rem; width: 20px; text-align: center; }
-        .neraca-val { font-weight: 600; }
-        
         @keyframes geserAtas { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-
-    <div id="notif"><i class="fa-solid fa-circle-check" style="color:var(--sukses)"></i><span>Data Diperbarui</span></div>
 
     <div class="wadah">
         <div id="beranda" class="halaman aktif">
             <header>
                 <div class="logo-header"><i class="fa-solid fa-crown"></i></div>
                 <h1>MACCA CASHFLOW</h1>
-                <span class="sub-header">Macca Financial System</span>
             </header>
             
-            <div class="kartu-saldo-utama">
-                <small class="label-pusat">Total Saldo Keseluruhan</small>
-                <div class="jumlah-saldo" id="saldoUtama">Rp. 0</div>
-                <div class="grid-split-saldo">
-                    <div class="split-item" onclick="bukaPopupDetail('offline')">
-                        <span class="split-label"><i class="fa-solid fa-vault" style="color:var(--emas-murni)"></i> KAS OFFLINE</span>
-                        <div class="split-value" id="saldoOffline">Rp. 0</div>
-                    </div>
-                    <div class="split-item" onclick="bukaPopupDetail('online')">
-                        <span class="split-label"><i class="fa-solid fa-gem" style="color:var(--biru-muda)"></i> KAS ONLINE</span>
-                        <div class="split-value" id="saldoOnline">Rp. 0</div>
-                    </div>
-                </div>
-                
-                <div class="box-sub-bank">
-                    <div class="bank-mini" onclick="bukaPopupDetail('BNI')">
-                        <span class="bank-label">BNI (QRIS)</span>
-                        <span class="bank-val" id="saldoBNI">Rp. 0</span>
-                    </div>
-                    <div style="width:1px; height:20px; background:rgba(255,255,255,0.1); align-self:center;"></div>
-                    <div class="bank-mini" onclick="bukaPopupDetail('BRI')">
-                        <span class="bank-label">BRI (TF/GF)</span>
-                        <span class="bank-val" id="saldoBRI">Rp. 0</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section-harian">
-                <span class="harian-title">Tren Aktivitas Terakhir</span>
-                <div class="kartu-grafik"><canvas id="chartTrend" style="max-height: 160px;"></canvas></div>
-                <div class="baris-harian">
-                    <div class="box-harian-mini"><span class="mini-label">Masuk</span><span class="mini-value" id="harianMasuk" style="color:var(--sukses)">+ Rp. 0</span></div>
-                    <div class="box-harian-mini"><span class="mini-label">Keluar</span><span class="mini-value" id="harianKeluar" style="color:var(--bahaya)">- Rp. 0</span></div>
-                </div>
-            </div>
-            
-            <h2><i class="fa-solid fa-arrow-down-long" style="color:var(--sukses)"></i> Kas Masuk</h2>
-            <div class="grid-tombol">
-                <button class="tombol-aksi" onclick="bukaModalInput('CASH KASIR', 'masuk')"><i class="fa-solid fa-cash-register"></i><span>Kasir</span></button>
-                <button class="tombol-aksi" onclick="bukaModalInput('CASH GERAI', 'masuk')"><i class="fa-solid fa-store"></i><span>Gerai</span></button>
-                <button class="tombol-aksi" onclick="bukaModalInput('CASH WARKOP', 'masuk')"><i class="fa-solid fa-mug-hot"></i><span>Warkop</span></button>
-                <button class="tombol-aksi" onclick="bukaModalInput('ONLINE PAYMENT', 'masuk')"><i class="fa-solid fa-qrcode"></i><span>Online Pay</span></button>
-            </div>
-
-            <h2><i class="fa-solid fa-arrow-up-long" style="color:var(--bahaya)"></i> Kas Keluar</h2>
-            <div class="grid-tombol">
-                <button class="tombol-aksi" onclick="bukaModalInput('KASIR (ARA)', 'keluar')"><i class="fa-solid fa-user-tie"></i><span>Kasir</span></button>
-                <button class="tombol-aksi" onclick="bukaModalInput('DAPUR (IBU ATI)', 'keluar')"><i class="fa-solid fa-kitchen-set"></i><span>Dapur</span></button>
-                <button class="tombol-aksi" onclick="bukaModalInput('STOK IKAN/GAS (HASBI)', 'keluar')"><i class="fa-solid fa-fish"></i><span>Stok</span></button>
-                <button class="tombol-aksi" onclick="bukaModalInput('PAK BOSS', 'keluar')"><i class="fa-solid fa-crown"></i><span>Boss</span></button>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px;">
+                <button class="tombol-aksi btn-buka-input" data-judul="KASIR"><i class="fa-solid fa-cash-register"></i><span>Kasir</span></button>
+                <button class="tombol-aksi btn-buka-input" data-judul="GERAI"><i class="fa-solid fa-store"></i><span>Gerai</span></button>
             </div>
         </div>
 
         <div id="riwayat" class="halaman">
-            <header>
-                <div class="logo-header"><i class="fa-solid fa-receipt"></i></div>
-                <h1>RIWAYAT</h1>
-                <span class="sub-header">Transaction History Log</span>
-            </header>
-            <div id="listRiwayat"></div>
+            <header><h1>RIWAYAT</h1></header>
         </div>
 
         <div id="neraca" class="halaman">
-            <header>
-                <div class="logo-header"><i class="fa-solid fa-scale-balanced"></i></div>
-                <h1>NERACA</h1>
-                <span class="sub-header">Financial Balance Summary</span>
-            </header>
-            <div id="boxNeraca" style="background:var(--kaca-bg); padding:20px; border-radius:25px; border: 1px solid var(--kaca-garis);">
-                <div id="detailNeraca"></div>
-            </div>
+            <header><h1>NERACA</h1></header>
         </div>
     </div>
 
-    <div id="modal" class="modal-overlay">
+    <div id="modalInput" class="modal-overlay">
         <div class="modal-konten">
-            <h3 id="judulModal" style="margin-top:0;">INPUT DATA</h3>
-            <input type="hidden" id="editId">
-            <label class="label-input">TANGGAL</label>
-            <input type="date" id="inTanggal">
-            <label class="label-input">NOMINAL</label>
-            <input type="text" id="inNominal" placeholder="Rp. 0">
-            <label class="label-input">KETERANGAN</label>
-            <textarea id="inCatatan" rows="3" placeholder="Tambahkan catatan..."></textarea>
-            <button id="btnSimpan" style="width:100%; padding:15px; border:none; border-radius:15px; background:var(--emas-murni); color:var(--biru-dalam); font-weight:600; cursor:pointer;">SIMPAN DATA</button>
-            <button onclick="tutupModal()" class="btn-batal">KEMBALI / BATAL</button>
-        </div>
-    </div>
-
-    <div id="modalDetail" class="modal-overlay">
-        <div class="modal-konten">
-            <h3 id="judulDetail" style="margin-top:0; color:var(--emas-murni);">DETAIL TRANSAKSI</h3>
-            <div id="listDetailContent"></div>
-            <button onclick="tutupModalDetail()" class="btn-batal">TUTUP</button>
+            <h3 id="judulModal">INPUT DATA</h3>
+            <input type="text" placeholder="Nominal" style="width:100%; padding:12px; margin:10px 0; border-radius:10px; border:none;">
+            <button id="btnSimpan" style="width:100%; padding:15px; border-radius:15px; background:var(--emas-murni); border:none; font-weight:bold;">SIMPAN</button>
+            <button id="btnTutupModal" class="btn-batal">KEMBALI / BATAL</button>
         </div>
     </div>
 
     <nav class="nav-bawah">
-        <div class="nav-item aktif" onclick="gantiHal('beranda')">
-            <i class="fa-solid fa-house"></i>
-            <span>Beranda</span>
-        </div>
-        <div class="nav-item" onclick="gantiHal('riwayat')">
-            <i class="fa-solid fa-receipt"></i>
-            <span>Riwayat</span>
-        </div>
-        <div class="nav-item" onclick="gantiHal('neraca')">
-            <i class="fa-solid fa-scale-balanced"></i>
-            <span>Neraca</span>
-        </div>
+        <div class="nav-item aktif" data-target="beranda"><i class="fa-solid fa-house"></i><span>Beranda</span></div>
+        <div class="nav-item" data-target="riwayat"><i class="fa-solid fa-receipt"></i><span>Riwayat</span></div>
+        <div class="nav-item" data-target="neraca"><i class="fa-solid fa-scale-balanced"></i><span>Neraca</span></div>
     </nav>
 
-    <script>
-        // FUNGSI NAVIGASI
-        function gantiHal(id) {
-            document.querySelectorAll('.halaman').forEach(h => h.classList.remove('aktif'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('aktif'));
-            document.getElementById(id).classList.add('aktif');
-            event.currentTarget.classList.add('aktif');
-        }
-
-        // FUNGSI MODAL INPUT (FIX)
-        function bukaModalInput(judul, tipe) {
-            document.getElementById('judulModal').innerText = judul;
-            document.getElementById('modal').style.display = 'flex';
-        }
+    <script type="module">
+        // 1. Definisikan Fungsi Tutup Modal Secara Global agar bisa diakses
+        const modal = document.getElementById('modalInput');
+        const btnTutup = document.getElementById('btnTutupModal');
 
         function tutupModal() {
-            document.getElementById('modal').style.display = 'none';
+            modal.style.display = 'none';
         }
 
-        // FUNGSI MODAL DETAIL (FIX)
-        function bukaPopupDetail(type) {
-            document.getElementById('judulDetail').innerText = "DETAIL " + type.toUpperCase();
-            document.getElementById('modalDetail').style.display = 'flex';
-        }
+        // 2. Gunakan Event Listener (Cara Paling Aman untuk HP & Module)
+        btnTutup.addEventListener('click', () => {
+            tutupModal();
+        });
 
-        function tutupModalDetail() {
-            document.getElementById('modalDetail').style.display = 'none';
-        }
+        // Event Listener untuk tombol buka
+        document.querySelectorAll('.btn-buka-input').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById('judulModal').innerText = btn.getAttribute('data-judul');
+                modal.style.display = 'flex';
+            });
+        });
 
-        // Menutup modal jika area luar konten diklik
-        window.onclick = function(event) {
-            let modalInput = document.getElementById('modal');
-            let modalDetail = document.getElementById('modalDetail');
-            if (event.target == modalInput) {
-                tutupModal();
-            }
-            if (event.target == modalDetail) {
-                tutupModalDetail();
-            }
-        }
+        // Navigasi Bawah
+        document.querySelectorAll('.nav-item').forEach(nav => {
+            nav.addEventListener('click', function() {
+                const target = this.getAttribute('data-target');
+                
+                document.querySelectorAll('.halaman').forEach(h => h.classList.remove('aktif'));
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('aktif'));
+                
+                document.getElementById(target).classList.add('aktif');
+                this.classList.add('aktif');
+            });
+        });
+
+        // Tutup saat klik di luar area konten
+        window.addEventListener('click', (e) => {
+            if (e.target == modal) tutupModal();
+        });
     </script>
 </body>
 </html>
