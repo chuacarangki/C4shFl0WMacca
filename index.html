@@ -15,9 +15,8 @@
     <style>
         :root {
             --biru-dalam: #040a16;
-            --ungu-elektrik: #8a2be2;
-            --pink-krimson: #ff007f;
             --emas-murni: #efbf3b;
+            --biru-muda: #00d4ff;
             --kaca-bg: rgba(255, 255, 255, 0.05);
             --kaca-garis: rgba(255, 255, 255, 0.1);
             --sukses: #00ff88;
@@ -31,49 +30,51 @@
         .halaman.aktif { display: block; animation: geserAtas 0.4s ease-out; }
 
         header { text-align: center; padding: 30px 0 20px; }
-        .logo-crown { font-size: 1.8rem; color: var(--emas-murni); margin-bottom: 5px; filter: drop-shadow(0 0 10px rgba(239, 191, 59, 0.5)); }
+        .logo-header { font-size: 1.8rem; color: var(--emas-murni); margin-bottom: 5px; filter: drop-shadow(0 0 10px rgba(239, 191, 59, 0.5)); }
         h1 { font-size: 1.4rem; font-weight: 600; letter-spacing: 4px; background: linear-gradient(to right, var(--emas-murni), #fff, var(--emas-murni)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; text-transform: uppercase; }
-        .sub-header { font-size: 0.65rem; color: rgba(255,255,255,0.4); letter-spacing: 2px; text-transform: uppercase; margin-top: 5px; display: block; }
+        .sub-header { font-size: 0.65rem; color: rgba(255,255,255,0.6); letter-spacing: 2px; text-transform: uppercase; margin-top: 5px; display: block; }
 
-        /* Saldo & Grafik */
-        .kartu-saldo { background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)); backdrop-filter: blur(15px); border: 1px solid var(--kaca-garis); border-radius: 25px; padding: 35px 25px; text-align: center; margin-bottom: 30px; }
-        .jumlah-saldo { font-size: 2.1rem; font-weight: 600; color: #fff; }
-        .kartu-grafik { background: rgba(255,255,255,0.03); border: 1px solid var(--kaca-garis); border-radius: 25px; padding: 15px; margin-bottom: 25px; }
-        .chart-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--kaca-garis); }
-        .legend-item { font-size: 0.55rem; display: flex; align-items: center; gap: 4px; color: rgba(255,255,255,0.5); }
-        .dot { width: 7px; height: 7px; border-radius: 50%; }
+        .kartu-saldo-utama { background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.03)); backdrop-filter: blur(15px); border: 1px solid var(--kaca-garis); border-radius: 25px; padding: 25px; text-align: center; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .label-pusat { font-size: 0.65rem; color: var(--emas-murni); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; display: block; font-weight: 600; }
+        .jumlah-saldo { font-size: 2.2rem; font-weight: 600; color: #fff; margin-bottom: 25px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        
+        .grid-split-saldo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 20px; }
+        .split-item { text-align: center; padding: 5px; }
+        .split-label { font-size: 0.75rem; color: #ffffff; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 8px; font-weight: 600; }
+        .split-label i { font-size: 0.9rem; }
+        .split-value { font-size: 1rem; font-weight: 600; color: var(--emas-murni); filter: drop-shadow(0 0 5px rgba(239, 191, 59, 0.3)); }
 
-        /* Tombol Aksi */
-        h2 { font-size: 0.8rem; color: var(--emas-murni); letter-spacing: 1.5px; text-transform: uppercase; margin: 25px 0 15px; display: flex; align-items: center; gap: 10px; }
+        .section-harian { margin-bottom: 30px; }
+        .harian-title { font-size: 0.65rem; color: var(--emas-murni); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; display: block; font-weight: 600; }
+        .baris-harian { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .box-harian-mini { background: rgba(255,255,255,0.05); border: 1px solid var(--kaca-garis); border-radius: 15px; padding: 12px; display: flex; flex-direction: column; align-items: center; }
+        .mini-label { font-size: 0.55rem; color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+        .mini-value { font-size: 0.85rem; font-weight: 600; }
+
+        .kartu-grafik { background: rgba(255,255,255,0.03); border: 1px solid var(--kaca-garis); border-radius: 25px; padding: 15px; margin-bottom: 15px; }
+
+        h2 { font-size: 0.85rem; color: var(--emas-murni); letter-spacing: 1.5px; text-transform: uppercase; margin: 25px 0 15px; display: flex; align-items: center; gap: 10px; font-weight: 600; }
         .grid-tombol { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .tombol-aksi { background: var(--kaca-bg); border: 1px solid var(--kaca-garis); border-radius: 20px; padding: 18px 10px; color: white; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: 0.2s; }
         .tombol-aksi i { font-size: 1.4rem; color: var(--emas-murni); }
 
-        /* Notifikasi */
         #notif { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(20px); border: 1px solid var(--emas-murni); padding: 15px 30px; border-radius: 50px; display: flex; align-items: center; gap: 12px; color: white; font-weight: 600; z-index: 3000; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         #notif.show { top: 30px; }
 
-        /* Riwayat & Neraca */
         .item-riwayat-elite { background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02)); backdrop-filter: blur(10px); border: 1px solid var(--kaca-garis); border-radius: 20px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
-        .kartu-neraca { background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)); backdrop-filter: blur(15px); border: 1px solid var(--kaca-garis); border-radius: 25px; padding: 25px; margin-bottom: 10px; }
-        .neraca-row { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
-        .neraca-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
-
-        /* Export Bar */
-        .box-export { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 30px; }
-        .btn-export { background: rgba(239, 191, 59, 0.05); border: 1px solid rgba(239, 191, 59, 0.3); color: var(--emas-murni); padding: 10px; border-radius: 12px; cursor: pointer; font-size: 0.65rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.3s; }
-        .btn-export:active { background: var(--emas-murni); color: var(--biru-dalam); }
-
-        /* Input & Nav */
-        input, select, textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--kaca-garis); color: #fff; padding: 14px; border-radius: 15px; font-family: 'Poppins'; margin-bottom: 12px; outline: none; box-sizing: border-box; }
-        .label-input { font-size: 0.65rem; color: var(--emas-murni); margin-bottom: 5px; display: block; text-align: left; }
+        
         .nav-bawah { position: fixed; bottom: 20px; left: 20px; right: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: space-around; padding: 12px; border-radius: 20px; border: 1px solid var(--kaca-garis); z-index: 1000; }
-        .nav-item { color: rgba(255,255,255,0.4); display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+        .nav-item { color: rgba(255,255,255,0.5); display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
         .nav-item.aktif { color: var(--emas-murni); }
-        .nav-item span { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; }
+        .nav-item span { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; }
 
         #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
         .modal-konten { background: linear-gradient(160deg, #0f172a 0%, #040a16 100%); border: 1px solid var(--kaca-garis); border-radius: 30px; padding: 30px; width: 100%; max-width: 380px; text-align: center; }
+
+        input, select, textarea { width: 100%; background: rgba(255,255,255,0.08); border: 1px solid var(--kaca-garis); color: #fff; padding: 14px; border-radius: 15px; font-family: 'Poppins'; margin-bottom: 12px; outline: none; box-sizing: border-box; }
+        .label-input { font-size: 0.7rem; color: var(--emas-murni); margin-bottom: 5px; display: block; text-align: left; font-weight: 600; }
+
+        .btn-export { width: 100%; padding: 10px; background: var(--kaca-bg); border: 1px solid var(--emas-murni); color: var(--emas-murni); border-radius: 12px; font-size: 0.75rem; margin-top: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; }
 
         @keyframes geserAtas { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -85,24 +86,48 @@
     <div class="wadah">
         <div id="beranda" class="halaman aktif">
             <header>
-                <div class="logo-crown"><i class="fa-solid fa-crown"></i></div>
-                <h1>MACCA CASHFLOW</h1>
+                <div class="logo-header"><i class="fa-solid fa-crown"></i></div>
+                <h1>MACCA FLOW</h1>
                 <span class="sub-header">Elite Financial System</span>
             </header>
             
-            <div class="kartu-saldo">
-                <small style="color:var(--emas-murni); letter-spacing: 2px;">SALDO TERSEDIA</small>
+            <div class="kartu-saldo-utama">
+                <small class="label-pusat">Total Saldo Keseluruhan</small>
                 <div class="jumlah-saldo" id="saldoUtama">Rp. 0</div>
+                <div class="grid-split-saldo">
+                    <div class="split-item">
+                        <span class="split-label"><i class="fa-solid fa-wallet" style="color:var(--emas-murni)"></i> KAS OFFLINE</span>
+                        <div class="split-value" id="saldoOffline">Rp. 0</div>
+                    </div>
+                    <div class="split-item">
+                        <span class="split-label"><i class="fa-solid fa-globe" style="color:var(--biru-muda)"></i> KAS ONLINE</span>
+                        <div class="split-value" id="saldoOnline">Rp. 0</div>
+                    </div>
+                </div>
             </div>
 
-            <div class="kartu-grafik">
-                <canvas id="chartTrend" style="max-height: 180px;"></canvas>
-                <div class="chart-legend">
-                    <div class="legend-item"><span class="dot" style="background:#00ff88"></span> In</div>
-                    <div class="legend-item"><span class="dot" style="background:#ff3366"></span> Out</div>
-                    <div class="legend-item"><span class="dot" style="background:#3399ff"></span> Gerai</div>
-                    <div class="legend-item"><span class="dot" style="background:#efbf3b"></span> Warkop</div>
-                    <div class="legend-item"><span class="dot" style="background:#8a2be2"></span> Kasir</div>
+            <div class="section-harian">
+                <span class="harian-title">Tren Aktivitas Terakhir</span>
+                <div class="kartu-grafik">
+                    <canvas id="chartTrend" style="max-height: 160px;"></canvas>
+                </div>
+                <div class="baris-harian">
+                    <div class="box-harian-mini">
+                        <span class="mini-label">Off Hari Ini</span>
+                        <span class="mini-value" id="harianOff" style="color:var(--emas-murni)">Rp. 0</span>
+                    </div>
+                    <div class="box-harian-mini">
+                        <span class="mini-label">On Hari Ini</span>
+                        <span class="mini-value" id="harianOn" style="color:var(--emas-murni)">Rp. 0</span>
+                    </div>
+                    <div class="box-harian-mini">
+                        <span class="mini-label">Masuk</span>
+                        <span class="mini-value" id="harianMasuk" style="color:var(--sukses)">+ Rp. 0</span>
+                    </div>
+                    <div class="box-harian-mini">
+                        <span class="mini-label">Keluar</span>
+                        <span class="mini-value" id="harianKeluar" style="color:var(--bahaya)">- Rp. 0</span>
+                    </div>
                 </div>
             </div>
             
@@ -111,7 +136,7 @@
                 <button class="tombol-aksi" onclick="bukaModal('CASH KASIR', 'masuk')"><i class="fa-solid fa-cash-register"></i><span>Kasir</span></button>
                 <button class="tombol-aksi" onclick="bukaModal('CASH GERAI', 'masuk')"><i class="fa-solid fa-store"></i><span>Gerai</span></button>
                 <button class="tombol-aksi" onclick="bukaModal('CASH WARKOP', 'masuk')"><i class="fa-solid fa-mug-hot"></i><span>Warkop</span></button>
-                <button class="tombol-aksi" onclick="bukaModal('TRANSFER / QRIS', 'masuk')"><i class="fa-solid fa-qrcode"></i><span>QRIS</span></button>
+                <button class="tombol-aksi" onclick="bukaModal('ONLINE PAYMENT', 'masuk')"><i class="fa-solid fa-qrcode"></i><span>Online Pay</span></button>
             </div>
 
             <h2><i class="fa-solid fa-arrow-up-long" style="color:var(--bahaya)"></i> Kas Keluar</h2>
@@ -125,9 +150,9 @@
 
         <div id="riwayat" class="halaman">
             <header>
-                <div class="logo-crown"><i class="fa-solid fa-receipt"></i></div>
+                <div class="logo-header"><i class="fa-solid fa-receipt"></i></div>
                 <h1>RIWAYAT</h1>
-                <span class="sub-header">Daily Transaction Logs</span>
+                <span class="sub-header">Transaction History Log</span>
             </header>
             <label class="label-input">PILIH TANGGAL</label>
             <input type="date" id="riwayatTgl" onchange="syncUI()">
@@ -136,54 +161,33 @@
 
         <div id="neraca" class="halaman">
             <header>
-                <div class="logo-crown"><i class="fa-solid fa-scale-balanced"></i></div>
+                <div class="logo-header"><i class="fa-solid fa-scale-balanced"></i></div>
                 <h1>NERACA</h1>
-                <span class="sub-header">Financial Report</span>
+                <span class="sub-header">Daily Financial Balance</span>
             </header>
-            
-            <label class="label-input">FILTER HARIAN</label>
+            <label class="label-input">FILTER TANGGAL LAPORAN</label>
             <input type="date" id="nDaily" onchange="syncUI()">
-            <div id="boxHarian" class="kartu-neraca"></div>
-            <div class="box-export">
-                <button class="btn-export" onclick="universalExport('harian', 'pdf')"><i class="fa-solid fa-file-pdf"></i> PDF</button>
-                <button class="btn-export" onclick="universalExport('harian', 'excel')"><i class="fa-solid fa-file-excel"></i> EXCEL</button>
-            </div>
-            
-            <label class="label-input">FILTER BULANAN</label>
-            <input type="month" id="nMonthly" onchange="syncUI()">
-            <div id="boxBulanan" class="kartu-neraca"></div>
-            <div class="box-export">
-                <button class="btn-export" onclick="universalExport('bulanan', 'pdf')"><i class="fa-solid fa-file-pdf"></i> PDF</button>
-                <button class="btn-export" onclick="universalExport('bulanan', 'excel')"><i class="fa-solid fa-file-excel"></i> EXCEL</button>
-            </div>
-            
-            <label class="label-input">FILTER TAHUNAN</label>
-            <select id="nYearly" onchange="syncUI()">
-                <option value="2025">2025</option>
-                <option value="2026" selected>2026</option>
-            </select>
-            <div id="boxTahunan" class="kartu-neraca"></div>
-            <div class="box-export">
-                <button class="btn-export" onclick="universalExport('tahunan', 'pdf')"><i class="fa-solid fa-file-pdf"></i> PDF</button>
-                <button class="btn-export" onclick="universalExport('tahunan', 'excel')"><i class="fa-solid fa-file-excel"></i> EXCEL</button>
+            <div id="boxNeraca" style="background:var(--kaca-bg); padding:20px; border-radius:20px; border: 1px solid var(--kaca-garis);">
+                <div id="detailNeraca"></div>
+                <hr style="border:0; border-top:1px solid var(--kaca-garis); margin:15px 0;">
+                <button class="btn-export" onclick="exportData('pdf')"><i class="fa-solid fa-file-pdf"></i> Ekspor PDF</button>
+                <button class="btn-export" onclick="exportData('excel')"><i class="fa-solid fa-file-excel"></i> Ekspor Excel</button>
             </div>
         </div>
     </div>
 
     <div id="modal">
         <div class="modal-konten">
-            <div id="labelStatus" class="label-status-modal">KAS MASUK</div>
-            <h3 id="judulModal" style="color:white; margin:0 0 15px;">KATEGORI</h3>
+            <h3 id="judulModal" style="margin-top:0;"></h3>
             <div id="boxSubDynamic" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;"></div>
-            <div id="boxSubLevel2" style="display:none; flex-wrap:wrap; gap:8px; margin-bottom:20px;"></div>
             <label class="label-input">TANGGAL</label>
             <input type="date" id="inTanggal">
             <label class="label-input">NOMINAL</label>
             <input type="text" id="inNominal" placeholder="Rp. 0" oninput="formatRupiah(this)">
             <label class="label-input">CATATAN</label>
             <textarea id="inCatatan" rows="2" placeholder="Keterangan..."></textarea>
-            <button onclick="simpanData()" style="width:100%; padding:15px; background:linear-gradient(45deg, var(--ungu-elektrik), var(--pink-krimson)); border:none; border-radius:15px; color:white; font-weight:600; cursor:pointer">SIMPAN DATA</button>
-            <p onclick="tutupModal()" style="text-align:center; color:rgba(255,255,255,0.3); cursor:pointer; margin-top:15px;">BATALKAN</p>
+            <button onclick="simpanData()" id="btnSimpan" style="width:100%; padding:15px; border:none; border-radius:15px; color:var(--biru-dalam); font-weight:600; cursor:pointer">SIMPAN DATA</button>
+            <p onclick="tutupModal()" style="text-align:center; color:rgba(255,255,255,0.3); cursor:pointer; margin-top:15px;">BATAL</p>
         </div>
     </div>
 
@@ -205,230 +209,218 @@
         let cache = [], lineChart = null;
         const getHariIni = () => new Date().toLocaleDateString('en-CA');
 
-        const configSub = {
-            'CASH KASIR': ['Penjualan Toko', 'GrabFood', 'GoFood'],
-            'TRANSFER / QRIS': ['QRIS', 'Transfer Bank'],
-            'KASIR (ARA)': ['Operasional', 'Kasbon', 'Belanja'],
-            'DAPUR (IBU ATI)': ['Bahan Dapur', 'Sayuran'],
-            'STOK IKAN/GAS (HASBI)': ['Ikan', 'Gas'],
-            'PAK BOSS': ['Offline', 'Online']
-        };
+        onSnapshot(query(colRef, orderBy("timestamp", "desc")), (s) => {
+            cache = []; 
+            let totalSal = 0, offSal = 0, onSal = 0;
+            let dayIn = 0, dayOut = 0, dayOff = 0, dayOn = 0;
+            const hariIni = getHariIni();
+            
+            s.forEach(d => { 
+                const x = d.data(); 
+                const tDate = x.timestamp.toDate();
+                const strDate = tDate.toLocaleDateString('en-CA');
+                const dataObj = {...x, id: d.id, t: tDate};
+                cache.push(dataObj);
 
-        window.tampilkanNotif = () => {
-            const n = document.getElementById('notif');
-            n.classList.add('show');
-            setTimeout(() => n.classList.remove('show'), 3000);
-        };
+                const amt = (x.type === 'in' ? x.amount : -x.amount);
+                const isOnline = (x.isOnline || x.category === 'ONLINE PAYMENT');
 
-        // --- UNIVERSAL EXPORT LOGIC ---
-        window.universalExport = (scope, type) => {
-            let dataFilter = [];
-            let fileName = "Laporan_Macca";
-            const today = getHariIni();
+                totalSal += amt;
+                if(isOnline) onSal += amt; else offSal += amt;
 
-            if (scope === 'harian') {
-                const val = document.getElementById('nDaily').value || today;
-                dataFilter = cache.filter(d => d.t.toLocaleDateString('en-CA') === val);
-                fileName = `Harian_${val}`;
-            } else if (scope === 'bulanan') {
-                const val = document.getElementById('nMonthly').value || today.substring(0, 7);
-                dataFilter = cache.filter(d => d.t.toLocaleDateString('en-CA').startsWith(val));
-                fileName = `Bulanan_${val}`;
-            } else {
-                const val = document.getElementById('nYearly').value;
-                dataFilter = cache.filter(d => d.t.getFullYear().toString() === val);
-                fileName = `Tahunan_${val}`;
-            }
-
-            if (dataFilter.length === 0) return alert("Tidak ada data untuk periode ini!");
-
-            if (type === 'pdf') {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                doc.text(`LAPORAN ${scope.toUpperCase()} MACCA FLOW`, 14, 15);
-                const rows = dataFilter.map(d => [d.t.toLocaleDateString(), d.category, d.type==='in'?'In':'Out', d.amount.toLocaleString(), d.description]);
-                doc.autoTable({ head: [['Tanggal', 'Kategori', 'Tipe', 'Nominal', 'Catatan']], body: rows, startY: 25 });
-                doc.save(`Macca_${fileName}.pdf`);
-            } else {
-                const rows = dataFilter.map(d => ({
-                    'Tanggal': d.t.toLocaleDateString(),
-                    'Kategori': d.category,
-                    'Tipe': d.type === 'in' ? 'MASUK' : 'KELUAR',
-                    'Nominal': d.amount,
-                    'Keterangan': d.description
-                }));
-                const ws = XLSX.utils.json_to_sheet(rows);
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, "Data");
-                ws['!cols'] = [{wch:15}, {wch:20}, {wch:12}, {wch:15}, {wch:40}];
-                XLSX.writeFile(wb, `Macca_${fileName}.xlsx`);
-            }
-        };
-
-        const initLineChart = () => {
-            const ctx = document.getElementById('chartTrend').getContext('2d');
-            lineChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [
-                        { label: 'In', borderColor: '#00ff88', data: [], tension: 0.4, borderWidth: 2, pointRadius: 0 },
-                        { label: 'Out', borderColor: '#ff3366', data: [], tension: 0.4, borderWidth: 2, pointRadius: 0 },
-                        { label: 'Gerai', borderColor: '#3399ff', data: [], tension: 0.4, borderWidth: 1, borderDash:[4,4], pointRadius: 0 },
-                        { label: 'Warkop', borderColor: '#efbf3b', data: [], tension: 0.4, borderWidth: 1, borderDash:[4,4], pointRadius: 0 },
-                        { label: 'Kasir', borderColor: '#8a2be2', data: [], tension: 0.4, borderWidth: 1, borderDash:[4,4], pointRadius: 0 }
-                    ]
-                },
-                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.3)', font: { size: 9 } } } } }
+                if(strDate === hariIni) {
+                    if(x.type === 'in') dayIn += x.amount; else dayOut += x.amount;
+                    if(isOnline) dayOn += amt; else dayOff += amt;
+                }
             });
-        };
+
+            document.getElementById('saldoUtama').innerText = "Rp. " + totalSal.toLocaleString('id-ID');
+            document.getElementById('saldoOffline').innerText = "Rp. " + offSal.toLocaleString('id-ID');
+            document.getElementById('saldoOnline').innerText = "Rp. " + onSal.toLocaleString('id-ID');
+            document.getElementById('harianMasuk').innerText = "+ Rp. " + dayIn.toLocaleString('id-ID');
+            document.getElementById('harianKeluar').innerText = "- Rp. " + dayOut.toLocaleString('id-ID');
+            document.getElementById('harianOff').innerText = "Rp. " + dayOff.toLocaleString('id-ID');
+            document.getElementById('harianOn').innerText = "Rp. " + dayOn.toLocaleString('id-ID');
+            
+            syncUI();
+            updateLineChart();
+        });
 
         const updateLineChart = () => {
-            if(!lineChart) return;
-            const labels = [], dIn = [], dOut = [], dG = [], dW = [], dK = [];
-            for(let i=6; i>=0; i--) {
-                const t = new Date(); t.setDate(t.getDate() - i);
-                const s = t.toLocaleDateString('en-CA');
-                labels.push(t.toLocaleDateString('id-ID', { weekday: 'short' }));
-                let inT=0, outT=0, gT=0, wT=0, kT=0;
-                cache.filter(x => x.t.toLocaleDateString('en-CA') === s).forEach(x => {
-                    if(x.type === 'in') {
-                        inT += x.amount;
-                        if(x.category === 'CASH GERAI') gT += x.amount;
-                        if(x.category === 'CASH WARKOP') wT += x.amount;
-                        if(x.category === 'CASH KASIR') kT += x.amount;
-                    } else outT += x.amount;
-                });
-                dIn.push(inT); dOut.push(outT); dG.push(gT); dW.push(wT); dK.push(kT);
+            const ctx = document.getElementById('chartTrend').getContext('2d');
+            
+            // Ambil 7 hari terakhir secara otomatis (bahkan jika data kosong)
+            const labels = [];
+            const dataIn = [];
+            const dataOut = [];
+            
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                const dStr = d.toLocaleDateString('en-CA');
+                
+                labels.push(d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }));
+                
+                const valIn = cache.filter(item => item.t.toLocaleDateString('en-CA') === dStr && item.type === 'in')
+                                  .reduce((sum, item) => sum + item.amount, 0);
+                const valOut = cache.filter(item => item.t.toLocaleDateString('en-CA') === dStr && item.type === 'out')
+                                   .reduce((sum, item) => sum + item.amount, 0);
+                
+                dataIn.push(valIn);
+                dataOut.push(valOut);
             }
-            lineChart.data.labels = labels;
-            lineChart.data.datasets[0].data = dIn;
-            lineChart.data.datasets[1].data = dOut;
-            lineChart.data.datasets[2].data = dG;
-            lineChart.data.datasets[3].data = dW;
-            lineChart.data.datasets[4].data = dK;
-            lineChart.update();
+
+            if (lineChart) {
+                lineChart.data.labels = labels;
+                lineChart.data.datasets[0].data = dataIn;
+                lineChart.data.datasets[1].data = dataOut;
+                lineChart.update();
+            } else {
+                lineChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            { 
+                                label: 'Masuk', 
+                                data: dataIn, 
+                                borderColor: '#00ff88', 
+                                backgroundColor: 'rgba(0, 255, 136, 0.1)', 
+                                tension: 0.4, 
+                                fill: true,
+                                pointRadius: 4,
+                                pointBackgroundColor: '#00ff88'
+                            },
+                            { 
+                                label: 'Keluar', 
+                                data: dataOut, 
+                                borderColor: '#ff3366', 
+                                backgroundColor: 'rgba(255, 51, 102, 0.1)', 
+                                tension: 0.4, 
+                                fill: true,
+                                pointRadius: 4,
+                                pointBackgroundColor: '#ff3366'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { 
+                                beginAtZero: true,
+                                ticks: { color: 'rgba(255,255,255,0.4)', font: { size: 8 } }, 
+                                grid: { color: 'rgba(255,255,255,0.05)' } 
+                            },
+                            x: { 
+                                ticks: { color: 'rgba(255,255,255,0.6)', font: { size: 9 } }, 
+                                grid: { display: false } 
+                            }
+                        }
+                    }
+                });
+            }
         };
 
-        window.formatRupiah = (el) => {
-            let v = el.value.replace(/\D/g, "");
-            el.value = v ? "Rp. " + parseInt(v).toLocaleString('id-ID') : "";
+        window.simpanData = async () => {
+            const nom = parseInt(document.getElementById('inNominal').value.replace(/\D/g, ""));
+            const tgl = document.getElementById('inTanggal').value;
+            if(!nom || !tgl) return alert("Nominal & Tanggal wajib diisi!");
+            const desc = (window.cSub ? `[${window.cSub}] ` : "") + document.getElementById('inCatatan').value;
+            let statusOnline = (window.cKat === 'ONLINE PAYMENT' || window.cSub === 'TF BRI' || window.cSub === 'TF BNI' || window.cSub === 'Online');
+
+            await addDoc(colRef, {
+                category: window.cKat, 
+                type: window.cTip === 'masuk' ? 'in' : 'out', 
+                amount: nom, 
+                description: desc,
+                isOnline: statusOnline, 
+                timestamp: Timestamp.fromDate(new Date(tgl + "T" + new Date().toLocaleTimeString('en-GB')))
+            });
+            tutupModal();
+            window.tampilkanNotif();
         };
 
         window.bukaModal = (k, t) => {
-            window.cKat = k; window.cTip = t; window.cSub = ""; window.cSub2 = "";
-            document.getElementById('inNominal').value = ""; document.getElementById('inCatatan').value = "";
-            document.getElementById('judulModal').innerText = k;
+            window.cKat = k; window.cTip = t; window.cSub = "";
+            const hModal = document.getElementById('judulModal');
+            const btnSimpan = document.getElementById('btnSimpan');
+            hModal.innerText = k;
+            if(t === 'masuk') { hModal.style.color = 'var(--sukses)'; btnSimpan.style.backgroundColor = 'var(--sukses)'; } 
+            else { hModal.style.color = 'var(--bahaya)'; btnSimpan.style.backgroundColor = 'var(--bahaya)'; }
             document.getElementById('inTanggal').value = getHariIni();
-            const label = document.getElementById('labelStatus');
-            if(t === 'masuk') { label.innerText = "KAS MASUK"; label.className = "label-status-modal status-hijau"; }
-            else { label.innerText = "KAS KELUAR"; label.className = "label-status-modal status-merah"; }
             const subBox = document.getElementById('boxSubDynamic');
-            const subBox2 = document.getElementById('boxSubLevel2');
-            subBox.innerHTML = ""; subBox2.innerHTML = ""; subBox2.style.display = 'none';
+            subBox.innerHTML = "";
+            
+            const configSub = { 
+                'CASH KASIR': ['Penjualan Kasir', 'GrabFood', 'Lainnya'], 
+                'ONLINE PAYMENT': ['QRIS', 'TF BRI', 'TF BNI'], 
+                'KASIR (ARA)': ['Operasional', 'Kasbon', 'Belanja'], 
+                'STOK IKAN/GAS (HASBI)': ['IKAN', 'GAS'], 
+                'DAPUR (IBU ATI)': ['Bahan Dapur', 'Sayuran'], 
+                'PAK BOSS': t === 'masuk' ? ['Offline', 'Online'] : ['Offline', 'TF BRI', 'TF BNI'] 
+            };
+
             if(configSub[k]) {
                 configSub[k].forEach((s, idx) => {
                     const btn = document.createElement('button');
-                    btn.innerText = s;
-                    btn.style.cssText = "flex:1; min-width:80px; padding:10px; border-radius:12px; border:1px solid var(--kaca-garis); background:transparent; color:white; font-size:0.7rem; cursor:pointer;";
-                    if(idx===0) { window.cSub = s; logicLevel2(k, s); btn.style.backgroundColor = 'var(--emas-murni)'; btn.style.color = 'var(--biru-dalam)'; }
-                    btn.onclick = () => {
-                        Array.from(subBox.children).forEach(b => { b.style.backgroundColor = 'transparent'; b.style.color = 'white'; });
-                        btn.style.backgroundColor = 'var(--emas-murni)'; btn.style.color = 'var(--biru-dalam)';
-                        window.cSub = s; logicLevel2(k, s);
-                    };
+                    btn.innerText = s; btn.style.cssText = "flex:1; padding:10px; border-radius:12px; border:1px solid var(--kaca-garis); background:transparent; color:white; font-size:0.7rem; min-width:80px;";
+                    if(idx===0) { window.cSub = s; btn.style.backgroundColor = 'var(--emas-murni)'; btn.style.color = 'var(--biru-dalam)'; }
+                    btn.onclick = () => { Array.from(subBox.children).forEach(b => { b.style.backgroundColor = 'transparent'; b.style.color = 'white'; }); btn.style.backgroundColor = 'var(--emas-murni)'; btn.style.color = 'var(--biru-dalam)'; window.cSub = s; };
                     subBox.appendChild(btn);
                 });
             }
             document.getElementById('modal').style.display = 'flex';
         };
 
-        const logicLevel2 = (k, s) => {
-            const subBox2 = document.getElementById('boxSubLevel2');
-            if ((k === 'PAK BOSS' && s === 'Online') || (k === 'TRANSFER / QRIS' && s === 'Transfer Bank')) {
-                subBox2.innerHTML = ""; subBox2.style.display = 'flex';
-                ['TF BRI', 'TF BNI'].forEach((bank, idx) => {
-                    const btn = document.createElement('button');
-                    btn.innerText = bank;
-                    btn.style.cssText = "flex:1; min-width:80px; padding:10px; border-radius:12px; border:1px solid var(--kaca-garis); background:transparent; color:white; font-size:0.7rem; cursor:pointer;";
-                    if(idx===0) { window.cSub2 = bank; btn.style.backgroundColor = 'var(--emas-murni)'; btn.style.color = 'var(--biru-dalam)'; }
-                    btn.onclick = () => {
-                        Array.from(subBox2.children).forEach(b => { b.style.backgroundColor = 'transparent'; b.style.color = 'white'; });
-                        btn.style.backgroundColor = 'var(--emas-murni)'; btn.style.color = 'var(--biru-dalam)';
-                        window.cSub2 = bank;
-                    };
-                    subBox2.appendChild(btn);
-                });
-            } else { subBox2.style.display = 'none'; window.cSub2 = ""; }
+        window.tutupModal = () => document.getElementById('modal').style.display = 'none';
+        window.formatRupiah = (el) => { let v = el.value.replace(/\D/g, ""); el.value = v ? "Rp. " + parseInt(v).toLocaleString('id-ID') : ""; };
+        window.tampilkanNotif = () => { const n = document.getElementById('notif'); n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 3000); };
+        window.gantiHal = (id) => { 
+            document.querySelectorAll('.halaman').forEach(h => h.classList.remove('aktif')); 
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('aktif')); 
+            document.getElementById(id).classList.add('aktif'); event.currentTarget.classList.add('aktif'); 
+            syncUI(); 
         };
-
-        window.tutupModal = () => { document.getElementById('modal').style.display = 'none'; };
-
-        window.simpanData = async () => {
-            const nom = parseInt(document.getElementById('inNominal').value.replace(/\D/g, ""));
-            const tgl = document.getElementById('inTanggal').value;
-            if(!nom || !tgl) return alert("Isi nominal!");
-            const desc = (window.cSub ? `[${window.cSub}] ` : "") + (window.cSub2 ? `[${window.cSub2}] ` : "") + document.getElementById('inCatatan').value;
-            await addDoc(colRef, {
-                category: window.cKat, type: window.cTip === 'masuk' ? 'in' : 'out', amount: nom, description: desc,
-                timestamp: Timestamp.fromDate(new Date(tgl + "T" + new Date().toLocaleTimeString('en-GB')))
-            });
-            tutupModal();
-            tampilkanNotif();
-        };
-
-        window.gantiHal = (id) => {
-            document.querySelectorAll('.halaman').forEach(h => h.classList.remove('aktif'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('aktif'));
-            document.getElementById(id).classList.add('aktif');
-            event.currentTarget.classList.add('aktif');
-            syncUI();
-        };
-
-        onSnapshot(query(colRef, orderBy("timestamp", "desc")), (s) => {
-            cache = []; let sal = 0;
-            s.forEach(d => { const x = d.data(); cache.push({...x, id: d.id, t: x.timestamp.toDate()}); });
-            cache.forEach(i => sal += (i.type === 'in' ? i.amount : -i.amount));
-            document.getElementById('saldoUtama').innerText = "Rp. " + sal.toLocaleString('id-ID');
-            syncUI();
-        });
 
         window.syncUI = () => {
-            updateLineChart();
-            const list = document.getElementById('listRiwayat'); if(list) {
-                list.innerHTML = "";
-                const filter = document.getElementById('riwayatTgl').value || getHariIni();
-                cache.filter(d => d.t.toLocaleDateString('en-CA') === filter).forEach(d => {
-                    const isIn = d.type === 'in';
-                    const div = document.createElement('div'); div.className = 'item-riwayat-elite';
-                    div.innerHTML = `
-                        <div class="riwayat-kiri"><div class="riwayat-icon-box" style="background:rgba(${isIn?'0,255,136':'255,51,102'},0.1); color:var(${isIn?'--sukses':'--bahaya'})"><i class="fa-solid fa-arrow-${isIn?'down':'up'}"></i></div><div class="riwayat-info"><span style="font-weight:600; font-size:0.85rem;">${d.category}</span><small style="opacity:0.4; font-size:0.6rem;">${d.t.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</small></div></div>
-                        <div class="riwayat-kanan"><span class="riwayat-amt" style="color:${isIn?'#00ff88':'#ff3366'}">${isIn?'+':'-'} Rp ${d.amount.toLocaleString()}</span><small style="opacity:0.3; font-size:0.55rem;">${d.description || ''}</small></div>`;
-                    list.appendChild(div);
-                });
+            const list = document.getElementById('listRiwayat');
+            const detNeraca = document.getElementById('detailNeraca');
+            if(!list) return;
+            list.innerHTML = ""; detNeraca.innerHTML = "";
+            const filter = document.getElementById('riwayatTgl').value || getHariIni();
+            const filterNeraca = document.getElementById('nDaily').value || getHariIni();
+            let totalIn = 0, totalOut = 0;
+            cache.filter(d => d.t.toLocaleDateString('en-CA') === filter).forEach(d => {
+                const isIn = d.type === 'in';
+                const div = document.createElement('div'); div.className = 'item-riwayat-elite';
+                div.innerHTML = `<div style="display:flex; align-items:center; gap:12px;"><i class="fa-solid ${isIn ? 'fa-circle-arrow-down' : 'fa-circle-arrow-up'}" style="color:${isIn?'var(--sukses)':'var(--bahaya)'}; font-size:1.2rem;"></i><div><small style="color:var(--emas-murni); font-size:0.6rem;">${d.category}</small><div style="font-weight:600; font-size:0.8rem;">${d.description || '-'}</div></div></div><div style="text-align:right; color:${isIn?'var(--sukses)':'var(--bahaya)'}; font-weight:600;">${isIn?'+':'-'} ${d.amount.toLocaleString()}</div>`;
+                list.appendChild(div);
+            });
+            cache.filter(d => d.t.toLocaleDateString('en-CA') === filterNeraca).forEach(d => { if(d.type === 'in') totalIn += d.amount; else totalOut += d.amount; });
+            detNeraca.innerHTML = `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>Total Masuk:</span><span style="color:var(--sukses)">+ Rp. ${totalIn.toLocaleString()}</span></div><div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>Total Keluar:</span><span style="color:var(--bahaya)">- Rp. ${totalOut.toLocaleString()}</span></div><div style="display:flex; justify-content:space-between; font-weight:600; border-top:1px solid var(--kaca-garis); padding-top:10px;"><span>Sisa Saldo:</span><span style="color:var(--emas-murni)">Rp. ${(totalIn - totalOut).toLocaleString()}</span></div>`;
+        };
+
+        window.exportData = (type) => {
+            const filterDate = document.getElementById('nDaily').value;
+            const dataToExport = cache.filter(d => d.t.toLocaleDateString('en-CA') === filterDate);
+            if(dataToExport.length === 0) return alert("Tidak ada data!");
+            if(type === 'excel') {
+                const ws = XLSX.utils.json_to_sheet(dataToExport.map(d => ({ Tanggal: d.t.toLocaleString(), Kategori: d.category, Tipe: d.type === 'in' ? 'MASUK' : 'KELUAR', Nominal: d.amount, Keterangan: d.description })));
+                const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Laporan"); XLSX.writeFile(wb, `Laporan_${filterDate}.xlsx`);
+            } else {
+                const { jsPDF } = window.jspdf; const doc = new jsPDF();
+                doc.text(`Laporan Macca Flow - ${filterDate}`, 14, 15);
+                doc.autoTable({ head: [['Waktu', 'Kategori', 'Tipe', 'Nominal', 'Ket']], body: dataToExport.map(d => [d.t.toLocaleString(), d.category, d.type.toUpperCase(), d.amount.toLocaleString(), d.description]), startY: 20 });
+                doc.save(`Laporan_${filterDate}.pdf`);
             }
-            drawNeracaMewah("boxHarian", cache.filter(d => d.t.toLocaleDateString('en-CA') === (document.getElementById('nDaily').value || getHariIni())), "RINGKASAN HARIAN");
-            drawNeracaMewah("boxBulanan", cache.filter(d => d.t.toLocaleDateString('en-CA').substring(0, 7) === (document.getElementById('nMonthly').value || getHariIni().substring(0, 7))), "RINGKASAN BULANAN");
-            drawNeracaMewah("boxTahunan", cache.filter(d => d.t.getFullYear().toString() === document.getElementById('nYearly').value), "RINGKASAN TAHUNAN");
         };
 
-        const drawNeracaMewah = (target, data, title) => {
-            let pIn = 0, pOut = 0; data.forEach(d => { if(d.type==='in') pIn += d.amount; else pOut += d.amount; });
-            const el = document.getElementById(target); if(!el) return;
-            el.innerHTML = `
-                <span style="font-size:0.6rem; color:var(--emas-murni); letter-spacing:2px; display:block; margin-bottom:15px; text-transform:uppercase;">${title}</span>
-                <div class="neraca-row"><div class="neraca-icon" style="background:rgba(0,255,136,0.1); color:var(--sukses)"><i class="fa-solid fa-arrow-down"></i></div><div><small style="opacity:0.4; font-size:0.6rem">Masuk</small><div style="font-weight:600">Rp ${pIn.toLocaleString()}</div></div></div>
-                <div class="neraca-row"><div class="neraca-icon" style="background:rgba(255,51,102,0.1); color:var(--bahaya)"><i class="fa-solid fa-arrow-up"></i></div><div><small style="opacity:0.4; font-size:0.6rem">Keluar</small><div style="font-weight:600">Rp ${pOut.toLocaleString()}</div></div></div>
-                <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--kaca-garis)"><div class="neraca-row" style="margin-bottom:0"><div class="neraca-icon" style="background:rgba(239,191,59,0.1); color:var(--emas-murni)"><i class="fa-solid fa-scale-balanced"></i></div><div><small style="opacity:0.4; font-size:0.6rem">Laba Bersih</small><div style="color:var(--emas-murni); font-weight:600">Rp ${(pIn-pOut).toLocaleString()}</div></div></div></div>`;
-        };
-
-        window.onload = () => {
-            initLineChart();
-            document.getElementById('riwayatTgl').value = getHariIni();
-            document.getElementById('nDaily').value = getHariIni();
-            document.getElementById('nMonthly').value = getHariIni().substring(0, 7);
+        window.onload = () => { 
+            document.getElementById('riwayatTgl').value = getHariIni(); 
+            document.getElementById('nDaily').value = getHariIni(); 
         };
     </script>
 </body>
 </html>
-
