@@ -79,6 +79,10 @@
 
         .btn-export { width: 100%; padding: 10px; background: var(--kaca-bg); border: 1px solid var(--emas-murni); color: var(--emas-murni); border-radius: 12px; font-size: 0.75rem; margin-top: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; }
 
+        /* Neraca Split Style */
+        .neraca-group { margin-bottom: 20px; }
+        .neraca-group-title { font-size: 0.6rem; color: #fff; background: var(--kaca-garis); padding: 4px 10px; border-radius: 5px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: inline-block; }
+
         @keyframes geserAtas { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -90,7 +94,7 @@
         <div id="beranda" class="halaman aktif">
             <header>
                 <div class="logo-header"><i class="fa-solid fa-crown"></i></div>
-                <h1>MACCA CASHFLOW</h1>
+                <h1>MACCA FLOW</h1>
                 <span class="sub-header">Elite Financial System</span>
             </header>
             
@@ -200,7 +204,6 @@
         let cache = [], lineChart = null;
         const getHariIni = () => new Date().toLocaleDateString('en-CA');
 
-        // Fungsi Reset Form
         const resetForm = () => {
             document.getElementById('inNominal').value = "";
             document.getElementById('inCatatan').value = "";
@@ -282,7 +285,7 @@
             
             await addDoc(colRef, { category: window.cKat, type: window.cTip === 'masuk' ? 'in' : 'out', amount: nom, description: desc, isOnline: statusOnline, timestamp: Timestamp.fromDate(new Date(tgl + "T" + new Date().toLocaleTimeString('en-GB'))) });
             
-            resetForm(); // Bersihkan form setelah simpan
+            resetForm();
             tutupModal();
             window.tampilkanNotif();
         };
@@ -320,7 +323,7 @@
 
         window.tutupModal = () => {
             document.getElementById('modal').style.display = 'none';
-            resetForm(); // Bersihkan form saat batal/tutup
+            resetForm();
             if (history.state && history.state.modal) { history.back(); }
         };
 
@@ -343,15 +346,40 @@
             if(!list) return; list.innerHTML = ""; detNeraca.innerHTML = "";
             const filter = document.getElementById('riwayatTgl').value || getHariIni();
             const filterNeraca = document.getElementById('nDaily').value || getHariIni();
-            let totalIn = 0, totalOut = 0;
+            
+            // Sync Riwayat
             cache.filter(d => d.t.toLocaleDateString('en-CA') === filter).forEach(d => {
                 const isIn = d.type === 'in';
                 const div = document.createElement('div'); div.className = 'item-riwayat-elite';
                 div.innerHTML = `<div style="display:flex; align-items:center; gap:12px;"><i class="fa-solid ${isIn ? 'fa-circle-arrow-down' : 'fa-circle-arrow-up'}" style="color:${isIn?'var(--sukses)':'var(--bahaya)'}; font-size:1.2rem;"></i><div><small style="color:var(--emas-murni); font-size:0.6rem;">${d.category}</small><div style="font-weight:600; font-size:0.8rem;">${d.description || '-'}</div></div></div><div style="text-align:right; color:${isIn?'var(--sukses)':'var(--bahaya)'}; font-weight:600;">${isIn?'+':'-'} ${d.amount.toLocaleString()}</div>`;
                 list.appendChild(div);
             });
-            cache.filter(d => d.t.toLocaleDateString('en-CA') === filterNeraca).forEach(d => { if(d.type === 'in') totalIn += d.amount; else totalOut += d.amount; });
-            detNeraca.innerHTML = `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>Total Masuk:</span><span style="color:var(--sukses)">+ Rp. ${totalIn.toLocaleString()}</span></div><div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>Total Keluar:</span><span style="color:var(--bahaya)">- Rp. ${totalOut.toLocaleString()}</span></div><div style="display:flex; justify-content:space-between; font-weight:600; border-top:1px solid var(--kaca-garis); padding-top:10px;"><span>Sisa Saldo:</span><span style="color:var(--emas-murni)">Rp. ${(totalIn - totalOut).toLocaleString()}</span></div>`;
+
+            // Sync Neraca Terpisah (Split)
+            let inOff = 0, outOff = 0, inOn = 0, outOn = 0;
+            cache.filter(d => d.t.toLocaleDateString('en-CA') === filterNeraca).forEach(d => {
+                const isOnline = (d.isOnline || d.category === 'ONLINE PAYMENT' || (d.description && d.description.includes('[GrabFood]')));
+                if(isOnline) { if(d.type === 'in') inOn += d.amount; else outOn += d.amount; }
+                else { if(d.type === 'in') inOff += d.amount; else outOff += d.amount; }
+            });
+
+            detNeraca.innerHTML = `
+                <div class="neraca-group">
+                    <span class="neraca-group-title">Kas Offline (Cash)</span>
+                    <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:5px;"><span>Masuk:</span><span style="color:var(--sukses)">+ Rp. ${inOff.toLocaleString()}</span></div>
+                    <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:5px;"><span>Keluar:</span><span style="color:var(--bahaya)">- Rp. ${outOff.toLocaleString()}</span></div>
+                    <div style="display:flex; justify-content:space-between; font-weight:600; color:var(--emas-murni); border-top:1px dashed rgba(255,255,255,0.1); padding-top:5px;"><span>Subtotal:</span><span>Rp. ${(inOff-outOff).toLocaleString()}</span></div>
+                </div>
+                <div class="neraca-group">
+                    <span class="neraca-group-title">Kas Online (Digital)</span>
+                    <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:5px;"><span>Masuk:</span><span style="color:var(--sukses)">+ Rp. ${inOn.toLocaleString()}</span></div>
+                    <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:5px;"><span>Keluar:</span><span style="color:var(--bahaya)">- Rp. ${outOn.toLocaleString()}</span></div>
+                    <div style="display:flex; justify-content:space-between; font-weight:600; color:var(--biru-muda); border-top:1px dashed rgba(255,255,255,0.1); padding-top:5px;"><span>Subtotal:</span><span>Rp. ${(inOn-outOn).toLocaleString()}</span></div>
+                </div>
+                <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:12px; margin-top:10px; border:1px solid var(--emas-murni);">
+                    <div style="display:flex; justify-content:space-between; font-weight:600; font-size:0.9rem;"><span>NET PROFIT HARI INI</span><span style="color:var(--emas-murni)">Rp. ${( (inOff+inOn) - (outOff+outOn) ).toLocaleString()}</span></div>
+                </div>
+            `;
         };
 
         window.exportData = (type) => {
@@ -359,12 +387,12 @@
             const dataToExport = cache.filter(d => d.t.toLocaleDateString('en-CA') === filterDate);
             if(dataToExport.length === 0) return alert("Tidak ada data!");
             if(type === 'excel') {
-                const ws = XLSX.utils.json_to_sheet(dataToExport.map(d => ({ Tanggal: d.t.toLocaleString(), Kategori: d.category, Tipe: d.type === 'in' ? 'MASUK' : 'KELUAR', Nominal: d.amount, Keterangan: d.description })));
+                const ws = XLSX.utils.json_to_sheet(dataToExport.map(d => ({ Tanggal: d.t.toLocaleString(), Kategori: d.category, Tipe: d.type === 'in' ? 'MASUK' : 'KELUAR', Kas: (d.isOnline || d.category === 'ONLINE PAYMENT' ? 'ONLINE' : 'OFFLINE'), Nominal: d.amount, Keterangan: d.description })));
                 const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Laporan"); XLSX.writeFile(wb, `Laporan_${filterDate}.xlsx`);
             } else {
                 const { jsPDF } = window.jspdf; const doc = new jsPDF();
                 doc.text(`Laporan Macca Flow - ${filterDate}`, 14, 15);
-                doc.autoTable({ head: [['Waktu', 'Kategori', 'Tipe', 'Nominal', 'Ket']], body: dataToExport.map(d => [d.t.toLocaleString(), d.category, d.type.toUpperCase(), d.amount.toLocaleString(), d.description]), startY: 20 });
+                doc.autoTable({ head: [['Waktu', 'Kat', 'Kas', 'Tipe', 'Nominal', 'Ket']], body: dataToExport.map(d => [d.t.toLocaleTimeString('id-ID'), d.category, (d.isOnline || d.category === 'ONLINE PAYMENT' ? 'ON' : 'OFF'), d.type.toUpperCase(), d.amount.toLocaleString(), d.description]), startY: 20 });
                 doc.save(`Laporan_${filterDate}.pdf`);
             }
         };
