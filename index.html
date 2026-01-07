@@ -24,7 +24,7 @@
             --teks-utama: #f8f9fa;
         }
 
-        body { margin: 0; font-family: 'Poppins', sans-serif; background: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #040a16 100%); color: var(--teks-utama); min-height: 100vh; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; font-family: 'Poppins', sans-serif; background: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #040a16 100%); color: var(--teks-utama); min-height: 100vh; overflow-x: hidden; }
         .wadah { padding: 25px; max-width: 480px; margin: auto; padding-bottom: 130px; }
         .halaman { display: none; }
         .halaman.aktif { display: block; animation: geserAtas 0.4s ease-out; }
@@ -46,6 +46,7 @@
 
         .box-sub-bank { display: flex; justify-content: center; gap: 15px; margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); width: 100%; }
         .bank-mini { display: flex; flex-direction: column; align-items: center; flex: 1; cursor: pointer; transition: 0.3s; border-radius: 10px; padding: 5px; }
+        .bank-mini:active { background: rgba(255,255,255,0.1); }
         .bank-label { font-size: 0.55rem; color: rgba(255,255,255,0.5); text-transform: uppercase; }
         .bank-val { font-size: 0.75rem; font-weight: 600; color: var(--biru-muda); }
 
@@ -60,53 +61,84 @@
 
         h2 { font-size: 0.85rem; color: var(--emas-murni); letter-spacing: 1.5px; text-transform: uppercase; margin: 25px 0 15px; display: flex; align-items: center; gap: 10px; font-weight: 600; }
         .grid-tombol { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .tombol-aksi { background: var(--kaca-bg); border: 1px solid var(--kaca-garis); border-radius: 20px; padding: 18px 10px; color: white; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: 0.2s; border: 1px solid var(--kaca-garis); }
+        .tombol-aksi { background: var(--kaca-bg); border: 1px solid var(--kaca-garis); border-radius: 20px; padding: 18px 10px; color: white; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: 0.2s; }
         .tombol-aksi i { font-size: 1.4rem; color: var(--emas-murni); }
 
         input, select, textarea { width: 100%; background: rgba(255,255,255,0.15) !important; border: 1px solid var(--kaca-garis); color: #fff; padding: 14px; border-radius: 15px; font-family: 'Poppins'; margin-bottom: 12px; outline: none; box-sizing: border-box; }
+        select option { background-color: #1a1a2e; color: white; }
         
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
-        .modal-konten { background: linear-gradient(160deg, #0f172a 0%, #040a16 100%); border: 1px solid var(--kaca-garis); border-radius: 30px; padding: 30px; width: 100%; max-width: 380px; text-align: center; max-height: 80vh; overflow-y: auto; }
+        input:focus, select:focus { background: rgba(255,255,255,0.2); border-color: var(--emas-murni); }
 
-        .btn-batal { width: 100%; padding: 12px; background: transparent; border: 1px solid rgba(239, 191, 59, 0.3); color: var(--emas-murni); border-radius: 15px; font-weight: 600; cursor: pointer; margin-top: 15px; }
+        #notif { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(20px); border: 1px solid var(--emas-murni); padding: 15px 30px; border-radius: 50px; display: flex; align-items: center; gap: 12px; color: white; font-weight: 600; z-index: 4000; transition: 0.5s; }
+        #notif.show { top: 30px; }
+
+        .item-riwayat-elite { background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02)); backdrop-filter: blur(10px); border: 1px solid var(--kaca-garis); border-radius: 20px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+        .btn-edit-item { background: rgba(239, 191, 59, 0.1); border: 1px solid rgba(239, 191, 59, 0.3); color: var(--emas-murni); width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-left: 10px; transition: 0.3s; }
 
         .nav-bawah { position: fixed; bottom: 20px; left: 20px; right: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: space-around; padding: 12px; border-radius: 20px; border: 1px solid var(--kaca-garis); z-index: 1000; }
         .nav-item { color: rgba(255,255,255,0.5); display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
         .nav-item.aktif { color: var(--emas-murni); }
         .nav-item span { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; }
 
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-konten { background: linear-gradient(160deg, #0f172a 0%, #040a16 100%); border: 1px solid var(--kaca-garis); border-radius: 30px; padding: 30px; width: 100%; max-width: 380px; text-align: center; max-height: 80vh; overflow-y: auto; }
+
+        .label-input { font-size: 0.7rem; color: var(--emas-murni); margin-bottom: 5px; display: block; text-align: left; font-weight: 600; }
+        .btn-batal { width: 100%; padding: 12px; background: transparent; border: 1px solid rgba(239, 191, 59, 0.3); color: var(--emas-murni); border-radius: 15px; font-weight: 600; cursor: pointer; margin-top: 15px; font-size: 0.8rem; }
+        .btn-export { width: 100%; padding: 10px; background: var(--kaca-bg); border: 1px solid var(--emas-murni); color: var(--emas-murni); border-radius: 12px; font-size: 0.75rem; margin-top: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; }
+
+        .neraca-group { margin-bottom: 25px; }
+        .neraca-group-title { font-size: 0.65rem; color: #fff; background: rgba(255,255,255,0.05); padding: 8px 16px; border-radius: 30px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; font-weight: 600; border: 1px solid rgba(255,255,255,0.15); width: fit-content; }
+        .neraca-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.85rem; align-items: center; }
+        .neraca-label { color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 12px; }
+        .neraca-label i { font-size: 1rem; width: 20px; text-align: center; }
+        .neraca-val { font-weight: 600; }
+        
+        .neraca-sub-row { font-size: 0.75rem; padding-left: 32px; color: rgba(255,255,255,0.5); display: flex; justify-content: space-between; margin-bottom: 8px; align-items: center; }
+        .neraca-sub-label { display: flex; align-items: center; gap: 8px; }
+        .neraca-sub-label i { font-size: 0.7rem; width: 12px; opacity: 0.8; }
+        .neraca-sub-val { font-weight: 600; }
+
+        .list-popup { text-align: left; margin-top: 15px; }
+        .item-popup { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 10px 0; display: flex; justify-content: space-between; align-items: center; }
+        .item-popup:last-child { border: none; }
+
         @keyframes geserAtas { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
+    <div id="notif"><i class="fa-solid fa-circle-check" style="color:var(--sukses)"></i><span>Data Diperbarui</span></div>
+
     <div class="wadah">
         <div id="beranda" class="halaman aktif">
             <header>
                 <div class="logo-header"><i class="fa-solid fa-crown"></i></div>
-                <h1>MACCA CASHFLOW</h1>
-                <span class="sub-header">Macca Financial System</span>
+                <h1>MACCA FLOW</h1>
+                <span class="sub-header">Elite Financial System</span>
             </header>
             
             <div class="kartu-saldo-utama">
                 <small class="label-pusat">Total Saldo Keseluruhan</small>
                 <div class="jumlah-saldo" id="saldoUtama">Rp. 0</div>
                 <div class="grid-split-saldo">
-                    <div class="split-item btn-detail-pop" data-type="offline">
+                    <div class="split-item" onclick="bukaPopupDetail('offline')">
                         <span class="split-label"><i class="fa-solid fa-vault" style="color:var(--emas-murni)"></i> KAS OFFLINE</span>
                         <div class="split-value" id="saldoOffline">Rp. 0</div>
                     </div>
-                    <div class="split-item btn-detail-pop" data-type="online">
+                    <div class="split-item" onclick="bukaPopupDetail('online')">
                         <span class="split-label"><i class="fa-solid fa-gem" style="color:var(--biru-muda)"></i> KAS ONLINE</span>
                         <div class="split-value" id="saldoOnline">Rp. 0</div>
                     </div>
                 </div>
+                
                 <div class="box-sub-bank">
-                    <div class="bank-mini btn-detail-pop" data-type="BNI">
+                    <div class="bank-mini" onclick="bukaPopupDetail('BNI')">
                         <span class="bank-label">BNI (QRIS)</span>
                         <span class="bank-val" id="saldoBNI">Rp. 0</span>
                     </div>
-                    <div class="bank-mini btn-detail-pop" data-type="BRI">
+                    <div style="width:1px; height:20px; background:rgba(255,255,255,0.1); align-self:center;"></div>
+                    <div class="bank-mini" onclick="bukaPopupDetail('BRI')">
                         <span class="bank-label">BRI (TF/GF)</span>
                         <span class="bank-val" id="saldoBRI">Rp. 0</span>
                     </div>
@@ -116,95 +148,305 @@
             <div class="section-harian">
                 <span class="harian-title">Tren Aktivitas Terakhir</span>
                 <div class="kartu-grafik"><canvas id="chartTrend" style="max-height: 160px;"></canvas></div>
+                <div class="baris-harian">
+                    <div class="box-harian-mini"><span class="mini-label">Off Hari Ini</span><span class="mini-value" id="harianOff" style="color:var(--emas-murni)">Rp. 0</span></div>
+                    <div class="box-harian-mini"><span class="mini-label">On Hari Ini</span><span class="mini-value" id="harianOn" style="color:var(--emas-murni)">Rp. 0</span></div>
+                    <div class="box-harian-mini"><span class="mini-label">Masuk</span><span class="mini-value" id="harianMasuk" style="color:var(--sukses)">+ Rp. 0</span></div>
+                    <div class="box-harian-mini"><span class="mini-label">Keluar</span><span class="mini-value" id="harianKeluar" style="color:var(--bahaya)">- Rp. 0</span></div>
+                </div>
             </div>
             
             <h2><i class="fa-solid fa-arrow-down-long" style="color:var(--sukses)"></i> Kas Masuk</h2>
             <div class="grid-tombol">
-                <button class="tombol-aksi btn-in" data-judul="CASH KASIR" data-tipe="masuk"><i class="fa-solid fa-cash-register"></i><span>Kasir</span></button>
-                <button class="tombol-aksi btn-in" data-judul="CASH GERAI" data-tipe="masuk"><i class="fa-solid fa-store"></i><span>Gerai</span></button>
+                <button class="tombol-aksi" onclick="bukaModalInput('CASH KASIR', 'masuk')"><i class="fa-solid fa-cash-register"></i><span>Kasir</span></button>
+                <button class="tombol-aksi" onclick="bukaModalInput('CASH GERAI', 'masuk')"><i class="fa-solid fa-store"></i><span>Gerai</span></button>
+                <button class="tombol-aksi" onclick="bukaModalInput('CASH WARKOP', 'masuk')"><i class="fa-solid fa-mug-hot"></i><span>Warkop</span></button>
+                <button class="tombol-aksi" onclick="bukaModalInput('ONLINE PAYMENT', 'masuk')"><i class="fa-solid fa-qrcode"></i><span>Online Pay</span></button>
             </div>
 
             <h2><i class="fa-solid fa-arrow-up-long" style="color:var(--bahaya)"></i> Kas Keluar</h2>
             <div class="grid-tombol">
-                <button class="tombol-aksi btn-in" data-judul="KASIR (ARA)" data-tipe="keluar"><i class="fa-solid fa-user-tie"></i><span>Kasir</span></button>
-                <button class="tombol-aksi btn-in" data-judul="DAPUR (IBU ATI)" data-tipe="keluar"><i class="fa-solid fa-kitchen-set"></i><span>Dapur</span></button>
+                <button class="tombol-aksi" onclick="bukaModalInput('KASIR (ARA)', 'keluar')"><i class="fa-solid fa-user-tie"></i><span>Kasir</span></button>
+                <button class="tombol-aksi" onclick="bukaModalInput('DAPUR (IBU ATI)', 'keluar')"><i class="fa-solid fa-kitchen-set"></i><span>Dapur</span></button>
+                <button class="tombol-aksi" onclick="bukaModalInput('STOK IKAN/GAS (HASBI)', 'keluar')"><i class="fa-solid fa-fish"></i><span>Stok</span></button>
+                <button class="tombol-aksi" onclick="bukaModalInput('PAK BOSS', 'keluar')"><i class="fa-solid fa-crown"></i><span>Boss</span></button>
             </div>
         </div>
 
-        <div id="riwayat" class="halaman"><header><h1>RIWAYAT</h1></header><div id="listRiwayat"></div></div>
-        <div id="neraca" class="halaman"><header><h1>NERACA</h1></header><div id="detailNeraca"></div></div>
+        <div id="riwayat" class="halaman">
+            <header>
+                <div class="logo-header"><i class="fa-solid fa-receipt"></i></div>
+                <h1>RIWAYAT</h1>
+                <span class="sub-header">Transaction History Log</span>
+            </header>
+            <label class="label-input"><i class="fa-solid fa-calendar-day"></i> PILIH TANGGAL</label>
+            <input type="date" id="riwayatTgl" onchange="syncUI()">
+            <div id="listRiwayat"></div>
+        </div>
+
+        <div id="neraca" class="halaman">
+            <header>
+                <div class="logo-header"><i class="fa-solid fa-scale-balanced"></i></div>
+                <h1>NERACA</h1>
+                <span class="sub-header">Financial Balance Summary</span>
+            </header>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                <div><label class="label-input"><i class="fa-solid fa-filter"></i> RENTANG</label>
+                    <select id="nRange" onchange="toggleFilterNeraca()">
+                        <option value="daily">Harian</option>
+                        <option value="monthly">Bulanan</option>
+                        <option value="yearly">Tahunan</option>
+                    </select>
+                </div>
+                <div><label class="label-input"><i class="fa-solid fa-clock"></i> WAKTU</label>
+                    <input type="date" id="nDaily" onchange="syncUI()">
+                    <input type="month" id="nMonthly" style="display:none;" onchange="syncUI()">
+                    <select id="nYearly" style="display:none;" onchange="syncUI()">
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="boxNeraca" style="background:var(--kaca-bg); padding:20px; border-radius:25px; border: 1px solid var(--kaca-garis);">
+                <div id="detailNeraca"></div>
+                <hr style="border:0; border-top:1px solid var(--kaca-garis); margin:20px 0;">
+                <button class="btn-export" onclick="exportData('pdf')"><i class="fa-solid fa-file-pdf"></i> Ekspor PDF</button>
+                <button class="btn-export" onclick="exportData('excel')"><i class="fa-solid fa-file-excel"></i> Ekspor Excel</button>
+            </div>
+        </div>
     </div>
 
     <div id="modal" class="modal-overlay">
         <div class="modal-konten">
-            <h3 id="judulModal">INPUT DATA</h3>
+            <h3 id="judulModal" style="margin-top:0;">INPUT DATA</h3>
+            <div id="boxSubDynamic" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;"></div>
+            <input type="hidden" id="editId">
+            <label class="label-input">TANGGAL</label>
             <input type="date" id="inTanggal">
-            <input type="text" id="inNominal" placeholder="Rp. 0">
+            <label class="label-input">NOMINAL</label>
+            <input type="text" id="inNominal" placeholder="Rp. 0" oninput="formatRupiah(this)">
+            <label class="label-input">KETERANGAN</label>
             <textarea id="inCatatan" rows="3" placeholder="Tambahkan catatan..."></textarea>
-            <button id="btnSimpan" style="width:100%; padding:15px; border:none; border-radius:15px; background:var(--emas-murni); color:var(--biru-dalam); font-weight:600;">SIMPAN DATA</button>
-            <button id="btnTutupInput" class="btn-batal">KEMBALI / BATAL</button>
+            <button onclick="prosesSimpan()" id="btnSimpan" style="width:100%; padding:15px; border:none; border-radius:15px; color:var(--biru-dalam); font-weight:600; cursor:pointer; text-transform:uppercase;">SIMPAN DATA</button>
+            <button onclick="tutupModal()" class="btn-batal">KEMBALI / BATAL</button>
         </div>
     </div>
 
     <div id="modalDetail" class="modal-overlay">
         <div class="modal-konten">
-            <h3 id="judulDetail">DETAIL</h3>
-            <div id="listDetailContent"></div>
-            <button id="btnTutupDetail" class="btn-batal">TUTUP</button>
+            <h3 id="judulDetail" style="margin-top:0; color:var(--emas-murni);">DETAIL TRANSAKSI</h3>
+            <div id="listDetailContent" class="list-popup"></div>
+            <button onclick="tutupModalDetail()" class="btn-batal">TUTUP</button>
         </div>
     </div>
 
     <nav class="nav-bawah">
-        <div class="nav-item aktif" data-hal="beranda"><i class="fa-solid fa-house"></i><span>Beranda</span></div>
-        <div class="nav-item" data-hal="riwayat"><i class="fa-solid fa-receipt"></i><span>Riwayat</span></div>
-        <div class="nav-item" data-hal="neraca"><i class="fa-solid fa-scale-balanced"></i><span>Neraca</span></div>
+        <div class="nav-item aktif" onclick="gantiHal('beranda')">
+            <i class="fa-solid fa-house"></i>
+            <span>Beranda</span>
+        </div>
+        <div class="nav-item" onclick="gantiHal('riwayat')">
+            <i class="fa-solid fa-receipt"></i>
+            <span>Riwayat</span>
+        </div>
+        <div class="nav-item" onclick="gantiHal('neraca')">
+            <i class="fa-solid fa-scale-balanced"></i>
+            <span>Neraca</span>
+        </div>
     </nav>
 
     <script type="module">
-        // --- LOGIKA FIREBASE ANDA TETAP DISINI ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        const firebaseConfig = { apiKey: "AIzaSyAXs5ZVr6gop28qPKbeaqTRiNdEGZlZMZQ", projectId: "cashflowmacca" };
+        import { getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, Timestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyAXs5ZVr6gop28qPKbeaqTRiNdEGZlZMZQ", authDomain: "cashflowmacca.firebaseapp.com", projectId: "cashflowmacca" };
         const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const colRef = collection(db, "transactions");
 
-        // --- FIX TOMBOL (PASTI JALAN DI HP) ---
-        const mInput = document.getElementById('modal');
-        const mDetail = document.getElementById('modalDetail');
+        let cache = [], lineChart = null;
+        const getHariIni = () => new Date().toLocaleDateString('en-CA');
+        const getBulanIni = () => new Date().toISOString().slice(0, 7);
 
-        // Buka Modal Input
-        document.querySelectorAll('.btn-in').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.getElementById('judulModal').innerText = btn.dataset.judul;
-                mInput.style.display = 'flex';
+        onSnapshot(query(colRef, orderBy("timestamp", "desc")), (s) => {
+            cache = []; 
+            let totalSal = 0, offSal = 0, onSal = 0, salBNI = 0, salBRI = 0;
+            let dayIn = 0, dayOut = 0, dayOff = 0, dayOn = 0;
+            const hariIni = getHariIni();
+            
+            s.forEach(d => { 
+                const x = d.data(); 
+                const tDate = x.timestamp.toDate();
+                const strDate = tDate.toLocaleDateString('en-CA');
+                const dataObj = {...x, id: d.id, t: tDate};
+                cache.push(dataObj);
+                
+                const amt = (x.type === 'in' ? x.amount : -x.amount);
+                const isOnline = (x.isOnline || x.category === 'ONLINE PAYMENT' || (x.description && (x.description.includes('[GrabFood]') || x.description.includes('[TF BRI]') || x.description.includes('[QRIS]'))));
+                
+                totalSal += amt;
+                if(isOnline) {
+                    onSal += amt;
+                    if(x.description && x.description.includes('[QRIS]')) salBNI += amt;
+                    else if(x.description && (x.description.includes('[TF BRI]') || x.description.includes('[GrabFood]'))) salBRI += amt;
+                    else salBNI += amt; 
+                } else { offSal += amt; }
+
+                if(strDate === hariIni) {
+                    if(x.type === 'in') dayIn += x.amount; else dayOut += x.amount;
+                    if(isOnline) dayOn += amt; else dayOff += amt;
+                }
             });
+
+            document.getElementById('saldoUtama').innerText = "Rp. " + totalSal.toLocaleString('id-ID');
+            document.getElementById('saldoOffline').innerText = "Rp. " + offSal.toLocaleString('id-ID');
+            document.getElementById('saldoOnline').innerText = "Rp. " + onSal.toLocaleString('id-ID');
+            document.getElementById('saldoBNI').innerText = "Rp. " + salBNI.toLocaleString('id-ID');
+            document.getElementById('saldoBRI').innerText = "Rp. " + salBRI.toLocaleString('id-ID');
+            document.getElementById('harianMasuk').innerText = "+ Rp. " + dayIn.toLocaleString('id-ID');
+            document.getElementById('harianKeluar').innerText = "- Rp. " + dayOut.toLocaleString('id-ID');
+            document.getElementById('harianOff').innerText = "Rp. " + dayOff.toLocaleString('id-ID');
+            document.getElementById('harianOn').innerText = "Rp. " + dayOn.toLocaleString('id-ID');
+            
+            syncUI();
+            updateLineChart();
         });
 
-        // Buka Modal Detail
-        document.querySelectorAll('.btn-detail-pop').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.getElementById('judulDetail').innerText = "DETAIL " + btn.dataset.type.toUpperCase();
-                mDetail.style.display = 'flex';
+        window.bukaPopupDetail = (tipe) => {
+            const listContent = document.getElementById('listDetailContent'); const judul = document.getElementById('judulDetail');
+            listContent.innerHTML = ""; let filtered = [];
+            if(tipe === 'offline') { judul.innerText = "HISTORI KAS OFFLINE"; filtered = cache.filter(d => !(d.isOnline || d.category === 'ONLINE PAYMENT' || (d.description && (d.description.includes('[GrabFood]') || d.description.includes('[TF BRI]') || d.description.includes('[QRIS]'))))); }
+            else if(tipe === 'online') { judul.innerText = "HISTORI KAS ONLINE"; filtered = cache.filter(d => (d.isOnline || d.category === 'ONLINE PAYMENT' || (d.description && (d.description.includes('[GrabFood]') || d.description.includes('[TF BRI]') || d.description.includes('[QRIS]'))))); }
+            else if(tipe === 'BNI') { judul.innerText = "HISTORI BNI / QRIS"; filtered = cache.filter(d => (d.description && d.description.includes('[QRIS]'))); }
+            else if(tipe === 'BRI') { judul.innerText = "HISTORI BRI / TF / GF"; filtered = cache.filter(d => (d.description && (d.description.includes('[TF BRI]') || d.description.includes('[GrabFood]')))); }
+            if(filtered.length === 0) { listContent.innerHTML = "<div style='text-align:center; padding:20px; opacity:0.5;'>Tidak ada riwayat transaksi</div>"; }
+            else { filtered.forEach(d => {
+                    const item = document.createElement('div'); item.className = 'item-popup';
+                    const color = d.type === 'in' ? 'var(--sukses)' : 'var(--bahaya)';
+                    const sign = d.type === 'in' ? '+' : '-';
+                    const dStr = d.t.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'2-digit'});
+                    item.innerHTML = `<div style="max-width:65%;"><div style="font-size:0.75rem; font-weight:600;">${d.description || d.category}</div><small style="font-size:0.6rem; opacity:0.6;">${dStr} • ${d.t.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'})}</small></div><div style="color:${color}; font-weight:600; font-size:0.8rem;">${sign} ${d.amount.toLocaleString()}</div>`;
+                    listContent.appendChild(item);
+                });
+            }
+            document.getElementById('modalDetail').style.display = 'flex';
+        };
+
+        window.tutupModalDetail = () => { document.getElementById('modalDetail').style.display = 'none'; };
+
+        const updateLineChart = () => {
+            const ctx = document.getElementById('chartTrend').getContext('2d');
+            const labels = [], dataIn = [], dataOut = [];
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date(); d.setDate(d.getDate() - i); const dStr = d.toLocaleDateString('en-CA');
+                labels.push(d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }));
+                dataIn.push(cache.filter(item => item.t.toLocaleDateString('en-CA') === dStr && item.type === 'in').reduce((sum, item) => sum + item.amount, 0));
+                dataOut.push(cache.filter(item => item.t.toLocaleDateString('en-CA') === dStr && item.type === 'out').reduce((sum, item) => sum + item.amount, 0));
+            }
+            if (lineChart) { lineChart.data.labels = labels; lineChart.data.datasets[0].data = dataIn; lineChart.data.datasets[1].data = dataOut; lineChart.update(); }
+            else { lineChart = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'Masuk', data: dataIn, borderColor: '#00ff88', backgroundColor: 'rgba(0, 255, 136, 0.1)', tension: 0.4, fill: true, pointRadius: 4 }, { label: 'Keluar', data: dataOut, borderColor: '#ff3366', backgroundColor: 'rgba(255, 51, 102, 0.1)', tension: 0.4, fill: true, pointRadius: 4 }]}, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { color: 'rgba(255,255,255,0.4)', font: { size: 8 } }, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { ticks: { color: 'rgba(255,255,255,0.6)', font: { size: 9 } }, grid: { display: false } } } } }); }
+        };
+
+        window.prosesSimpan = async () => {
+            const id = document.getElementById('editId').value; const nomInput = document.getElementById('inNominal').value;
+            const nom = parseInt(nomInput.replace(/\D/g, "")); const tgl = document.getElementById('inTanggal').value;
+            const catatan = document.getElementById('inCatatan').value; if(!nom || !tgl) return alert("Nominal & Tanggal wajib diisi!");
+            const finalDesc = (window.cSub && !id ? `[${window.cSub}] ` : "") + catatan;
+            let statusOnline = (window.cKat === 'ONLINE PAYMENT' || window.cSub === 'GrabFood' || window.cSub === 'TF BRI' || window.cSub === 'QRIS' || window.cSub === 'Online' || window.cSub === 'TF BNI');
+            if(id) { const ref = doc(db, "transactions", id); await updateDoc(ref, { amount: nom, description: catatan, timestamp: Timestamp.fromDate(new Date(tgl + "T" + new Date().toLocaleTimeString('en-GB'))) }); }
+            else { await addDoc(colRef, { category: window.cKat, type: window.cTip === 'masuk' ? 'in' : 'out', amount: nom, description: finalDesc, isOnline: statusOnline, timestamp: Timestamp.fromDate(new Date(tgl + "T" + new Date().toLocaleTimeString('en-GB'))) }); }
+            tutupModal(); window.tampilkanNotif(id ? "Data Diperbarui" : "Data Tersimpan");
+        };
+
+        window.bukaModalInput = (k, t) => {
+            window.cKat = k; window.cTip = t; document.getElementById('editId').value = ""; document.getElementById('inCatatan').value = ""; document.getElementById('inNominal').value = "";
+            const hModal = document.getElementById('judulModal'); hModal.innerText = "INPUT " + k;
+            document.getElementById('btnSimpan').style.backgroundColor = t === 'masuk' ? 'var(--sukses)' : 'var(--bahaya)';
+            hModal.style.color = t === 'masuk' ? 'var(--sukses)' : 'var(--bahaya)';
+            document.getElementById('inTanggal').value = getHariIni();
+            const subBox = document.getElementById('boxSubDynamic'); subBox.innerHTML = "";
+            const configSub = { 'CASH KASIR': ['Penjualan Kasir', 'Lainnya'], 'ONLINE PAYMENT': ['QRIS', 'TF BRI', 'GrabFood'], 'KASIR (ARA)': ['Operasional', 'Kasbon', 'Belanja'], 'STOK IKAN/GAS (HASBI)': ['IKAN', 'GAS'], 'DAPUR (IBU ATI)': ['Bahan Dapur', 'Sayuran'], 'PAK BOSS': t === 'masuk' ? ['Offline', 'Online'] : ['Offline', 'TF BRI', 'TF BNI'] };
+            if(configSub[k]) { configSub[k].forEach((s, idx) => { const btn = document.createElement('button'); btn.innerText = s; btn.style.cssText = "flex:1; padding:10px; border-radius:12px; border:1px solid var(--kaca-garis); background:transparent; color:white; font-size:0.7rem; min-width:80px;"; if(idx===0) { window.cSub = s; btn.style.backgroundColor = 'var(--emas-murni)'; btn.style.color = 'var(--biru-dalam)'; } btn.onclick = () => { Array.from(subBox.children).forEach(b => { b.style.backgroundColor = 'transparent'; b.style.color = 'white'; }); btn.style.backgroundColor = 'var(--emas-murni)'; btn.style.color = 'var(--biru-dalam)'; window.cSub = s; }; subBox.appendChild(btn); }); }
+            document.getElementById('modal').style.display = 'flex';
+        };
+
+        window.bukaEdit = (id) => { const d = cache.find(item => item.id === id); if(!d) return; document.getElementById('editId').value = d.id; document.getElementById('inNominal').value = "Rp. " + d.amount.toLocaleString('id-ID'); document.getElementById('inTanggal').value = d.t.toLocaleDateString('en-CA'); document.getElementById('inCatatan').value = d.description || ""; document.getElementById('boxSubDynamic').innerHTML = ""; document.getElementById('judulModal').innerText = "EDIT TRANSAKSI"; document.getElementById('judulModal').style.color = 'var(--emas-murni)'; document.getElementById('btnSimpan').style.backgroundColor = 'var(--emas-murni)'; document.getElementById('modal').style.display = 'flex'; };
+        window.tutupModal = () => { document.getElementById('modal').style.none = 'none'; };
+        window.formatRupiah = (el) => { let v = el.value.replace(/\D/g, ""); el.value = v ? "Rp. " + parseInt(v).toLocaleString('id-ID') : ""; };
+        window.tampilkanNotif = (txt) => { const n = document.getElementById('notif'); n.querySelector('span').innerText = txt; n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 3000); };
+        
+        window.gantiHal = (id) => { document.querySelectorAll('.halaman').forEach(h => h.classList.remove('aktif')); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('aktif')); document.getElementById(id).classList.add('aktif'); const items = document.querySelectorAll('.nav-item'); if(id === 'beranda') items[0].classList.add('aktif'); else if(id === 'riwayat') items[1].classList.add('aktif'); else if(id === 'neraca') items[2].classList.add('aktif'); syncUI(); };
+
+        window.toggleFilterNeraca = () => { const range = document.getElementById('nRange').value; document.getElementById('nDaily').style.display = range === 'daily' ? 'block' : 'none'; document.getElementById('nMonthly').style.display = range === 'monthly' ? 'block' : 'none'; document.getElementById('nYearly').style.display = range === 'yearly' ? 'block' : 'none'; if(range === 'monthly') document.getElementById('nMonthly').value = getBulanIni(); syncUI(); };
+
+        window.syncUI = () => {
+            const list = document.getElementById('listRiwayat'); const detNeraca = document.getElementById('detailNeraca');
+            if(!list || !detNeraca) return; list.innerHTML = ""; detNeraca.innerHTML = "";
+            const fR = document.getElementById('riwayatTgl').value || getHariIni();
+            const range = document.getElementById('nRange').value; const vD = document.getElementById('nDaily').value || getHariIni();
+            const vM = document.getElementById('nMonthly').value; const vY = document.getElementById('nYearly').value;
+
+            cache.filter(d => d.t.toLocaleDateString('en-CA') === fR).forEach(d => {
+                const isIn = d.type === 'in'; const div = document.createElement('div'); div.className = 'item-riwayat-elite';
+                div.innerHTML = `<div style="display:flex; align-items:center; gap:12px;"><i class="fa-solid ${isIn ? 'fa-circle-arrow-down' : 'fa-circle-arrow-up'}" style="color:${isIn?'var(--sukses)':'var(--bahaya)'}; font-size:1.2rem;"></i><div><small style="color:var(--emas-murni); font-size:0.6rem;">${d.category}</small><div style="font-weight:600; font-size:0.8rem;">${d.description || '-'}</div></div></div><div style="display:flex; align-items:center;"><div style="text-align:right; color:${isIn?'var(--sukses)':'var(--bahaya)'}; font-weight:600; font-size:0.85rem;">${isIn?'+':'-'} ${d.amount.toLocaleString()}</div><button class="btn-edit-item" onclick="bukaEdit('${d.id}')"><i class="fa-solid fa-pen-to-square"></i></button></div>`;
+                list.appendChild(div);
             });
-        });
 
-        // Tutup Modal (Ini yang Anda cari)
-        document.getElementById('btnTutupInput').addEventListener('click', () => mInput.style.display = 'none');
-        document.getElementById('btnTutupDetail').addEventListener('click', () => mDetail.style.display = 'none');
-
-        // Navigasi
-        document.querySelectorAll('.nav-item').forEach(nav => {
-            nav.addEventListener('click', () => {
-                document.querySelectorAll('.halaman').forEach(h => h.classList.remove('aktif'));
-                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('aktif'));
-                document.getElementById(nav.dataset.hal).classList.add('aktif');
-                nav.classList.add('aktif');
+            let inOff = 0, outOff = 0, inOn = 0, outOn = 0, netBNI = 0, netBRI = 0;
+            cache.filter(d => {
+                if(range === 'daily') return d.t.toLocaleDateString('en-CA') === vD;
+                if(range === 'monthly') return vM && d.t.toISOString().startsWith(vM);
+                if(range === 'yearly') return d.t.getFullYear().toString() === vY;
+                return false;
+            }).forEach(d => {
+                const amt = (d.type === 'in' ? d.amount : -d.amount);
+                const isOnline = (d.isOnline || d.category === 'ONLINE PAYMENT' || (d.description && (d.description.includes('[GrabFood]') || d.description.includes('[TF BRI]') || d.description.includes('[QRIS]'))));
+                if(isOnline) { 
+                    if(d.type === 'in') inOn += d.amount; else outOn += d.amount; 
+                    if(d.description && d.description.includes('[QRIS]')) netBNI += amt;
+                    else if(d.description && (d.description.includes('[TF BRI]') || d.description.includes('[GrabFood]'))) netBRI += amt;
+                    else netBNI += amt;
+                } else { if(d.type === 'in') inOff += d.amount; else outOff += d.amount; }
             });
-        });
 
-        // Klik Luar untuk Tutup
-        window.addEventListener('click', (e) => {
-            if(e.target == mInput) mInput.style.display = 'none';
-            if(e.target == mDetail) mDetail.style.display = 'none';
-        });
+            detNeraca.innerHTML = `
+                <div class="neraca-group">
+                    <span class="neraca-group-title"><i class="fa-solid fa-vault" style="color:var(--emas-murni)"></i> KAS OFFLINE (CASH)</span>
+                    <div class="neraca-row"><span class="neraca-label"><i class="fa-solid fa-arrow-down-long" style="color:var(--sukses)"></i> Dana Masuk</span><span class="neraca-val" style="color:var(--sukses)">+ Rp. ${inOff.toLocaleString()}</span></div>
+                    <div class="neraca-row"><span class="neraca-label"><i class="fa-solid fa-arrow-up-long" style="color:var(--bahaya)"></i> Dana Keluar</span><span class="neraca-val" style="color:var(--bahaya)">- Rp. ${outOff.toLocaleString()}</span></div>
+                    <div class="neraca-row" style="border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;"><span class="neraca-label"><i class="fa-solid fa-sack-dollar" style="color:var(--emas-murni)"></i> Subtotal Offline</span><span class="neraca-val" style="color:var(--emas-murni)">Rp. ${(inOff - outOff).toLocaleString()}</span></div>
+                </div>
+                <div class="neraca-group">
+                    <span class="neraca-group-title"><i class="fa-solid fa-gem" style="color:var(--biru-muda)"></i> KAS ONLINE (DIGITAL)</span>
+                    <div class="neraca-row"><span class="neraca-label"><i class="fa-solid fa-arrow-down-long" style="color:var(--sukses)"></i> Dana Masuk</span><span class="neraca-val" style="color:var(--sukses)">+ Rp. ${inOn.toLocaleString()}</span></div>
+                    <div class="neraca-row"><span class="neraca-label"><i class="fa-solid fa-arrow-up-long" style="color:var(--bahaya)"></i> Dana Keluar</span><span class="neraca-val" style="color:var(--bahaya)">- Rp. ${outOn.toLocaleString()}</span></div>
+                    
+                    <div class="neraca-sub-row">
+                        <span class="neraca-sub-label"><i class="fa-solid fa-qrcode" style="color:var(--emas-murni)"></i> BNI (QRIS)</span>
+                        <span class="neraca-sub-val" style="color:var(--emas-murni)">Rp. ${netBNI.toLocaleString()}</span>
+                    </div>
+                    <div class="neraca-sub-row">
+                        <span class="neraca-sub-label"><i class="fa-solid fa-building-columns" style="color:var(--biru-muda)"></i> BRI (TF/GF)</span>
+                        <span class="neraca-sub-val" style="color:var(--biru-muda)">Rp. ${netBRI.toLocaleString()}</span>
+                    </div>
+                    
+                    <div class="neraca-row" style="border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;"><span class="neraca-label"><i class="fa-solid fa-credit-card" style="color:var(--biru-muda)"></i> Subtotal Online</span><span class="neraca-val" style="color:var(--biru-muda)">Rp. ${(inOn - outOn).toLocaleString()}</span></div>
+                </div>
+                <div class="neraca-group" style="background:linear-gradient(135deg, rgba(239, 191, 59, 0.1), rgba(239, 191, 59, 0.02)); padding:15px; border-radius:20px; border: 1px solid rgba(239, 191, 59, 0.25);">
+                    <div class="neraca-row" style="margin-bottom:0;"><span class="neraca-label" style="color:#fff; font-weight:600;"><i class="fa-solid fa-chart-line" style="color:var(--emas-murni)"></i> SURPLUS ELITE</span><span class="neraca-val" style="color:var(--emas-murni); font-size:1rem; text-shadow: 0 0 10px rgba(239, 191, 59, 0.3);">Rp. ${(inOff + inOn - outOff - outOn).toLocaleString()}</span></div>
+                </div>`;
+        };
+
+        window.exportData = (type) => {
+            const range = document.getElementById('nRange').value; const period = range === 'daily' ? document.getElementById('nDaily').value : (range === 'monthly' ? document.getElementById('nMonthly').value : document.getElementById('nYearly').value);
+            const filtered = cache.filter(d => { if(range === 'daily') return d.t.toLocaleDateString('en-CA') === period; if(range === 'monthly') return period && d.t.toISOString().startsWith(period); if(range === 'yearly') return d.t.getFullYear().toString() === period; return false; });
+            if(type === 'excel') { const ws = XLSX.utils.json_to_sheet(filtered.map(d => ({ Tanggal: d.t.toLocaleString(), Kategori: d.category, Tipe: d.type === 'in' ? 'MASUK' : 'KELUAR', Nominal: d.amount, Keterangan: d.description }))); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Laporan"); XLSX.writeFile(wb, `Laporan_${period}.xlsx`); }
+            else { const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text(`LAPORAN KEUANGAN MACCA - ${period}`, 14, 15); doc.autoTable({ head: [['Tanggal', 'Kategori', 'Tipe', 'Nominal', 'Keterangan']], body: filtered.map(d => [d.t.toLocaleDateString(), d.category, d.type === 'in' ? 'MASUK' : 'KELUAR', d.amount.toLocaleString(), d.description]) }); doc.save(`Laporan_${period}.pdf`); }
+        };
+
+        document.getElementById('nDaily').value = getHariIni(); document.getElementById('riwayatTgl').value = getHariIni();
     </script>
 </body>
 </html>
