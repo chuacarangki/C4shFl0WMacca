@@ -65,7 +65,6 @@
         .tombol-aksi i { font-size: 1.4rem; color: var(--emas-murni); }
 
         input, select, textarea { width: 100%; background: rgba(255,255,255,0.15) !important; border: 1px solid var(--kaca-garis); color: #fff; padding: 14px; border-radius: 15px; font-family: 'Poppins'; margin-bottom: 12px; outline: none; box-sizing: border-box; }
-        /* Fix untuk layar putih di iOS/Android pada Select */
         select option { background-color: #1a1a2e; color: white; }
         
         input:focus, select:focus { background: rgba(255,255,255,0.2); border-color: var(--emas-murni); }
@@ -94,6 +93,11 @@
         .neraca-label { color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 12px; }
         .neraca-label i { font-size: 1rem; width: 20px; text-align: center; }
         .neraca-val { font-weight: 600; }
+        
+        .neraca-sub-row { font-size: 0.75rem; padding-left: 32px; color: rgba(255,255,255,0.5); display: flex; justify-content: space-between; margin-bottom: 8px; align-items: center; }
+        .neraca-sub-label { display: flex; align-items: center; gap: 8px; }
+        .neraca-sub-label i { font-size: 0.7rem; width: 12px; opacity: 0.8; }
+        .neraca-sub-val { font-weight: 600; }
 
         .list-popup { text-align: left; margin-top: 15px; }
         .item-popup { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 10px 0; display: flex; justify-content: space-between; align-items: center; }
@@ -111,7 +115,7 @@
             <header>
                 <div class="logo-header"><i class="fa-solid fa-crown"></i></div>
                 <h1>MACCA CASHFLOW</h1>
-                <span class="sub-header">Elite Financial System</span>
+                <span class="sub-header">Macca Financial System</span>
             </header>
             
             <div class="kartu-saldo-utama">
@@ -310,43 +314,20 @@
             updateLineChart();
         });
 
-        // LOGIKA DETAIL TRANSAKSI KESELURUHAN
         window.bukaPopupDetail = (tipe) => {
-            const listContent = document.getElementById('listDetailContent');
-            const judul = document.getElementById('judulDetail');
-            listContent.innerHTML = "";
-            
-            let filtered = [];
-            if(tipe === 'offline') {
-                judul.innerText = "HISTORI KAS OFFLINE";
-                filtered = cache.filter(d => !(d.isOnline || d.category === 'ONLINE PAYMENT' || (d.description && (d.description.includes('[GrabFood]') || d.description.includes('[TF BRI]') || d.description.includes('[QRIS]')))));
-            } else if(tipe === 'online') {
-                judul.innerText = "HISTORI KAS ONLINE";
-                filtered = cache.filter(d => (d.isOnline || d.category === 'ONLINE PAYMENT' || (d.description && (d.description.includes('[GrabFood]') || d.description.includes('[TF BRI]') || d.description.includes('[QRIS]')))));
-            } else if(tipe === 'BNI') {
-                judul.innerText = "HISTORI BNI / QRIS";
-                filtered = cache.filter(d => (d.description && d.description.includes('[QRIS]')));
-            } else if(tipe === 'BRI') {
-                judul.innerText = "HISTORI BRI / TF / GF";
-                filtered = cache.filter(d => (d.description && (d.description.includes('[TF BRI]') || d.description.includes('[GrabFood]'))));
-            }
-
-            if(filtered.length === 0) {
-                listContent.innerHTML = "<div style='text-align:center; padding:20px; opacity:0.5;'>Tidak ada riwayat transaksi</div>";
-            } else {
-                filtered.forEach(d => {
-                    const item = document.createElement('div');
-                    item.className = 'item-popup';
+            const listContent = document.getElementById('listDetailContent'); const judul = document.getElementById('judulDetail');
+            listContent.innerHTML = ""; let filtered = [];
+            if(tipe === 'offline') { judul.innerText = "HISTORI KAS OFFLINE"; filtered = cache.filter(d => !(d.isOnline || d.category === 'ONLINE PAYMENT' || (d.description && (d.description.includes('[GrabFood]') || d.description.includes('[TF BRI]') || d.description.includes('[QRIS]'))))); }
+            else if(tipe === 'online') { judul.innerText = "HISTORI KAS ONLINE"; filtered = cache.filter(d => (d.isOnline || d.category === 'ONLINE PAYMENT' || (d.description && (d.description.includes('[GrabFood]') || d.description.includes('[TF BRI]') || d.description.includes('[QRIS]'))))); }
+            else if(tipe === 'BNI') { judul.innerText = "HISTORI BNI / QRIS"; filtered = cache.filter(d => (d.description && d.description.includes('[QRIS]'))); }
+            else if(tipe === 'BRI') { judul.innerText = "HISTORI BRI / TF / GF"; filtered = cache.filter(d => (d.description && (d.description.includes('[TF BRI]') || d.description.includes('[GrabFood]')))); }
+            if(filtered.length === 0) { listContent.innerHTML = "<div style='text-align:center; padding:20px; opacity:0.5;'>Tidak ada riwayat transaksi</div>"; }
+            else { filtered.forEach(d => {
+                    const item = document.createElement('div'); item.className = 'item-popup';
                     const color = d.type === 'in' ? 'var(--sukses)' : 'var(--bahaya)';
                     const sign = d.type === 'in' ? '+' : '-';
                     const dStr = d.t.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'2-digit'});
-                    item.innerHTML = `
-                        <div style="max-width:65%;">
-                            <div style="font-size:0.75rem; font-weight:600;">${d.description || d.category}</div>
-                            <small style="font-size:0.6rem; opacity:0.6;">${dStr} • ${d.t.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'})}</small>
-                        </div>
-                        <div style="color:${color}; font-weight:600; font-size:0.8rem;">${sign} ${d.amount.toLocaleString()}</div>
-                    `;
+                    item.innerHTML = `<div style="max-width:65%;"><div style="font-size:0.75rem; font-weight:600;">${d.description || d.category}</div><small style="font-size:0.6rem; opacity:0.6;">${dStr} • ${d.t.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'})}</small></div><div style="color:${color}; font-weight:600; font-size:0.8rem;">${sign} ${d.amount.toLocaleString()}</div>`;
                     listContent.appendChild(item);
                 });
             }
@@ -359,146 +340,75 @@
             const ctx = document.getElementById('chartTrend').getContext('2d');
             const labels = [], dataIn = [], dataOut = [];
             for (let i = 6; i >= 0; i--) {
-                const d = new Date(); d.setDate(d.getDate() - i);
-                const dStr = d.toLocaleDateString('en-CA');
+                const d = new Date(); d.setDate(d.getDate() - i); const dStr = d.toLocaleDateString('en-CA');
                 labels.push(d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }));
                 dataIn.push(cache.filter(item => item.t.toLocaleDateString('en-CA') === dStr && item.type === 'in').reduce((sum, item) => sum + item.amount, 0));
                 dataOut.push(cache.filter(item => item.t.toLocaleDateString('en-CA') === dStr && item.type === 'out').reduce((sum, item) => sum + item.amount, 0));
             }
-            if (lineChart) {
-                lineChart.data.labels = labels; lineChart.data.datasets[0].data = dataIn; lineChart.data.datasets[1].data = dataOut; lineChart.update();
-            } else {
-                lineChart = new Chart(ctx, {
-                    type: 'line',
-                    data: { labels: labels, datasets: [
-                        { label: 'Masuk', data: dataIn, borderColor: '#00ff88', backgroundColor: 'rgba(0, 255, 136, 0.1)', tension: 0.4, fill: true, pointRadius: 4 },
-                        { label: 'Keluar', data: dataOut, borderColor: '#ff3366', backgroundColor: 'rgba(255, 51, 102, 0.1)', tension: 0.4, fill: true, pointRadius: 4 }
-                    ]},
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { color: 'rgba(255,255,255,0.4)', font: { size: 8 } }, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { ticks: { color: 'rgba(255,255,255,0.6)', font: { size: 9 } }, grid: { display: false } } } }
-                });
-            }
+            if (lineChart) { lineChart.data.labels = labels; lineChart.data.datasets[0].data = dataIn; lineChart.data.datasets[1].data = dataOut; lineChart.update(); }
+            else { lineChart = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'Masuk', data: dataIn, borderColor: '#00ff88', backgroundColor: 'rgba(0, 255, 136, 0.1)', tension: 0.4, fill: true, pointRadius: 4 }, { label: 'Keluar', data: dataOut, borderColor: '#ff3366', backgroundColor: 'rgba(255, 51, 102, 0.1)', tension: 0.4, fill: true, pointRadius: 4 }]}, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { color: 'rgba(255,255,255,0.4)', font: { size: 8 } }, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { ticks: { color: 'rgba(255,255,255,0.6)', font: { size: 9 } }, grid: { display: false } } } } }); }
         };
 
         window.prosesSimpan = async () => {
-            const id = document.getElementById('editId').value;
-            const nomInput = document.getElementById('inNominal').value;
-            const nom = parseInt(nomInput.replace(/\D/g, ""));
-            const tgl = document.getElementById('inTanggal').value;
-            const catatan = document.getElementById('inCatatan').value;
-            if(!nom || !tgl) return alert("Nominal & Tanggal wajib diisi!");
+            const id = document.getElementById('editId').value; const nomInput = document.getElementById('inNominal').value;
+            const nom = parseInt(nomInput.replace(/\D/g, "")); const tgl = document.getElementById('inTanggal').value;
+            const catatan = document.getElementById('inCatatan').value; if(!nom || !tgl) return alert("Nominal & Tanggal wajib diisi!");
             const finalDesc = (window.cSub && !id ? `[${window.cSub}] ` : "") + catatan;
             let statusOnline = (window.cKat === 'ONLINE PAYMENT' || window.cSub === 'GrabFood' || window.cSub === 'TF BRI' || window.cSub === 'QRIS' || window.cSub === 'Online' || window.cSub === 'TF BNI');
-            if(id) {
-                const ref = doc(db, "transactions", id);
-                await updateDoc(ref, { amount: nom, description: catatan, timestamp: Timestamp.fromDate(new Date(tgl + "T" + new Date().toLocaleTimeString('en-GB'))) });
-            } else {
-                await addDoc(colRef, { category: window.cKat, type: window.cTip === 'masuk' ? 'in' : 'out', amount: nom, description: finalDesc, isOnline: statusOnline, timestamp: Timestamp.fromDate(new Date(tgl + "T" + new Date().toLocaleTimeString('en-GB'))) });
-            }
+            if(id) { const ref = doc(db, "transactions", id); await updateDoc(ref, { amount: nom, description: catatan, timestamp: Timestamp.fromDate(new Date(tgl + "T" + new Date().toLocaleTimeString('en-GB'))) }); }
+            else { await addDoc(colRef, { category: window.cKat, type: window.cTip === 'masuk' ? 'in' : 'out', amount: nom, description: finalDesc, isOnline: statusOnline, timestamp: Timestamp.fromDate(new Date(tgl + "T" + new Date().toLocaleTimeString('en-GB'))) }); }
             tutupModal(); window.tampilkanNotif(id ? "Data Diperbarui" : "Data Tersimpan");
         };
 
         window.bukaModalInput = (k, t) => {
-            window.cKat = k; window.cTip = t;
-            document.getElementById('editId').value = "";
-            document.getElementById('inCatatan').value = "";
-            document.getElementById('inNominal').value = "";
-            const hModal = document.getElementById('judulModal');
-            hModal.innerText = "INPUT " + k;
+            window.cKat = k; window.cTip = t; document.getElementById('editId').value = ""; document.getElementById('inCatatan').value = ""; document.getElementById('inNominal').value = "";
+            const hModal = document.getElementById('judulModal'); hModal.innerText = "INPUT " + k;
             document.getElementById('btnSimpan').style.backgroundColor = t === 'masuk' ? 'var(--sukses)' : 'var(--bahaya)';
             hModal.style.color = t === 'masuk' ? 'var(--sukses)' : 'var(--bahaya)';
             document.getElementById('inTanggal').value = getHariIni();
-            const subBox = document.getElementById('boxSubDynamic');
-            subBox.innerHTML = "";
-            const configSub = { 
-                'CASH KASIR': ['Penjualan Kasir', 'Lainnya'], 'ONLINE PAYMENT': ['QRIS', 'TF BRI', 'GrabFood'], 
-                'KASIR (ARA)': ['Operasional', 'Kasbon', 'Belanja'], 'STOK IKAN/GAS (HASBI)': ['IKAN', 'GAS'], 
-                'DAPUR (IBU ATI)': ['Bahan Dapur', 'Sayuran'], 'PAK BOSS': t === 'masuk' ? ['Offline', 'Online'] : ['Offline', 'TF BRI', 'TF BNI'] 
-            };
-            if(configSub[k]) {
-                configSub[k].forEach((s, idx) => {
-                    const btn = document.createElement('button');
-                    btn.innerText = s; btn.style.cssText = "flex:1; padding:10px; border-radius:12px; border:1px solid var(--kaca-garis); background:transparent; color:white; font-size:0.7rem; min-width:80px;";
-                    if(idx===0) { window.cSub = s; btn.style.backgroundColor = 'var(--emas-murni)'; btn.style.color = 'var(--biru-dalam)'; }
-                    btn.onclick = () => { Array.from(subBox.children).forEach(b => { b.style.backgroundColor = 'transparent'; b.style.color = 'white'; }); btn.style.backgroundColor = 'var(--emas-murni)'; btn.style.color = 'var(--biru-dalam)'; window.cSub = s; };
-                    subBox.appendChild(btn);
-                });
-            }
+            const subBox = document.getElementById('boxSubDynamic'); subBox.innerHTML = "";
+            const configSub = { 'CASH KASIR': ['Penjualan Kasir', 'Lainnya'], 'ONLINE PAYMENT': ['QRIS', 'TF BRI', 'GrabFood'], 'KASIR (ARA)': ['Operasional', 'Kasbon', 'Belanja'], 'STOK IKAN/GAS (HASBI)': ['IKAN', 'GAS'], 'DAPUR (IBU ATI)': ['Bahan Dapur', 'Sayuran'], 'PAK BOSS': t === 'masuk' ? ['Offline', 'Online'] : ['Offline', 'TF BRI', 'TF BNI'] };
+            if(configSub[k]) { configSub[k].forEach((s, idx) => { const btn = document.createElement('button'); btn.innerText = s; btn.style.cssText = "flex:1; padding:10px; border-radius:12px; border:1px solid var(--kaca-garis); background:transparent; color:white; font-size:0.7rem; min-width:80px;"; if(idx===0) { window.cSub = s; btn.style.backgroundColor = 'var(--emas-murni)'; btn.style.color = 'var(--biru-dalam)'; } btn.onclick = () => { Array.from(subBox.children).forEach(b => { b.style.backgroundColor = 'transparent'; b.style.color = 'white'; }); btn.style.backgroundColor = 'var(--emas-murni)'; btn.style.color = 'var(--biru-dalam)'; window.cSub = s; }; subBox.appendChild(btn); }); }
             document.getElementById('modal').style.display = 'flex';
         };
 
-        window.bukaEdit = (id) => {
-            const d = cache.find(item => item.id === id);
-            if(!d) return;
-            document.getElementById('editId').value = d.id;
-            document.getElementById('inNominal').value = "Rp. " + d.amount.toLocaleString('id-ID');
-            document.getElementById('inTanggal').value = d.t.toLocaleDateString('en-CA');
-            document.getElementById('inCatatan').value = d.description || "";
-            document.getElementById('boxSubDynamic').innerHTML = "";
-            document.getElementById('judulModal').innerText = "EDIT TRANSAKSI";
-            document.getElementById('judulModal').style.color = 'var(--emas-murni)';
-            document.getElementById('btnSimpan').style.backgroundColor = 'var(--emas-murni)';
-            document.getElementById('modal').style.display = 'flex';
-        };
-
-        window.tutupModal = () => { document.getElementById('modal').style.display = 'none'; };
+        window.bukaEdit = (id) => { const d = cache.find(item => item.id === id); if(!d) return; document.getElementById('editId').value = d.id; document.getElementById('inNominal').value = "Rp. " + d.amount.toLocaleString('id-ID'); document.getElementById('inTanggal').value = d.t.toLocaleDateString('en-CA'); document.getElementById('inCatatan').value = d.description || ""; document.getElementById('boxSubDynamic').innerHTML = ""; document.getElementById('judulModal').innerText = "EDIT TRANSAKSI"; document.getElementById('judulModal').style.color = 'var(--emas-murni)'; document.getElementById('btnSimpan').style.backgroundColor = 'var(--emas-murni)'; document.getElementById('modal').style.display = 'flex'; };
+        window.tutupModal = () => { document.getElementById('modal').style.none = 'none'; };
         window.formatRupiah = (el) => { let v = el.value.replace(/\D/g, ""); el.value = v ? "Rp. " + parseInt(v).toLocaleString('id-ID') : ""; };
         window.tampilkanNotif = (txt) => { const n = document.getElementById('notif'); n.querySelector('span').innerText = txt; n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 3000); };
         
-        window.gantiHal = (id) => { 
-            document.querySelectorAll('.halaman').forEach(h => h.classList.remove('aktif')); 
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('aktif')); 
-            document.getElementById(id).classList.add('aktif');
-            const items = document.querySelectorAll('.nav-item');
-            if(id === 'beranda') items[0].classList.add('aktif'); else if(id === 'riwayat') items[1].classList.add('aktif'); else if(id === 'neraca') items[2].classList.add('aktif');
-            syncUI(); 
-        };
+        window.gantiHal = (id) => { document.querySelectorAll('.halaman').forEach(h => h.classList.remove('aktif')); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('aktif')); document.getElementById(id).classList.add('aktif'); const items = document.querySelectorAll('.nav-item'); if(id === 'beranda') items[0].classList.add('aktif'); else if(id === 'riwayat') items[1].classList.add('aktif'); else if(id === 'neraca') items[2].classList.add('aktif'); syncUI(); };
 
-        window.toggleFilterNeraca = () => {
-            const range = document.getElementById('nRange').value;
-            document.getElementById('nDaily').style.display = range === 'daily' ? 'block' : 'none';
-            document.getElementById('nMonthly').style.display = range === 'monthly' ? 'block' : 'none';
-            document.getElementById('nYearly').style.display = range === 'yearly' ? 'block' : 'none';
-            if(range === 'monthly') document.getElementById('nMonthly').value = getBulanIni();
-            syncUI();
-        };
+        window.toggleFilterNeraca = () => { const range = document.getElementById('nRange').value; document.getElementById('nDaily').style.display = range === 'daily' ? 'block' : 'none'; document.getElementById('nMonthly').style.display = range === 'monthly' ? 'block' : 'none'; document.getElementById('nYearly').style.display = range === 'yearly' ? 'block' : 'none'; if(range === 'monthly') document.getElementById('nMonthly').value = getBulanIni(); syncUI(); };
 
         window.syncUI = () => {
-            const list = document.getElementById('listRiwayat');
-            const detNeraca = document.getElementById('detailNeraca');
-            if(!list || !detNeraca) return;
-            list.innerHTML = ""; detNeraca.innerHTML = "";
-            
+            const list = document.getElementById('listRiwayat'); const detNeraca = document.getElementById('detailNeraca');
+            if(!list || !detNeraca) return; list.innerHTML = ""; detNeraca.innerHTML = "";
             const fR = document.getElementById('riwayatTgl').value || getHariIni();
-            const range = document.getElementById('nRange').value;
-            const vD = document.getElementById('nDaily').value || getHariIni();
-            const vM = document.getElementById('nMonthly').value;
-            const vY = document.getElementById('nYearly').value;
+            const range = document.getElementById('nRange').value; const vD = document.getElementById('nDaily').value || getHariIni();
+            const vM = document.getElementById('nMonthly').value; const vY = document.getElementById('nYearly').value;
 
             cache.filter(d => d.t.toLocaleDateString('en-CA') === fR).forEach(d => {
-                const isIn = d.type === 'in';
-                const div = document.createElement('div'); div.className = 'item-riwayat-elite';
-                div.innerHTML = `
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <i class="fa-solid ${isIn ? 'fa-circle-arrow-down' : 'fa-circle-arrow-up'}" style="color:${isIn?'var(--sukses)':'var(--bahaya)'}; font-size:1.2rem;"></i>
-                        <div><small style="color:var(--emas-murni); font-size:0.6rem;">${d.category}</small><div style="font-weight:600; font-size:0.8rem;">${d.description || '-'}</div></div>
-                    </div>
-                    <div style="display:flex; align-items:center;">
-                        <div style="text-align:right; color:${isIn?'var(--sukses)':'var(--bahaya)'}; font-weight:600; font-size:0.85rem;">${isIn?'+':'-'} ${d.amount.toLocaleString()}</div>
-                        <button class="btn-edit-item" onclick="bukaEdit('${d.id}')"><i class="fa-solid fa-pen-to-square"></i></button>
-                    </div>`;
+                const isIn = d.type === 'in'; const div = document.createElement('div'); div.className = 'item-riwayat-elite';
+                div.innerHTML = `<div style="display:flex; align-items:center; gap:12px;"><i class="fa-solid ${isIn ? 'fa-circle-arrow-down' : 'fa-circle-arrow-up'}" style="color:${isIn?'var(--sukses)':'var(--bahaya)'}; font-size:1.2rem;"></i><div><small style="color:var(--emas-murni); font-size:0.6rem;">${d.category}</small><div style="font-weight:600; font-size:0.8rem;">${d.description || '-'}</div></div></div><div style="display:flex; align-items:center;"><div style="text-align:right; color:${isIn?'var(--sukses)':'var(--bahaya)'}; font-weight:600; font-size:0.85rem;">${isIn?'+':'-'} ${d.amount.toLocaleString()}</div><button class="btn-edit-item" onclick="bukaEdit('${d.id}')"><i class="fa-solid fa-pen-to-square"></i></button></div>`;
                 list.appendChild(div);
             });
 
-            let inOff = 0, outOff = 0, inOn = 0, outOn = 0;
+            let inOff = 0, outOff = 0, inOn = 0, outOn = 0, netBNI = 0, netBRI = 0;
             cache.filter(d => {
                 if(range === 'daily') return d.t.toLocaleDateString('en-CA') === vD;
                 if(range === 'monthly') return vM && d.t.toISOString().startsWith(vM);
                 if(range === 'yearly') return d.t.getFullYear().toString() === vY;
                 return false;
             }).forEach(d => {
+                const amt = (d.type === 'in' ? d.amount : -d.amount);
                 const isOnline = (d.isOnline || d.category === 'ONLINE PAYMENT' || (d.description && (d.description.includes('[GrabFood]') || d.description.includes('[TF BRI]') || d.description.includes('[QRIS]'))));
-                if(isOnline) { if(d.type === 'in') inOn += d.amount; else outOn += d.amount; }
-                else { if(d.type === 'in') inOff += d.amount; else outOff += d.amount; }
+                if(isOnline) { 
+                    if(d.type === 'in') inOn += d.amount; else outOn += d.amount; 
+                    if(d.description && d.description.includes('[QRIS]')) netBNI += amt;
+                    else if(d.description && (d.description.includes('[TF BRI]') || d.description.includes('[GrabFood]'))) netBRI += amt;
+                    else netBNI += amt;
+                } else { if(d.type === 'in') inOff += d.amount; else outOff += d.amount; }
             });
 
             detNeraca.innerHTML = `
@@ -512,6 +422,16 @@
                     <span class="neraca-group-title"><i class="fa-solid fa-gem" style="color:var(--biru-muda)"></i> KAS ONLINE (DIGITAL)</span>
                     <div class="neraca-row"><span class="neraca-label"><i class="fa-solid fa-arrow-down-long" style="color:var(--sukses)"></i> Dana Masuk</span><span class="neraca-val" style="color:var(--sukses)">+ Rp. ${inOn.toLocaleString()}</span></div>
                     <div class="neraca-row"><span class="neraca-label"><i class="fa-solid fa-arrow-up-long" style="color:var(--bahaya)"></i> Dana Keluar</span><span class="neraca-val" style="color:var(--bahaya)">- Rp. ${outOn.toLocaleString()}</span></div>
+                    
+                    <div class="neraca-sub-row">
+                        <span class="neraca-sub-label"><i class="fa-solid fa-qrcode" style="color:var(--emas-murni)"></i> BNI (QRIS)</span>
+                        <span class="neraca-sub-val" style="color:var(--emas-murni)">Rp. ${netBNI.toLocaleString()}</span>
+                    </div>
+                    <div class="neraca-sub-row">
+                        <span class="neraca-sub-label"><i class="fa-solid fa-building-columns" style="color:var(--biru-muda)"></i> BRI (TF/GF)</span>
+                        <span class="neraca-sub-val" style="color:var(--biru-muda)">Rp. ${netBRI.toLocaleString()}</span>
+                    </div>
+                    
                     <div class="neraca-row" style="border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;"><span class="neraca-label"><i class="fa-solid fa-credit-card" style="color:var(--biru-muda)"></i> Subtotal Online</span><span class="neraca-val" style="color:var(--biru-muda)">Rp. ${(inOn - outOn).toLocaleString()}</span></div>
                 </div>
                 <div class="neraca-group" style="background:linear-gradient(135deg, rgba(239, 191, 59, 0.1), rgba(239, 191, 59, 0.02)); padding:15px; border-radius:20px; border: 1px solid rgba(239, 191, 59, 0.25);">
@@ -520,29 +440,13 @@
         };
 
         window.exportData = (type) => {
-            const range = document.getElementById('nRange').value;
-            const period = range === 'daily' ? document.getElementById('nDaily').value : (range === 'monthly' ? document.getElementById('nMonthly').value : document.getElementById('nYearly').value);
-            const filtered = cache.filter(d => {
-                if(range === 'daily') return d.t.toLocaleDateString('en-CA') === period;
-                if(range === 'monthly') return period && d.t.toISOString().startsWith(period);
-                if(range === 'yearly') return d.t.getFullYear().toString() === period;
-                return false;
-            });
-            if(type === 'excel') {
-                const ws = XLSX.utils.json_to_sheet(filtered.map(d => ({ Tanggal: d.t.toLocaleString(), Kategori: d.category, Tipe: d.type === 'in' ? 'MASUK' : 'KELUAR', Nominal: d.amount, Keterangan: d.description })));
-                const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Laporan");
-                XLSX.writeFile(wb, `Laporan_${period}.xlsx`);
-            } else {
-                const { jsPDF } = window.jspdf; const doc = new jsPDF();
-                doc.text(`LAPORAN KEUANGAN MACCA - ${period}`, 14, 15);
-                doc.autoTable({ head: [['Tanggal', 'Kategori', 'Tipe', 'Nominal', 'Keterangan']], body: filtered.map(d => [d.t.toLocaleDateString(), d.category, d.type === 'in' ? 'MASUK' : 'KELUAR', d.amount.toLocaleString(), d.description]) });
-                doc.save(`Laporan_${period}.pdf`);
-            }
+            const range = document.getElementById('nRange').value; const period = range === 'daily' ? document.getElementById('nDaily').value : (range === 'monthly' ? document.getElementById('nMonthly').value : document.getElementById('nYearly').value);
+            const filtered = cache.filter(d => { if(range === 'daily') return d.t.toLocaleDateString('en-CA') === period; if(range === 'monthly') return period && d.t.toISOString().startsWith(period); if(range === 'yearly') return d.t.getFullYear().toString() === period; return false; });
+            if(type === 'excel') { const ws = XLSX.utils.json_to_sheet(filtered.map(d => ({ Tanggal: d.t.toLocaleString(), Kategori: d.category, Tipe: d.type === 'in' ? 'MASUK' : 'KELUAR', Nominal: d.amount, Keterangan: d.description }))); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Laporan"); XLSX.writeFile(wb, `Laporan_${period}.xlsx`); }
+            else { const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text(`LAPORAN KEUANGAN MACCA - ${period}`, 14, 15); doc.autoTable({ head: [['Tanggal', 'Kategori', 'Tipe', 'Nominal', 'Keterangan']], body: filtered.map(d => [d.t.toLocaleDateString(), d.category, d.type === 'in' ? 'MASUK' : 'KELUAR', d.amount.toLocaleString(), d.description]) }); doc.save(`Laporan_${period}.pdf`); }
         };
 
-        document.getElementById('nDaily').value = getHariIni();
-        document.getElementById('riwayatTgl').value = getHariIni();
+        document.getElementById('nDaily').value = getHariIni(); document.getElementById('riwayatTgl').value = getHariIni();
     </script>
 </body>
 </html>
-
