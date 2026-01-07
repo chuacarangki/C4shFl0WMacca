@@ -40,9 +40,11 @@
         
         .grid-split-saldo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 20px; }
         .split-item { text-align: center; padding: 5px; }
-        .split-label { font-size: 0.75rem; color: #ffffff; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 8px; font-weight: 600; }
-        .split-label i { font-size: 0.9rem; }
-        .split-value { font-size: 1rem; font-weight: 600; color: var(--emas-murni); filter: drop-shadow(0 0 5px rgba(239, 191, 59, 0.3)); }
+        .split-label { font-size: 0.7rem; color: #ffffff; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 8px; font-weight: 600; }
+        .split-label i { font-size: 0.8rem; }
+        
+        /* UKURAN FONT SALDO DIKECILKAN AGAR TIDAK TURUN */
+        .split-value { font-size: 0.9rem; font-weight: 600; color: var(--emas-murni); filter: drop-shadow(0 0 5px rgba(239, 191, 59, 0.3)); letter-spacing: -0.2px; }
 
         .section-harian { margin-bottom: 30px; }
         .harian-title { font-size: 0.65rem; color: var(--emas-murni); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; display: block; font-weight: 600; }
@@ -248,8 +250,6 @@
 
         const updateLineChart = () => {
             const ctx = document.getElementById('chartTrend').getContext('2d');
-            
-            // Ambil 7 hari terakhir secara otomatis (bahkan jika data kosong)
             const labels = [];
             const dataIn = [];
             const dataOut = [];
@@ -258,14 +258,9 @@
                 const d = new Date();
                 d.setDate(d.getDate() - i);
                 const dStr = d.toLocaleDateString('en-CA');
-                
                 labels.push(d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }));
-                
-                const valIn = cache.filter(item => item.t.toLocaleDateString('en-CA') === dStr && item.type === 'in')
-                                  .reduce((sum, item) => sum + item.amount, 0);
-                const valOut = cache.filter(item => item.t.toLocaleDateString('en-CA') === dStr && item.type === 'out')
-                                   .reduce((sum, item) => sum + item.amount, 0);
-                
+                const valIn = cache.filter(item => item.t.toLocaleDateString('en-CA') === dStr && item.type === 'in').reduce((sum, item) => sum + item.amount, 0);
+                const valOut = cache.filter(item => item.t.toLocaleDateString('en-CA') === dStr && item.type === 'out').reduce((sum, item) => sum + item.amount, 0);
                 dataIn.push(valIn);
                 dataOut.push(valOut);
             }
@@ -281,26 +276,8 @@
                     data: {
                         labels: labels,
                         datasets: [
-                            { 
-                                label: 'Masuk', 
-                                data: dataIn, 
-                                borderColor: '#00ff88', 
-                                backgroundColor: 'rgba(0, 255, 136, 0.1)', 
-                                tension: 0.4, 
-                                fill: true,
-                                pointRadius: 4,
-                                pointBackgroundColor: '#00ff88'
-                            },
-                            { 
-                                label: 'Keluar', 
-                                data: dataOut, 
-                                borderColor: '#ff3366', 
-                                backgroundColor: 'rgba(255, 51, 102, 0.1)', 
-                                tension: 0.4, 
-                                fill: true,
-                                pointRadius: 4,
-                                pointBackgroundColor: '#ff3366'
-                            }
+                            { label: 'Masuk', data: dataIn, borderColor: '#00ff88', backgroundColor: 'rgba(0, 255, 136, 0.1)', tension: 0.4, fill: true, pointRadius: 4, pointBackgroundColor: '#00ff88' },
+                            { label: 'Keluar', data: dataOut, borderColor: '#ff3366', backgroundColor: 'rgba(255, 51, 102, 0.1)', tension: 0.4, fill: true, pointRadius: 4, pointBackgroundColor: '#ff3366' }
                         ]
                     },
                     options: {
@@ -308,15 +285,8 @@
                         maintainAspectRatio: false,
                         plugins: { legend: { display: false } },
                         scales: {
-                            y: { 
-                                beginAtZero: true,
-                                ticks: { color: 'rgba(255,255,255,0.4)', font: { size: 8 } }, 
-                                grid: { color: 'rgba(255,255,255,0.05)' } 
-                            },
-                            x: { 
-                                ticks: { color: 'rgba(255,255,255,0.6)', font: { size: 9 } }, 
-                                grid: { display: false } 
-                            }
+                            y: { beginAtZero: true, ticks: { color: 'rgba(255,255,255,0.4)', font: { size: 8 } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                            x: { ticks: { color: 'rgba(255,255,255,0.6)', font: { size: 9 } }, grid: { display: false } }
                         }
                     }
                 });
