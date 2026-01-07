@@ -275,7 +275,25 @@
         const getHariIni = () => new Date().toLocaleDateString('en-CA');
         const getBulanIni = () => new Date().toISOString().slice(0, 7);
 
-        // DATA REALTIME DARI FIREBASE
+        // --- SISTEM HANDLER TOMBOL BACK HP ---
+        // Fungsi untuk menambahkan 'state' baru ke riwayat browser saat modal dibuka
+        function addBackState() {
+            window.history.pushState({ modalOpen: true }, "");
+        }
+
+        // Event listener saat tombol Back HP ditekan
+        window.onpopstate = function(event) {
+            // Jika modal sedang terbuka, tutup modalnya bukannya keluar aplikasi
+            const modalInput = document.getElementById('modal');
+            const modalDetail = document.getElementById('modalDetail');
+            
+            if (modalInput.style.display === 'flex' || modalDetail.style.display === 'flex') {
+                tutupModal();
+                tutupModalDetail();
+            }
+        };
+        // -------------------------------------
+
         onSnapshot(query(colRef, orderBy("timestamp", "desc")), (s) => {
             cache = []; 
             let totalSal = 0, offSal = 0, onSal = 0, salBNI = 0, salBRI = 0;
@@ -290,7 +308,6 @@
                 cache.push(dataObj);
                 
                 const amt = (x.type === 'in' ? x.amount : -x.amount);
-                // Logic Penentuan Online/Offline
                 const isOnline = (x.isOnline || x.category === 'ONLINE PAYMENT' || (x.description && (x.description.includes('[GrabFood]') || x.description.includes('[TF BRI]') || x.description.includes('[QRIS]'))));
                 
                 totalSal += amt;
@@ -307,7 +324,6 @@
                 }
             });
 
-            // Update UI Saldo
             document.getElementById('saldoUtama').innerText = "Rp. " + totalSal.toLocaleString('id-ID');
             document.getElementById('saldoOffline').innerText = "Rp. " + offSal.toLocaleString('id-ID');
             document.getElementById('saldoOnline').innerText = "Rp. " + onSal.toLocaleString('id-ID');
@@ -322,8 +338,8 @@
             updateLineChart();
         });
 
-        // FUNGSI POPUP DETAIL SALDO
         window.bukaPopupDetail = (tipe) => {
+            addBackState(); // Tambah state agar back tidak keluar app
             const listContent = document.getElementById('listDetailContent'); 
             const judul = document.getElementById('judulDetail');
             listContent.innerHTML = ""; 
@@ -362,9 +378,10 @@
             document.getElementById('modalDetail').style.display = 'flex';
         };
 
-        window.tutupModalDetail = () => { document.getElementById('modalDetail').style.display = 'none'; };
+        window.tutupModalDetail = () => { 
+            document.getElementById('modalDetail').style.display = 'none'; 
+        };
 
-        // GRAFIK TREND
         const updateLineChart = () => {
             const ctx = document.getElementById('chartTrend').getContext('2d');
             const labels = [], dataIn = [], dataOut = [];
@@ -402,7 +419,6 @@
             }
         };
 
-        // SIMPAN DATA
         window.prosesSimpan = async () => {
             const id = document.getElementById('editId').value; 
             const nomInput = document.getElementById('inNominal').value;
@@ -432,12 +448,17 @@
                     timestamp: Timestamp.fromDate(new Date(tgl + "T" + new Date().toLocaleTimeString('en-GB'))) 
                 }); 
             }
-            tutupModal(); 
+            // Gunakan back browser untuk menutup modal secara alami jika modal terbuka
+            if (window.history.state && window.history.state.modalOpen) {
+                window.history.back();
+            } else {
+                tutupModal();
+            }
             window.tampilkanNotif(id ? "Data Diperbarui" : "Data Tersimpan");
         };
 
-        // FUNGSI UI LAINNYA
         window.bukaModalInput = (k, t) => {
+            addBackState(); // Tambah state agar back tidak keluar app
             window.cKat = k; window.cTip = t; 
             document.getElementById('editId').value = ""; 
             document.getElementById('inCatatan').value = ""; 
@@ -475,6 +496,7 @@
         };
 
         window.bukaEdit = (id) => { 
+            addBackState(); // Tambah state
             const d = cache.find(item => item.id === id); 
             if(!d) return; 
             document.getElementById('editId').value = d.id; 
@@ -488,7 +510,10 @@
             document.getElementById('modal').style.display = 'flex'; 
         };
 
-        window.tutupModal = () => { document.getElementById('modal').style.display = 'none'; };
+        window.tutupModal = () => { 
+            document.getElementById('modal').style.display = 'none'; 
+        };
+
         window.formatRupiah = (el) => { let v = el.value.replace(/\D/g, ""); el.value = v ? "Rp. " + parseInt(v).toLocaleString('id-ID') : ""; };
         window.tampilkanNotif = (txt) => { const n = document.getElementById('notif'); n.querySelector('span').innerText = txt; n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 3000); };
         
@@ -519,14 +544,12 @@
             const range = document.getElementById('nRange').value; const vD = document.getElementById('nDaily').value || getHariIni();
             const vM = document.getElementById('nMonthly').value; const vY = document.getElementById('nYearly').value;
 
-            // List Riwayat
             cache.filter(d => d.t.toLocaleDateString('en-CA') === fR).forEach(d => {
                 const isIn = d.type === 'in'; const div = document.createElement('div'); div.className = 'item-riwayat-elite';
                 div.innerHTML = `<div style="display:flex; align-items:center; gap:12px;"><i class="fa-solid ${isIn ? 'fa-circle-arrow-down' : 'fa-circle-arrow-up'}" style="color:${isIn?'var(--sukses)':'var(--bahaya)'}; font-size:1.2rem;"></i><div><small style="color:var(--emas-murni); font-size:0.6rem;">${d.category}</small><div style="font-weight:600; font-size:0.8rem;">${d.description || '-'}</div></div></div><div style="display:flex; align-items:center;"><div style="text-align:right; color:${isIn?'var(--sukses)':'var(--bahaya)'}; font-weight:600; font-size:0.85rem;">${isIn?'+':'-'} ${d.amount.toLocaleString()}</div><button class="btn-edit-item" onclick="bukaEdit('${d.id}')"><i class="fa-solid fa-pen-to-square"></i></button></div>`;
                 list.appendChild(div);
             });
 
-            // Kalkulasi Neraca
             let inOff = 0, outOff = 0, inOn = 0, outOn = 0, netBNI = 0, netBRI = 0;
             cache.filter(d => {
                 if(range === 'daily') return d.t.toLocaleDateString('en-CA') === vD;
