@@ -134,7 +134,7 @@
                 
                 <div class="box-sub-bank">
                     <div class="bank-mini" onclick="bukaPopupDetail('BNI')">
-                        <span class="bank-label">BNI (QRIS)</span>
+                        <span class="bank-label">BNI (QRIS/TF)</span>
                         <span class="bank-val" id="saldoBNI">Rp. 0</span>
                     </div>
                     <div style="width:1px; height:20px; background:rgba(255,255,255,0.1); align-self:center;"></div>
@@ -275,24 +275,29 @@
         const getHariIni = () => new Date().toLocaleDateString('en-CA');
         const getBulanIni = () => new Date().toISOString().slice(0, 7);
 
-        // --- SISTEM HANDLER TOMBOL BACK HP ---
-        // Fungsi untuk menambahkan 'state' baru ke riwayat browser saat modal dibuka
-        function addBackState() {
-            window.history.pushState({ modalOpen: true }, "");
-        }
-
-        // Event listener saat tombol Back HP ditekan
-        window.onpopstate = function(event) {
-            // Jika modal sedang terbuka, tutup modalnya bukannya keluar aplikasi
-            const modalInput = document.getElementById('modal');
-            const modalDetail = document.getElementById('modalDetail');
-            
-            if (modalInput.style.display === 'flex' || modalDetail.style.display === 'flex') {
-                tutupModal();
-                tutupModalDetail();
-            }
+        // Helper untuk cek apakah transaksi ini Online
+        const isTransaksiOnline = (x) => {
+            const desc = x.description || "";
+            return (
+                x.isOnline || 
+                x.category === 'ONLINE PAYMENT' || 
+                desc.includes('[GrabFood]') || 
+                desc.includes('[TF BRI]') || 
+                desc.includes('[QRIS]') || 
+                desc.includes('[TF BNI]') || 
+                desc.includes('[TF BNI]')
+            );
         };
-        // -------------------------------------
+
+        // Helper untuk cek spesifik Bank
+        const getBankType = (x) => {
+            const desc = x.description || "";
+            if (desc.includes('[QRIS]') || desc.includes('[TF BNI]')) return 'BNI';
+            if (desc.includes('[TF BRI]') || desc.includes('[GrabFood]')) return 'BRI';
+            // Default untuk Online Payment jika tidak ada tag khusus
+            if (x.category === 'ONLINE PAYMENT') return 'BNI';
+            return null;
+        };
 
         onSnapshot(query(colRef, orderBy("timestamp", "desc")), (s) => {
             cache = []; 
@@ -308,19 +313,21 @@
                 cache.push(dataObj);
                 
                 const amt = (x.type === 'in' ? x.amount : -x.amount);
-                const isOnline = (x.isOnline || x.category === 'ONLINE PAYMENT' || (x.description && (x.description.includes('[GrabFood]') || x.description.includes('[TF BRI]') || x.description.includes('[QRIS]'))));
+                const onlineStatus = isTransaksiOnline(x);
+                const bank = getBankType(x);
                 
                 totalSal += amt;
-                if(isOnline) {
+                if(onlineStatus) {
                     onSal += amt;
-                    if(x.description && x.description.includes('[QRIS]')) salBNI += amt;
-                    else if(x.description && (x.description.includes('[TF BRI]') || x.description.includes('[GrabFood]'))) salBRI += amt;
-                    else salBNI += amt; 
-                } else { offSal += amt; }
+                    if(bank === 'BNI') salBNI += amt;
+                    else if(bank === 'BRI') salBRI += amt;
+                } else { 
+                    offSal += amt; 
+                }
 
                 if(strDate === hariIni) {
                     if(x.type === 'in') dayIn += x.amount; else dayOut += x.amount;
-                    if(isOnline) dayOn += amt; else dayOff += amt;
+                    if(onlineStatus) dayOn += amt; else dayOff += amt;
                 }
             });
 
@@ -339,7 +346,7 @@
         });
 
         window.bukaPopupDetail = (tipe) => {
-            addBackState(); // Tambah state agar back tidak keluar app
+            window.history.pushState({ modalOpen: true }, "");
             const listContent = document.getElementById('listDetailContent'); 
             const judul = document.getElementById('judulDetail');
             listContent.innerHTML = ""; 
@@ -347,19 +354,19 @@
 
             if(tipe === 'offline') { 
                 judul.innerText = "HISTORI KAS OFFLINE"; 
-                filtered = cache.filter(d => !(d.isOnline || d.category === 'ONLINE PAYMENT' || (d.description && (d.description.includes('[GrabFood]') || d.description.includes('[TF BRI]') || d.description.includes('[QRIS]'))))); 
+                filtered = cache.filter(d => !isTransaksiOnline(d)); 
             }
             else if(tipe === 'online') { 
                 judul.innerText = "HISTORI KAS ONLINE"; 
-                filtered = cache.filter(d => (d.isOnline || d.category === 'ONLINE PAYMENT' || (d.description && (d.description.includes('[GrabFood]') || d.description.includes('[TF BRI]') || d.description.includes('[QRIS]'))))); 
+                filtered = cache.filter(d => isTransaksiOnline(d)); 
             }
             else if(tipe === 'BNI') { 
-                judul.innerText = "HISTORI BNI / QRIS"; 
-                filtered = cache.filter(d => (d.description && d.description.includes('[QRIS]'))); 
+                judul.innerText = "HISTORI BNI (QRIS/TF)"; 
+                filtered = cache.filter(d => getBankType(d) === 'BNI'); 
             }
             else if(tipe === 'BRI') { 
-                judul.innerText = "HISTORI BRI / TF / GF"; 
-                filtered = cache.filter(d => (d.description && (d.description.includes('[TF BRI]') || d.description.includes('[GrabFood]')))); 
+                judul.innerText = "HISTORI BRI (TF/GF)"; 
+                filtered = cache.filter(d => getBankType(d) === 'BRI'); 
             }
 
             if(filtered.length === 0) { 
@@ -448,7 +455,6 @@
                     timestamp: Timestamp.fromDate(new Date(tgl + "T" + new Date().toLocaleTimeString('en-GB'))) 
                 }); 
             }
-            // Gunakan back browser untuk menutup modal secara alami jika modal terbuka
             if (window.history.state && window.history.state.modalOpen) {
                 window.history.back();
             } else {
@@ -458,7 +464,7 @@
         };
 
         window.bukaModalInput = (k, t) => {
-            addBackState(); // Tambah state agar back tidak keluar app
+            window.history.pushState({ modalOpen: true }, "");
             window.cKat = k; window.cTip = t; 
             document.getElementById('editId').value = ""; 
             document.getElementById('inCatatan').value = ""; 
@@ -496,7 +502,7 @@
         };
 
         window.bukaEdit = (id) => { 
-            addBackState(); // Tambah state
+            window.history.pushState({ modalOpen: true }, "");
             const d = cache.find(item => item.id === id); 
             if(!d) return; 
             document.getElementById('editId').value = d.id; 
@@ -558,13 +564,16 @@
                 return false;
             }).forEach(d => {
                 const amt = (d.type === 'in' ? d.amount : -d.amount);
-                const isOnline = (d.isOnline || d.category === 'ONLINE PAYMENT' || (d.description && (d.description.includes('[GrabFood]') || d.description.includes('[TF BRI]') || d.description.includes('[QRIS]'))));
-                if(isOnline) { 
+                const onlineStatus = isTransaksiOnline(d);
+                const bank = getBankType(d);
+
+                if(onlineStatus) { 
                     if(d.type === 'in') inOn += d.amount; else outOn += d.amount; 
-                    if(d.description && d.description.includes('[QRIS]')) netBNI += amt;
-                    else if(d.description && (d.description.includes('[TF BRI]') || d.description.includes('[GrabFood]'))) netBRI += amt;
-                    else netBNI += amt;
-                } else { if(d.type === 'in') inOff += d.amount; else outOff += d.amount; }
+                    if(bank === 'BNI') netBNI += amt;
+                    else if(bank === 'BRI') netBRI += amt;
+                } else { 
+                    if(d.type === 'in') inOff += d.amount; else outOff += d.amount; 
+                }
             });
 
             detNeraca.innerHTML = `
@@ -580,7 +589,7 @@
                     <div class="neraca-row"><span class="neraca-label"><i class="fa-solid fa-arrow-up-long" style="color:var(--bahaya)"></i> Dana Keluar</span><span class="neraca-val" style="color:var(--bahaya)">- Rp. ${outOn.toLocaleString()}</span></div>
                     
                     <div class="neraca-sub-row">
-                        <span class="neraca-sub-label"><i class="fa-solid fa-qrcode" style="color:var(--emas-murni)"></i> BNI (QRIS)</span>
+                        <span class="neraca-sub-label"><i class="fa-solid fa-qrcode" style="color:var(--emas-murni)"></i> BNI (QRIS/TF)</span>
                         <span class="neraca-sub-val" style="color:var(--emas-murni)">Rp. ${netBNI.toLocaleString()}</span>
                     </div>
                     <div class="neraca-sub-row">
@@ -619,6 +628,16 @@
                     body: filtered.map(d => [d.t.toLocaleDateString(), d.category, d.type === 'in' ? 'MASUK' : 'KELUAR', d.amount.toLocaleString(), d.description]) 
                 }); 
                 doc.save(`Laporan_${period}.pdf`); 
+            }
+        };
+
+        // Handler back button HP
+        window.onpopstate = function(event) {
+            const modalInput = document.getElementById('modal');
+            const modalDetail = document.getElementById('modalDetail');
+            if (modalInput.style.display === 'flex' || modalDetail.style.display === 'flex') {
+                tutupModal();
+                tutupModalDetail();
             }
         };
 
