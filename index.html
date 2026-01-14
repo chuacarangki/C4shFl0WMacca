@@ -74,6 +74,9 @@
 
         .item-riwayat-elite { background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02)); backdrop-filter: blur(10px); border: 1px solid var(--kaca-garis); border-radius: 20px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
         .btn-edit-item { background: rgba(239, 191, 59, 0.1); border: 1px solid rgba(239, 191, 59, 0.3); color: var(--emas-murni); width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-left: 10px; transition: 0.3s; }
+        
+        .btn-delete-item { background: rgba(255, 51, 102, 0.1); border: 1px solid rgba(255, 51, 102, 0.3); color: var(--bahaya); width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-left: 8px; transition: 0.3s; }
+        .btn-delete-item:active { background: var(--bahaya); color: white; }
 
         .nav-bawah { position: fixed; bottom: 20px; left: 20px; right: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: space-around; padding: 12px; border-radius: 20px; border: 1px solid var(--kaca-garis); z-index: 1000; }
         .nav-item { color: rgba(255,255,255,0.5); display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
@@ -259,7 +262,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, Timestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, Timestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { 
             apiKey: "AIzaSyAXs5ZVr6gop28qPKbeaqTRiNdEGZlZMZQ", 
@@ -275,7 +278,6 @@
         const getHariIni = () => new Date().toLocaleDateString('en-CA');
         const getBulanIni = () => new Date().toISOString().slice(0, 7);
 
-        // Helper untuk cek apakah transaksi ini Online
         const isTransaksiOnline = (x) => {
             const desc = x.description || "";
             return (
@@ -284,17 +286,14 @@
                 desc.includes('[GrabFood]') || 
                 desc.includes('[TF BRI]') || 
                 desc.includes('[QRIS]') || 
-                desc.includes('[TF BNI]') || 
                 desc.includes('[TF BNI]')
             );
         };
 
-        // Helper untuk cek spesifik Bank
         const getBankType = (x) => {
             const desc = x.description || "";
             if (desc.includes('[QRIS]') || desc.includes('[TF BNI]')) return 'BNI';
             if (desc.includes('[TF BRI]') || desc.includes('[GrabFood]')) return 'BRI';
-            // Default untuk Online Payment jika tidak ada tag khusus
             if (x.category === 'ONLINE PAYMENT') return 'BNI';
             return null;
         };
@@ -426,6 +425,19 @@
             }
         };
 
+        window.hapusData = async (id) => {
+            if(confirm("Apakah Anda yakin ingin menghapus transaksi ini?")) {
+                try {
+                    const ref = doc(db, "transactions", id);
+                    await deleteDoc(ref);
+                    window.tampilkanNotif("Data Berhasil Dihapus");
+                } catch (error) {
+                    console.error("Gagal menghapus:", error);
+                    alert("Gagal menghapus data.");
+                }
+            }
+        };
+
         window.prosesSimpan = async () => {
             const id = document.getElementById('editId').value; 
             const nomInput = document.getElementById('inNominal').value;
@@ -551,8 +563,24 @@
             const vM = document.getElementById('nMonthly').value; const vY = document.getElementById('nYearly').value;
 
             cache.filter(d => d.t.toLocaleDateString('en-CA') === fR).forEach(d => {
-                const isIn = d.type === 'in'; const div = document.createElement('div'); div.className = 'item-riwayat-elite';
-                div.innerHTML = `<div style="display:flex; align-items:center; gap:12px;"><i class="fa-solid ${isIn ? 'fa-circle-arrow-down' : 'fa-circle-arrow-up'}" style="color:${isIn?'var(--sukses)':'var(--bahaya)'}; font-size:1.2rem;"></i><div><small style="color:var(--emas-murni); font-size:0.6rem;">${d.category}</small><div style="font-weight:600; font-size:0.8rem;">${d.description || '-'}</div></div></div><div style="display:flex; align-items:center;"><div style="text-align:right; color:${isIn?'var(--sukses)':'var(--bahaya)'}; font-weight:600; font-size:0.85rem;">${isIn?'+':'-'} ${d.amount.toLocaleString()}</div><button class="btn-edit-item" onclick="bukaEdit('${d.id}')"><i class="fa-solid fa-pen-to-square"></i></button></div>`;
+                const isIn = d.type === 'in'; 
+                const div = document.createElement('div'); 
+                div.className = 'item-riwayat-elite';
+                div.innerHTML = `
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <i class="fa-solid ${isIn ? 'fa-circle-arrow-down' : 'fa-circle-arrow-up'}" style="color:${isIn?'var(--sukses)':'var(--bahaya)'}; font-size:1.2rem;"></i>
+                        <div>
+                            <small style="color:var(--emas-murni); font-size:0.6rem;">${d.category}</small>
+                            <div style="font-weight:600; font-size:0.8rem;">${d.description || '-'}</div>
+                        </div>
+                    </div>
+                    <div style="display:flex; align-items:center;">
+                        <div style="text-align:right; color:${isIn?'var(--sukses)':'var(--bahaya)'}; font-weight:600; font-size:0.85rem; margin-right:10px;">
+                            ${isIn?'+':'-'} ${d.amount.toLocaleString()}
+                        </div>
+                        <button class="btn-edit-item" onclick="bukaEdit('${d.id}')"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button class="btn-delete-item" onclick="hapusData('${d.id}')"><i class="fa-solid fa-trash"></i></button>
+                    </div>`;
                 list.appendChild(div);
             });
 
@@ -587,7 +615,6 @@
                     <span class="neraca-group-title"><i class="fa-solid fa-gem" style="color:var(--biru-muda)"></i> KAS ONLINE (DIGITAL)</span>
                     <div class="neraca-row"><span class="neraca-label"><i class="fa-solid fa-arrow-down-long" style="color:var(--sukses)"></i> Dana Masuk</span><span class="neraca-val" style="color:var(--sukses)">+ Rp. ${inOn.toLocaleString()}</span></div>
                     <div class="neraca-row"><span class="neraca-label"><i class="fa-solid fa-arrow-up-long" style="color:var(--bahaya)"></i> Dana Keluar</span><span class="neraca-val" style="color:var(--bahaya)">- Rp. ${outOn.toLocaleString()}</span></div>
-                    
                     <div class="neraca-sub-row">
                         <span class="neraca-sub-label"><i class="fa-solid fa-qrcode" style="color:var(--emas-murni)"></i> BNI (QRIS/TF)</span>
                         <span class="neraca-sub-val" style="color:var(--emas-murni)">Rp. ${netBNI.toLocaleString()}</span>
@@ -596,7 +623,6 @@
                         <span class="neraca-sub-label"><i class="fa-solid fa-building-columns" style="color:var(--biru-muda)"></i> BRI (TF/GF)</span>
                         <span class="neraca-sub-val" style="color:var(--biru-muda)">Rp. ${netBRI.toLocaleString()}</span>
                     </div>
-                    
                     <div class="neraca-row" style="border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;"><span class="neraca-label"><i class="fa-solid fa-credit-card" style="color:var(--biru-muda)"></i> Subtotal Online</span><span class="neraca-val" style="color:var(--biru-muda)">Rp. ${(inOn - outOn).toLocaleString()}</span></div>
                 </div>
                 <div class="neraca-group" style="background:linear-gradient(135deg, rgba(239, 191, 59, 0.1), rgba(239, 191, 59, 0.02)); padding:15px; border-radius:20px; border: 1px solid rgba(239, 191, 59, 0.25);">
@@ -631,7 +657,6 @@
             }
         };
 
-        // Handler back button HP
         window.onpopstate = function(event) {
             const modalInput = document.getElementById('modal');
             const modalDetail = document.getElementById('modalDetail');
